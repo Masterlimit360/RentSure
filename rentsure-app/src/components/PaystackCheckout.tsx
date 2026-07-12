@@ -109,9 +109,9 @@ export function PaystackCheckout({
         }
 
         // Initialize immediately
-        window.onload = function() {
+        setTimeout(function() {
           payWithPaystack();
-        };
+        }, 500);
       </script>
     </body>
     </html>

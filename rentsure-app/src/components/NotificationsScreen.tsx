@@ -18,7 +18,7 @@ import {
 import { TouchableOpacity, Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Swipeable, GestureHandlerRootView, TouchableOpacity as GHTouchableOpacity } from 'react-native-gesture-handler';
 import { useNotifications, useMarkAllRead, useClearAllNotifications, useDeleteNotification } from '@/hooks/useNotifications';
 import { useNotificationsStore } from '@/store/notifications.store';
 import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
@@ -136,18 +136,13 @@ export function NotificationsScreen({ userId }: NotificationsScreenProps) {
           >
             <Swipeable
               renderRightActions={() => (
-                <TouchableOpacity
+                <GHTouchableOpacity
                   style={styles.deleteAction}
                   onPress={() => deleteMutation.mutate({ notificationId: item.id, userId }, { onSuccess: () => refetch() })}
                 >
                   <Ionicons name="trash" size={24} color="#FFF" />
-                </TouchableOpacity>
+                </GHTouchableOpacity>
               )}
-              onSwipeableOpen={(direction) => {
-                if (direction === 'right') {
-                  deleteMutation.mutate({ notificationId: item.id, userId }, { onSuccess: () => refetch() });
-                }
-              }}
             >
               <View style={[styles.card, !item.isRead && styles.cardUnread]}>
                 <View style={styles.iconBox}>
