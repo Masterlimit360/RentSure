@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
   },
   reviewBtn: {
     marginBottom: 0,
-    backgroundColor: colors.background,
+    marginTop: spacing.sm,
   },
   emptyContainer: {
     alignItems: 'center',
