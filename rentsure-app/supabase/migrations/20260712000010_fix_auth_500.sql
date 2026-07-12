@@ -29,7 +29,7 @@ $$;
 -- This guarantees they will work in production without manual signup
 DO $$
 DECLARE
-  v_pass VARCHAR := 'password123';
+  v_pass VARCHAR := 'Test1234!';
   v_encrypted_pass VARCHAR;
   v_tenant_id UUID := gen_random_uuid();
   v_landlord_id UUID := gen_random_uuid();
