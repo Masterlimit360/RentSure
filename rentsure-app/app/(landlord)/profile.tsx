@@ -256,14 +256,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   content: {
-    paddingTop: Platform.OS === 'ios' ? 80 : 60,
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
     paddingHorizontal: spacing.lg,
     paddingBottom: 80,
   },
   profileHeader: {
     alignItems: 'center',
     marginBottom: spacing.xxl,
-    marginTop: -30,
+    marginTop: -60,
     width: '100%',
   },
   avatarContainer: {

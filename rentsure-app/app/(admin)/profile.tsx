@@ -127,8 +127,9 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: spacing.xl,
-    paddingHorizontal: spacing.md,
+    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingHorizontal: spacing.lg,
+    paddingBottom: 80,
   },
   title: {
     fontSize: typography.sizes.xxl,
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
   profileHeader: {
     alignItems: 'center',
     marginBottom: spacing.xxl,
-    marginTop: -30,
+    marginTop: -60,
     width: '100%',
   },
   avatarContainer: {
