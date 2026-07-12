@@ -79,6 +79,16 @@ export default function PropertyDetailScreen() {
     setMoveInDate(currentDate.toISOString().split('T')[0]);
   };
 
+  const [landlordVerified, setLandlordVerified] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    if (propertyData?.data?.landlordId) {
+      supabase.from('profiles').select('is_verified').eq('id', propertyData.data.landlordId).single()
+        .then(({ data }) => { if (data) setLandlordVerified(data.is_verified); });
+    }
+  }, [propertyData?.data?.landlordId]);
+
   if (isPropertyLoading) {
     return (
       <Screen noPadding>
@@ -139,16 +149,6 @@ export default function PropertyDetailScreen() {
       </Screen>
     );
   }
-
-  const [landlordVerified, setLandlordVerified] = useState(false);
-  useEffect(() => {
-    if (property?.landlordId) {
-      supabase.from('profiles').select('is_verified').eq('id', property.landlordId).single()
-        .then(({ data }) => { if (data) setLandlordVerified(data.is_verified); });
-    }
-  }, [property?.landlordId]);
-
-  const [showTooltip, setShowTooltip] = useState(false);
 
   const reviews = reviewsData?.data || [];
   const mediaItems = [...(property.media || [])].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));

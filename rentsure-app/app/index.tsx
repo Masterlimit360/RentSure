@@ -10,15 +10,15 @@ export default function Index() {
   }
 
   if (user?.role === 'TENANT') {
-    return <Redirect href="/(tenant)" />;
+    return <Redirect href="/(tenant)/(tabs)" />;
   }
 
   if (user?.role === 'LANDLORD') {
-    return <Redirect href="/(landlord)" />;
+    return <Redirect href="/(landlord)/(tabs)" />;
   }
 
   if (user?.role === 'ADMIN') {
-    return <Redirect href="/(admin)" />;
+    return <Redirect href="/(admin)/(tabs)" />;
   }
 
   return <Redirect href="/(auth)/login" />;

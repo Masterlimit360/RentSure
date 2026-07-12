@@ -64,9 +64,9 @@ export default function RootLayout() {
       router.replace('/(auth)/login');
     } else if (isAuthenticated && inAuthGroup) {
       // Redirect away from auth pages if already logged in
-      if (user?.role === 'TENANT') router.replace('/(tenant)');
-      else if (user?.role === 'LANDLORD') router.replace('/(landlord)');
-      else if (user?.role === 'ADMIN') router.replace('/(admin)');
+      if (user?.role === 'TENANT') router.replace('/(tenant)/(tabs)');
+      else if (user?.role === 'LANDLORD') router.replace('/(landlord)/(tabs)');
+      else if (user?.role === 'ADMIN') router.replace('/(admin)/(tabs)');
     }
   }, [isAuthenticated, isLoading, segments, user, router]);
 

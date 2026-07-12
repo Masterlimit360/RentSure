@@ -45,16 +45,7 @@ export default function TenantLayout() {
           tabBarBadge: tenantActionableCount > 0 ? tenantActionableCount : undefined,
         }}
       />
-      <Tabs.Screen
-        name="notifications"
-        options={{
-          title: 'Alerts',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="notifications" size={size} color={color} />
-          ),
-          tabBarBadge: unreadNotifications > 0 ? unreadNotifications : undefined,
-        }}
-      />
+
       <Tabs.Screen
         name="profile"
         options={{
