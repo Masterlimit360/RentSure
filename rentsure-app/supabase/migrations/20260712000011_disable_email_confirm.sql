@@ -1,11 +1,10 @@
--- Disable email confirmation requirement.
--- Users are signed in immediately after registration with any valid email.
--- No OTP or verification link is sent or required.
-UPDATE auth.config
-SET confirm_email_change = false
-WHERE confirm_email_change = true;
+-- NOTE: Disabling email confirmation cannot be done via SQL on Supabase Cloud.
+-- You MUST turn it off in the Dashboard:
+--   Authentication → Settings → Email → toggle "Confirm email" OFF
+--
+-- This migration only auto-confirms any existing unconfirmed users
+-- so they are not blocked from signing in.
 
--- Also auto-confirm any existing unconfirmed users so they can log in
 UPDATE auth.users
 SET email_confirmed_at = COALESCE(email_confirmed_at, NOW())
 WHERE email_confirmed_at IS NULL;
