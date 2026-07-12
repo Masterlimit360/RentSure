@@ -9,6 +9,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout, useUpdateProfile } from '@/hooks/useAuth';
 import { Screen } from '@/components/ui/Screen';
