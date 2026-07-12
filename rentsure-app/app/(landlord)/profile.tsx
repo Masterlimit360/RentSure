@@ -60,72 +60,60 @@ export default function LandlordProfileScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.headerBg} />
         {/* Avatar & Header */}
-        <View style={styles.profileHeader}>
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>
-                {user?.fullName.charAt(0).toUpperCase()}
-              </Text>
+        <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.profileCard}>
+          <View style={styles.profileCardContent}>
+            <View style={styles.avatarContainer}>
+              <View style={styles.avatar}>
+                <Text style={styles.avatarText}>
+                  {user?.fullName.charAt(0).toUpperCase()}
+                </Text>
+              </View>
+              <View style={styles.badge}>
+                <Ionicons name="checkmark" size={12} color="#fff" />
+              </View>
             </View>
-            <View style={styles.badge}>
-              <Ionicons name="checkmark" size={12} color="#fff" />
-            </View>
-          </View>
 
-          {isEditing ? (
-            <View style={styles.editForm}>
-              <TextInput
-                style={styles.input}
-                value={editForm.fullName}
-                onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
-                placeholder="Full Name"
-              />
-              <TextInput
-                style={styles.input}
-                value={editForm.phone}
-                onChangeText={(t) => setEditForm({ ...editForm, phone: t })}
-                placeholder="Phone Number"
-                keyboardType="phone-pad"
-              />
-              <View style={styles.editActions}>
-                <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.cancelBtn}>
-                  <Text style={styles.cancelBtnText}>Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={handleSavePress} style={styles.saveBtn} disabled={updateMutation.isPending}>
-                  <Text style={styles.saveBtnText}>{updateMutation.isPending ? 'Saving...' : 'Save'}</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          ) : (
-            <>
-              <View style={styles.nameRow}>
-                <Text style={styles.name}>{user?.fullName}</Text>
-                <TouchableOpacity onPress={handleEditPress}>
-                  <Ionicons name="pencil" size={18} color="rgba(255,255,255,0.8)" />
-                </TouchableOpacity>
-              </View>
-              <Text style={styles.email}>{user?.email}</Text>
-              <Text style={styles.phone}>{user?.phone}</Text>
-              
-              <View style={styles.roleChips}>
-                <View style={[styles.roleChip, { backgroundColor: '#E0F2FE' }]}>
-                  <Text style={[styles.roleText, { color: '#0284C7' }]}>LANDLORD</Text>
-                </View>
-                {user?.verificationStatus === 'APPROVED' ? (
-                  <View style={[styles.roleChip, { backgroundColor: '#DCFCE7' }]}>
-                    <Text style={[styles.roleText, { color: '#166534' }]}>VERIFIED</Text>
-                  </View>
-                ) : (
-                  <TouchableOpacity onPress={() => router.push('/(landlord)/verify' as any)}>
-                    <View style={[styles.roleChip, { backgroundColor: '#FEF9C3' }]}>
-                      <Text style={[styles.roleText, { color: '#854D0E' }]}>GET VERIFIED</Text>
-                    </View>
+            {isEditing ? (
+              <View style={styles.editForm}>
+                <TextInput
+                  style={styles.input}
+                  value={editForm.fullName}
+                  onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
+                  placeholder="Full Name"
+                />
+                <TextInput
+                  style={styles.input}
+                  value={editForm.phone}
+                  onChangeText={(t) => setEditForm({ ...editForm, phone: t })}
+                  placeholder="Phone Number"
+                  keyboardType="phone-pad"
+                />
+                <View style={styles.editActions}>
+                  <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.cancelBtn}>
+                    <Text style={styles.cancelBtnText}>Cancel</Text>
                   </TouchableOpacity>
-                )}
+                  <TouchableOpacity onPress={handleSavePress} style={styles.saveBtn} disabled={updateMutation.isPending}>
+                    <Text style={styles.saveBtnText}>{updateMutation.isPending ? 'Saving...' : 'Save'}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </>
-          )}
-        </View>
+            ) : (
+              <View style={styles.profileInfo}>
+                <View style={styles.nameRow}>
+                  <Text style={styles.name} numberOfLines={1}>{user?.fullName}</Text>
+                  <TouchableOpacity onPress={handleEditPress} style={styles.editBtn}>
+                    <Ionicons name="pencil" size={16} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
+                <Text style={styles.phone} numberOfLines={1}>{user?.phone}</Text>
+                <View style={styles.roleChip}>
+                  <Text style={styles.roleText}>LANDLORD</Text>
+                </View>
+              </View>
+            )}
+          </View>
+        </Animated.View>
 
         {user?.verificationStatus !== 'APPROVED' && (
           <View style={styles.unverifiedBanner}>
@@ -256,87 +244,97 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingBottom: 80,
   },
-  profileHeader: {
-    alignItems: 'center',
-    marginBottom: spacing.xxl,
-  },
-  avatarContainer: {
-    position: 'relative',
-    marginBottom: spacing.md,
-  },
-  avatar: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+  profileCard: {
     backgroundColor: colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 3,
-    borderColor: '#FFF',
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    marginBottom: spacing.xxl,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    shadowRadius: 12,
+    elevation: 4,
+  },
+  profileCardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.md,
+  },
+  avatarContainer: {
+    position: 'relative',
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#EFF6FF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: colors.primary,
   },
   avatarText: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: typography.weights.bold,
-    color: '#1E293B',
+    color: colors.primary,
   },
   badge: {
     position: 'absolute',
-    bottom: 2,
-    right: 2,
-    width: 28,
-    height: 28,
-    borderRadius: 14,
+    bottom: 0,
+    right: 0,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
     backgroundColor: colors.success,
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#FFF',
+    borderColor: colors.surface,
+  },
+  profileInfo: {
+    flex: 1,
+    alignItems: 'flex-start',
   },
   nameRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 4,
+    gap: 8,
+    marginBottom: 2,
+    width: '100%',
   },
   name: {
-    fontSize: typography.sizes.xl,
+    flex: 1,
+    fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
-    color: colors.surface,
+    color: colors.text,
+  },
+  editBtn: {
+    padding: 4,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 12,
   },
   email: {
     fontSize: typography.sizes.sm,
-    color: 'rgba(255, 255, 255, 0.8)',
+    color: colors.textSecondary,
     marginBottom: 2,
-    flexShrink: 1,
-    flexWrap: 'wrap',
-    textAlign: 'center',
-    paddingHorizontal: spacing.lg,
+    width: '100%',
   },
   phone: {
     fontSize: typography.sizes.sm,
-    color: 'rgba(255, 255, 255, 0.8)',
-    marginBottom: spacing.sm,
-  },
-  roleChips: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-    marginTop: spacing.xs,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
+    width: '100%',
   },
   roleChip: {
     paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingVertical: 2,
+    backgroundColor: colors.primary,
     borderRadius: borderRadius.pill,
   },
   roleText: {
     fontSize: 10,
     fontWeight: typography.weights.bold,
-    color: '#FFF',
+    color: colors.surface,
     letterSpacing: 1,
   },
   editForm: {
@@ -344,38 +342,40 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xl,
   },
   input: {
-    backgroundColor: '#FFF',
+    backgroundColor: '#F3F4F6',
     borderRadius: borderRadius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    marginBottom: spacing.sm,
-    fontSize: typography.sizes.md,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+    marginBottom: spacing.xs,
+    fontSize: typography.sizes.sm,
     color: colors.text,
   },
   editActions: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-start',
     gap: spacing.sm,
-    marginTop: spacing.sm,
+    marginTop: spacing.xs,
   },
   cancelBtn: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
     borderRadius: borderRadius.md,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: '#F3F4F6',
   },
   cancelBtnText: {
-    color: '#FFF',
+    color: colors.textSecondary,
+    fontSize: 12,
     fontWeight: typography.weights.medium,
   },
   saveBtn: {
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
     borderRadius: borderRadius.md,
     backgroundColor: colors.primary,
   },
   saveBtnText: {
     color: '#FFF',
+    fontSize: 12,
     fontWeight: typography.weights.bold,
   },
   unverifiedBanner: {

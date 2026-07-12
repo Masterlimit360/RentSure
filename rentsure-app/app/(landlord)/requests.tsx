@@ -299,7 +299,11 @@ export default function LandlordRequestsScreen() {
           onPress: () =>
             acceptMutation.mutate(booking.id, {
               onSuccess: (res) => {
-                if (!res.success) Alert.alert('Error', res.error?.message ?? 'Try again');
+                if (!res.success) {
+                  Alert.alert('Error', res.error?.message ?? 'Try again');
+                } else {
+                  refetch();
+                }
               },
             }),
         },
@@ -313,6 +317,7 @@ export default function LandlordRequestsScreen() {
       onSuccess: (res) => {
         if (res.success) {
           setRejectTarget(null);
+          refetch();
         } else {
           Alert.alert('Error', res.error?.message ?? 'Try again');
         }
