@@ -1,6 +1,6 @@
 package com.rentsure.backend.auth.entity;
 
-import com.rentsure.backend.entity.User;
+import com.rentsure.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

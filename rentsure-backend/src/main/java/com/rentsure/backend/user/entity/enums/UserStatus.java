@@ -1,4 +1,4 @@
-package com.rentsure.backend.entity.enums;
+package com.rentsure.backend.user.entity.enums;
 
 public enum UserStatus {
     ACTIVE,

@@ -1,4 +1,4 @@
-package com.rentsure.backend.entity.enums;
+package com.rentsure.backend.property.entity.enums;
 
 public enum PropertyStatus {
     AVAILABLE,

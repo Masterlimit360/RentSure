@@ -1,6 +1,6 @@
 package com.rentsure.backend.auth.dto;
 
-import com.rentsure.backend.entity.enums.Role;
+import com.rentsure.backend.user.entity.enums.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

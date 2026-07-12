@@ -1,6 +1,6 @@
-package com.rentsure.backend.repository;
+package com.rentsure.backend.user.repository;
 
-import com.rentsure.backend.entity.User;
+import com.rentsure.backend.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

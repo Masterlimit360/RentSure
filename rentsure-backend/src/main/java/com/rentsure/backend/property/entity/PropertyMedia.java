@@ -1,11 +1,14 @@
-package com.rentsure.backend.entity;
+package com.rentsure.backend.property.entity;
 
-import com.rentsure.backend.entity.enums.MediaType;
+import com.rentsure.backend.property.entity.enums.MediaType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
+/**
+ * Represents photos or videos attached to a Property.
+ */
 @Entity
 @Table(name = "property_media")
 @Getter

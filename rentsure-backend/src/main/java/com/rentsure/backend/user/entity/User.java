@@ -1,7 +1,7 @@
-package com.rentsure.backend.entity;
+package com.rentsure.backend.user.entity;
 
-import com.rentsure.backend.entity.enums.Role;
-import com.rentsure.backend.entity.enums.UserStatus;
+import com.rentsure.backend.user.entity.enums.Role;
+import com.rentsure.backend.user.entity.enums.UserStatus;
 import com.rentsure.backend.entity.enums.VerificationStatus;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,6 +11,10 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Core User entity representing tenants, landlords, and admins.
+ * Maps to the 'users' table.
+ */
 @Entity
 @Table(name = "users")
 @Getter

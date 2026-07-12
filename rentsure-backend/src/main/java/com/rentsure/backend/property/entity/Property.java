@@ -1,7 +1,8 @@
-package com.rentsure.backend.entity;
+package com.rentsure.backend.property.entity;
 
-import com.rentsure.backend.entity.enums.PropertyStatus;
-import com.rentsure.backend.entity.enums.PropertyType;
+import com.rentsure.backend.property.entity.enums.PropertyStatus;
+import com.rentsure.backend.property.entity.enums.PropertyType;
+import com.rentsure.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Represents a rental property listed by a Landlord.
+ */
 @Entity
-@Table(name = "properties", indexes = {
-        @Index(name = "idx_properties_search", columnList = "city, property_type, price_per_year")
-})
+@Table(name = "properties")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -53,20 +55,23 @@ public class Property {
     @Column(nullable = false)
     private String area;
 
-    @Column(precision = 9, scale = 6)
+    @Column(nullable = false, precision = 9, scale = 6)
     private BigDecimal gpsLat;
 
-    @Column(precision = 9, scale = 6)
+    @Column(nullable = false, precision = 9, scale = 6)
     private BigDecimal gpsLng;
 
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal pricePerYear;
 
+    @Column(nullable = false)
     private Integer bedrooms;
+
+    @Column(nullable = false)
     private Integer bathrooms;
 
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(columnDefinition = "jsonb")
+    @Column(columnDefinition = "jsonb", nullable = false)
     @Builder.Default
     private List<String> amenities = new ArrayList<>();
 
