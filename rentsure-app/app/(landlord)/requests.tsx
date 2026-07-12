@@ -189,7 +189,12 @@ function RequestCard({ booking, onAccept, onReject }: RequestCardProps) {
     <View style={styles.card}>
       <TouchableOpacity style={styles.cardHeader} onPress={() => setExpanded(!expanded)}>
         <View style={styles.cardHeaderContent}>
-          <Text style={styles.bookingRef}>{booking.bookingRef}</Text>
+          <View style={styles.refRow}>
+            <Text style={styles.bookingRef}>{booking.bookingRef}</Text>
+            {booking.status === 'REQUESTED' && (
+              <View style={styles.attentionDot} />
+            )}
+          </View>
           <Text style={styles.propertyTitle} numberOfLines={1}>
             {booking.propertyTitle || 'Property'}
           </Text>
@@ -263,7 +268,7 @@ function RequestSkeleton() {
 
 export default function LandlordRequestsScreen() {
   const { user } = useAuthStore();
-  const { data, isLoading, refetch } = useMyBookings(user?.id ?? '', 'LANDLORD');
+  const { data, isLoading, isRefetching, refetch } = useMyBookings(user?.id ?? '', 'LANDLORD');
   const acceptMutation = useAcceptBooking();
   const rejectMutation = useRejectBooking();
 
@@ -371,7 +376,7 @@ export default function LandlordRequestsScreen() {
           keyExtractor={(b) => b.id}
           contentContainerStyle={styles.list}
           onRefresh={refetch}
-          refreshing={isLoading}
+          refreshing={isRefetching}
           ListEmptyComponent={
             <View style={styles.empty}>
               <Ionicons name="clipboard-outline" size={48} color={colors.textSecondary} />
@@ -488,12 +493,23 @@ const styles = StyleSheet.create({
   cardHeaderContent: {
     flex: 1,
   },
+  refRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginBottom: 2,
+  },
   bookingRef: {
     fontSize: typography.sizes.sm,
     fontWeight: typography.weights.bold,
     color: colors.textSecondary,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    marginBottom: 2,
+  },
+  attentionDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#DC2626',
   },
   propertyTitle: {
     fontSize: typography.sizes.md,

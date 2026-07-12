@@ -31,7 +31,7 @@ interface NotificationsScreenProps {
 }
 
 export function NotificationsScreen({ userId }: NotificationsScreenProps) {
-  const { data, isLoading, refetch } = useNotifications(userId);
+  const { data, isLoading, isRefetching, refetch } = useNotifications(userId);
   const markReadMutation = useMarkAllRead();
   const clearMutation = useClearAllNotifications();
   const deleteMutation = useDeleteNotification();
@@ -120,6 +120,8 @@ export function NotificationsScreen({ userId }: NotificationsScreenProps) {
         data={notifications}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
+        onRefresh={refetch}
+        refreshing={isRefetching}
         ListEmptyComponent={
           <View style={styles.emptyState}>
             <Ionicons name="notifications-off-outline" size={48} color={colors.border} />

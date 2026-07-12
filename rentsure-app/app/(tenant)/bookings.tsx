@@ -240,7 +240,7 @@ function ReviewModal({ visible, onClose, onSubmit, isLoading }: ReviewModalProps
 
 export default function TenantBookingsScreen() {
   const { user } = useAuthStore();
-  const { data, isLoading, refetch } = useMyBookings(user?.id ?? '', 'TENANT');
+  const { data, isLoading, isRefetching, refetch } = useMyBookings(user?.id ?? '', 'TENANT');
   const payMutation = usePayBooking();
   const moveInMutation = useConfirmMoveIn();
   const reviewMutation = useCreateReview();
@@ -347,7 +347,7 @@ export default function TenantBookingsScreen() {
           keyExtractor={(b) => b.id}
           contentContainerStyle={styles.list}
           onRefresh={refetch}
-          refreshing={isLoading}
+          refreshing={isRefetching}
           ListEmptyComponent={
             <View style={styles.empty}>
               <Ionicons name="receipt-outline" size={48} color={colors.textSecondary} />

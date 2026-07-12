@@ -29,7 +29,7 @@ function UserSkeleton() {
 export default function AdminUsers() {
   const [filters, setFilters] = useState<AdminUserFilters>({});
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const { data, isLoading, refetch } = useAdminUsers(filters);
+  const { data, isLoading, isRefetching, refetch } = useAdminUsers(filters);
   const suspendMutation = useSuspendUser();
   const reactivateMutation = useReactivateUser();
 
@@ -117,7 +117,7 @@ export default function AdminUsers() {
           keyExtractor={(u) => u.id}
           contentContainerStyle={styles.listContent}
           onRefresh={refetch}
-          refreshing={isLoading}
+          refreshing={isRefetching}
           renderItem={renderUserCard}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>

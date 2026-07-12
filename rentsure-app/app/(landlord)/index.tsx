@@ -145,7 +145,7 @@ export default function LandlordListingsScreen() {
 
   // landlordId filter is not in our current PropertyFilters, so we filter client-side
   // from all properties. In production the API would accept a landlordId param.
-  const { data, isLoading, refetch } = useProperties({});
+  const { data, isLoading, isRefetching, refetch } = useProperties({});
   const { data: bookingsData } = useMyBookings(user?.id ?? '', 'LANDLORD');
   const softDeleteMutation = useSoftDeleteProperty();
   const hardDeleteMutation = useHardDeleteProperty();
@@ -242,7 +242,7 @@ export default function LandlordListingsScreen() {
           columnWrapperStyle={styles.columnWrapper}
           contentContainerStyle={styles.grid}
           onRefresh={refetch}
-          refreshing={isLoading}
+          refreshing={isRefetching}
           ListEmptyComponent={
             <View style={styles.empty}>
               <Ionicons name="home-outline" size={48} color={colors.textSecondary} />

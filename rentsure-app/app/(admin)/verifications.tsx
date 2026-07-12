@@ -24,7 +24,7 @@ function VerificationSkeleton() {
 }
 
 export default function AdminVerifications() {
-  const { data, isLoading, refetch } = useAdminVerifications();
+  const { data, isLoading, isRefetching, refetch } = useAdminVerifications();
   const { data: usersData } = useAdminUsers({ role: 'LANDLORD' });
   const { data: propertiesData } = useProperties({});
   const approveMutation = useApproveVerification();
@@ -129,7 +129,7 @@ export default function AdminVerifications() {
           keyExtractor={(v) => v.id}
           contentContainerStyle={styles.listContent}
           onRefresh={refetch}
-          refreshing={isLoading}
+          refreshing={isRefetching}
           renderItem={renderItem}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
