@@ -6,7 +6,7 @@
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { login, register, logout, verifyEmail, updateProfile, verifyOtp, resetPassword } from '@/api/auth.api';
+import { login, register, logout, verifyEmail, updateProfile, resetPassword } from '@/api/auth.api';
 import { useAuthStore } from '@/store/auth.store';
 import type { LoginRequest, RegisterRequest, VerifyEmailRequest } from '@/types';
 

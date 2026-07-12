@@ -5,7 +5,7 @@
  * Includes a sticky bottom bar to initiate the booking request flow.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -959,6 +959,44 @@ const styles = StyleSheet.create({
     borderRadius: 3,
   },
   factorDetail: {
+    fontSize: typography.sizes.xs,
+    color: colors.textSecondary,
+  },
+  tooltipOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.xl,
+  },
+  tooltipCard: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.lg,
+    width: '100%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tooltipTitle: {
+    fontSize: typography.sizes.lg,
+    fontWeight: typography.weights.bold,
+    color: colors.text,
+    marginBottom: spacing.md,
+  },
+  tooltipRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: spacing.md,
+  },
+  tooltipRowTitle: {
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.bold,
+    color: colors.text,
+  },
+  tooltipRowDesc: {
     fontSize: typography.sizes.sm,
     color: colors.textSecondary,
     marginTop: 2,
