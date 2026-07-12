@@ -1,5 +1,7 @@
-package com.rentsure.backend.entity;
+package com.rentsure.backend.review.entity;
 
+import com.rentsure.backend.booking.entity.Booking;
+import com.rentsure.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,8 +9,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Represents a review left by a tenant for a landlord (or vice versa).
+ */
 @Entity
-@Table(name = "reviews")
+@Table(name = "reviews", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"booking_id", "reviewer_id"})
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -39,6 +46,6 @@ public class Review {
     private String comment;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }

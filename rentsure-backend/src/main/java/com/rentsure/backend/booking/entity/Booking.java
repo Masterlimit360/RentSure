@@ -1,15 +1,21 @@
-package com.rentsure.backend.entity;
+package com.rentsure.backend.booking.entity;
 
-import com.rentsure.backend.entity.enums.BookingStatus;
+import com.rentsure.backend.booking.entity.enums.BookingStatus;
+import com.rentsure.backend.property.entity.Property;
+import com.rentsure.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Represents a rental application/booking lifecycle.
+ */
 @Entity
 @Table(name = "bookings")
 @Getter
@@ -32,13 +38,12 @@ public class Booking {
     private User tenant;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 15)
-    @Builder.Default
-    private BookingStatus status = BookingStatus.REQUESTED;
+    @Column(nullable = false, length = 20)
+    private BookingStatus status;
 
-    @CreationTimestamp
-    @Column(updatable = false)
-    private LocalDateTime requestedAt;
+    @Column(nullable = false, updatable = false)
+    @Builder.Default
+    private LocalDateTime requestedAt = LocalDateTime.now();
 
     @Column(nullable = false)
     private LocalDate moveInDate;
@@ -49,12 +54,13 @@ public class Booking {
     @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal totalAmount;
 
-    @Column(unique = true, nullable = false, length = 12)
+    @Column(nullable = false, unique = true, length = 12)
     private String bookingRef;
-    
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-    private Payment payment;
-    
-    @OneToOne(mappedBy = "booking", cascade = CascadeType.ALL)
-    private Agreement agreement;
+
+    @Column(length = 255)
+    private String rejectReason;
+
+    @UpdateTimestamp
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
 }

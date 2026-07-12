@@ -1,9 +1,14 @@
 package com.rentsure.backend.config;
 
+import com.rentsure.backend.booking.entity.Booking;
+import com.rentsure.backend.booking.entity.enums.BookingStatus;
+import com.rentsure.backend.booking.repository.BookingRepository;
 import com.rentsure.backend.property.entity.Property;
 import com.rentsure.backend.property.entity.enums.PropertyStatus;
 import com.rentsure.backend.property.entity.enums.PropertyType;
 import com.rentsure.backend.property.repository.PropertyRepository;
+import com.rentsure.backend.review.entity.Review;
+import com.rentsure.backend.review.repository.ReviewRepository;
 import com.rentsure.backend.user.entity.User;
 import com.rentsure.backend.user.entity.enums.Role;
 import com.rentsure.backend.user.entity.enums.UserStatus;
@@ -29,6 +34,8 @@ public class DataSeeder implements CommandLineRunner {
 
     private final UserRepository userRepository;
     private final PropertyRepository propertyRepository;
+    private final BookingRepository bookingRepository;
+    private final ReviewRepository reviewRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Override
@@ -318,6 +325,45 @@ public class DataSeeder implements CommandLineRunner {
         propertyRepository.saveAll(properties);
 
         System.out.println("Properties seeded successfully. Found " + properties.size() + " properties.");
+
+        // 3. Create Bookings and Reviews
+        Booking booking1 = Booking.builder()
+                .id(UUID.randomUUID())
+                .property(properties.get(0))
+                .tenant(tenant)
+                .status(BookingStatus.COMPLETED)
+                .moveInDate(java.time.LocalDate.now().minusMonths(6))
+                .durationMonths(12)
+                .totalAmount(new BigDecimal("3000"))
+                .bookingRef("RS-123456")
+                .build();
+        
+        bookingRepository.save(booking1);
+
+        Review review1 = Review.builder()
+                .booking(booking1)
+                .reviewer(tenant)
+                .reviewee(landlord)
+                .rating(5)
+                .comment("Great landlord, very responsive!")
+                .build();
+        
+        reviewRepository.save(review1);
+        
+        Booking booking2 = Booking.builder()
+                .id(UUID.randomUUID())
+                .property(properties.get(1))
+                .tenant(tenant)
+                .status(BookingStatus.REQUESTED)
+                .moveInDate(java.time.LocalDate.now().plusDays(10))
+                .durationMonths(12)
+                .totalAmount(new BigDecimal("4800"))
+                .bookingRef("RS-654321")
+                .build();
+
+        bookingRepository.save(booking2);
+
+        System.out.println("Bookings and Reviews seeded successfully.");
         System.out.println("Database Seeding Completed.");
     }
 }
