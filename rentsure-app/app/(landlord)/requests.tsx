@@ -192,7 +192,9 @@ function RequestCard({ booking, onAccept, onReject }: RequestCardProps) {
           <View style={styles.refRow}>
             <Text style={styles.bookingRef}>{booking.bookingRef}</Text>
             {booking.status === 'REQUESTED' && (
-              <View style={styles.attentionDot} />
+              <View style={styles.attentionBadge}>
+                <Text style={styles.attentionBadgeText}>NEEDS ACTION</Text>
+              </View>
             )}
           </View>
           <Text style={styles.propertyTitle} numberOfLines={1}>
@@ -505,11 +507,18 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
   },
-  attentionDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#DC2626',
+  attentionBadge: {
+    backgroundColor: '#EF4444',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: borderRadius.pill,
+  },
+  attentionBadgeText: {
+    color: '#FFF',
+    fontSize: 10,
+    fontWeight: typography.weights.bold,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   propertyTitle: {
     fontSize: typography.sizes.md,
