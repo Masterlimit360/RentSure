@@ -14,6 +14,7 @@ import {
   rejectBooking,
   confirmMoveIn,
   payBooking,
+  cancelBooking,
 } from '@/api/bookings.api';
 import type { CreateBookingRequest } from '@/types';
 
@@ -117,6 +118,22 @@ export function usePayBooking() {
 
   return useMutation({
     mutationFn: (bookingId: string) => payBooking(bookingId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookings });
+    },
+  });
+}
+
+/**
+ * Tenant cancels a pending or accepted booking (REQUESTED/ACCEPTED → CANCELLED).
+ * Preconditions: Tenant is authenticated and owns the booking.
+ * @throws INVALID_STATE if the booking is not REQUESTED or ACCEPTED.
+ */
+export function useCancelBooking() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (bookingId: string) => cancelBooking(bookingId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings });
     },

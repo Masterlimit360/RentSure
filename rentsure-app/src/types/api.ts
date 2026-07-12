@@ -84,6 +84,7 @@ export interface RefreshRequest {
 // ---------------------------------------------------------------------------
 
 export interface PropertyFilters {
+  query?: string;
   city?: string;
   type?: PropertyType;
   minPrice?: number;

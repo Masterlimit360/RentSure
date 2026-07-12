@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
 import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -69,9 +70,13 @@ export default function RegisterScreen() {
     registerMutation.mutate(data, {
       onSuccess: (res) => {
         if (res.success) {
-          showToast('Registration successful! Please verify your email.');
-          // Pass email to verify screen so it can pre-fill or use it for the API call
-          router.push({ pathname: '/(auth)/verify', params: { email: data.email } });
+          if ((res.data as any).accessToken) {
+            showToast('Registration successful! Welcome to RentSure.');
+            // Do NOT router.replace, the global _layout listener will handle it!
+          } else {
+            showToast('Registration successful! Please check your email to verify your account.');
+            router.replace('/(auth)/login');
+          }
         } else {
           showToast(res.error?.message || 'Registration failed', 'error');
         }
@@ -94,123 +99,139 @@ export default function RegisterScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          <View style={styles.header}>
-            <Text style={styles.title}>Create an Account</Text>
-            <Text style={styles.subtitle}>Join RentSure today.</Text>
-          </View>
+          <View style={styles.formContainer}>
+            <Animated.View entering={FadeInDown.delay(100).springify()}>
+              <Text style={styles.title}>Create Account</Text>
+              <Text style={styles.subtitle}>Join RentSure and find your next home.</Text>
+            </Animated.View>
 
-          <View style={styles.glassCard}>
-            <View style={styles.form}>
-              <Controller
-                control={control}
-                name="fullName"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextField
-                    label="Full Name"
-                    placeholder="Kwame Mensah"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    error={errors.fullName?.message}
-                  />
-                )}
-              />
+            <Animated.View entering={FadeInUp.delay(200).springify()}>
+              <View style={styles.form}>
+                <Controller
+                  control={control}
+                  name="fullName"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextField
+                      label="Full Name"
+                      placeholder="Kwame Mensah"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.fullName?.message}
+                    />
+                  )}
+                />
 
-              <Controller
-                control={control}
-                name="email"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextField
-                    label="Email"
-                    placeholder="name@example.com"
-                    keyboardType="email-address"
-                    autoCapitalize="none"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    error={errors.email?.message}
-                  />
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="email"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextField
+                      label="Email"
+                      placeholder="name@example.com"
+                      keyboardType="email-address"
+                      autoCapitalize="none"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.email?.message}
+                    />
+                  )}
+                />
 
-              <Controller
-                control={control}
-                name="phone"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextField
-                    label="Phone Number"
-                    placeholder="055 123 4567"
-                    keyboardType="phone-pad"
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    error={errors.phone?.message}
-                  />
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="phone"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextField
+                      label="Phone Number"
+                      placeholder="055 123 4567"
+                      keyboardType="phone-pad"
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.phone?.message}
+                    />
+                  )}
+                />
 
-              <Controller
-                control={control}
-                name="password"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextField
-                    label="Password"
-                    placeholder="Min 8 chars, 1 uppercase, 1 number"
-                    secureTextEntry={!showPassword}
-                    onBlur={onBlur}
-                    onChangeText={onChange}
-                    value={value}
-                    error={errors.password?.message}
-                    rightAccessory={
-                      <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={{ padding: 4 }}>
-                        <Ionicons 
-                          name={showPassword ? 'eye-off-outline' : 'eye-outline'} 
-                          size={20} 
-                          color={colors.textSecondary} 
-                        />
-                      </TouchableOpacity>
-                    }
-                  />
-                )}
-              />
-
-              <Text style={styles.roleLabel}>I am a...</Text>
-              <View style={styles.roleContainer}>
-                <TouchableOpacity
-                  style={[styles.roleButton, selectedRole === 'TENANT' && styles.roleButtonActive]}
-                  onPress={() => setValue('role', 'TENANT')}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.roleText, selectedRole === 'TENANT' && styles.roleTextActive]}>
-                    Tenant
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.roleButton, selectedRole === 'LANDLORD' && styles.roleButtonActive]}
-                  onPress={() => setValue('role', 'LANDLORD')}
-                  activeOpacity={0.8}
-                >
-                  <Text style={[styles.roleText, selectedRole === 'LANDLORD' && styles.roleTextActive]}>
-                    Landlord
-                  </Text>
-                </TouchableOpacity>
+                <Controller
+                  control={control}
+                  name="password"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <TextField
+                      label="Password"
+                      placeholder="Min 8 chars, 1 uppercase, 1 number"
+                      secureTextEntry={!showPassword}
+                      onBlur={onBlur}
+                      onChangeText={onChange}
+                      value={value}
+                      error={errors.password?.message}
+                      rightAccessory={
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)} style={{ padding: 4 }}>
+                          <Ionicons 
+                            name={showPassword ? 'eye-off-outline' : 'eye-outline'} 
+                            size={20} 
+                            color={colors.textSecondary} 
+                          />
+                        </TouchableOpacity>
+                      }
+                    />
+                  )}
+                />
               </View>
-              {errors.role && <Text style={styles.errorText}>{errors.role.message}</Text>}
+            </Animated.View>
 
+            <Animated.View entering={FadeInUp.delay(300).springify()}>
+              <Controller
+                control={control}
+                name="role"
+                render={({ field: { onChange } }) => (
+                  <>
+                    <Text style={styles.roleLabel}>I am a...</Text>
+                    <View style={styles.roleContainer}>
+                      <TouchableOpacity
+                        style={[styles.roleButton, selectedRole === 'TENANT' && styles.roleButtonActive]}
+                        onPress={() => onChange('TENANT')}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={[styles.roleText, selectedRole === 'TENANT' && styles.roleTextActive]}>
+                          Tenant
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={[styles.roleButton, selectedRole === 'LANDLORD' && styles.roleButtonActive]}
+                        onPress={() => onChange('LANDLORD')}
+                        activeOpacity={0.8}
+                      >
+                        <Text style={[styles.roleText, selectedRole === 'LANDLORD' && styles.roleTextActive]}>
+                          Landlord
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    {errors.role && <Text style={styles.errorText}>{errors.role.message}</Text>}
+                  </>
+                )}
+              />
+            </Animated.View>
+
+            <Animated.View entering={FadeInUp.delay(400).springify()}>
               <Button
-                title="Register"
+                title="Create Account"
                 onPress={handleSubmit(onSubmit)}
                 isLoading={registerMutation.isPending}
-                style={styles.registerBtn}
+                style={styles.submitBtn}
               />
+            </Animated.View>
 
-              <View style={styles.footer}>
-                <Text style={styles.footerText}>Already have an account? </Text>
-                <Link href="/(auth)/login" style={styles.link}>
-                  Sign In
-                </Link>
-              </View>
-            </View>
+            <Animated.View entering={FadeInUp.delay(500).springify()} style={styles.footer}>
+              <Text style={styles.footerText}>Already have an account? </Text>
+              <Link href="/(auth)/login" asChild>
+                <TouchableOpacity>
+                  <Text style={styles.loginLink}>Log In</Text>
+                </TouchableOpacity>
+              </Link>
+            </Animated.View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
@@ -275,7 +296,7 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.md,
     color: '#64748B',
   },
-  glassCard: {
+  formContainer: {
     backgroundColor: 'rgba(255, 255, 255, 0.85)',
     borderRadius: 24,
     padding: spacing.xl,
@@ -333,7 +354,7 @@ const styles = StyleSheet.create({
     marginTop: -spacing.sm,
     marginBottom: spacing.sm,
   },
-  registerBtn: {
+  submitBtn: {
     marginTop: spacing.md,
     borderRadius: 12,
   },
@@ -347,7 +368,7 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontSize: typography.sizes.sm,
   },
-  link: {
+  loginLink: {
     color: colors.primary,
     fontWeight: typography.weights.bold,
     fontSize: typography.sizes.sm,

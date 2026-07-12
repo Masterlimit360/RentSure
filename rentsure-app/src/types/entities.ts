@@ -44,7 +44,8 @@ export type BookingStatus =
   | 'EXPIRED'
   | 'PAID_ESCROW'
   | 'MOVED_IN'
-  | 'COMPLETED';
+  | 'COMPLETED'
+  | 'CANCELLED';
 
 /**
  * HELD  → money in escrow, untouchable.
@@ -84,6 +85,31 @@ export interface User {
   verificationStatus?: VerificationStatus; // Used by landlords to verify identity
   status: UserStatus;
   createdAt: string;
+}
+
+export interface TenantPreferences {
+  userId: string;
+  budgetMaxPerYear: number;
+  preferredCities: string[];
+  preferredAreas: string[];
+  propertyTypes: PropertyType[];
+  minBedrooms: number;
+  requiredAmenities: string[];
+  niceToHaveAmenities: string[];
+  updatedAt: string;
+}
+
+export interface CompatibilityFactor {
+  key: 'BUDGET' | 'LOCATION' | 'TYPE' | 'ROOMS' | 'AMENITIES';
+  label: string;
+  score: number;
+  maxScore: number;
+  detail: string;
+}
+
+export interface CompatibilityScore {
+  total: number;
+  factors: CompatibilityFactor[];
 }
 
 export interface Property {
@@ -183,11 +209,14 @@ export type NotificationType =
   | 'BOOKING_REQUESTED'
   | 'BOOKING_ACCEPTED'
   | 'BOOKING_REJECTED'
+  | 'BOOKING_CANCELLED'
   | 'PAYMENT_RECEIVED'
   | 'MOVE_IN_CONFIRMED'
   | 'REVIEW_RECEIVED'
   | 'AGREEMENT_SIGNED'
   | 'ESCROW_RELEASED'
+  | 'VERIFICATION_APPROVED'
+  | 'VERIFICATION_REJECTED'
   | 'SYSTEM';
 
 export interface Notification {

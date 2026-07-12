@@ -23,7 +23,7 @@ import {
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
-import { useMyBookings, useConfirmMoveIn } from '@/hooks/useBookings';
+import { useMyBookings, useConfirmMoveIn, useCancelBooking } from '@/hooks/useBookings';
 import { usePaymentStatus } from '@/hooks/usePayments';
 import { useAgreement, useSignAgreement } from '@/hooks/useAgreements';
 import { Screen } from '@/components/ui/Screen';
@@ -279,8 +279,29 @@ export default function TenantBookingDetailScreen() {
 
   const { data: bookingsData, isLoading } = useMyBookings(user?.id ?? '', 'TENANT');
   const moveInMutation = useConfirmMoveIn();
+  const cancelMutation = useCancelBooking();
 
   const booking = bookingsData?.data?.find((b) => b.id === id);
+
+  const handleCancelBooking = () => {
+    Alert.alert(
+      'Cancel Booking',
+      'Are you sure you want to cancel this booking request?',
+      [
+        { text: 'No', style: 'cancel' },
+        {
+          text: 'Yes, Cancel',
+          style: 'destructive',
+          onPress: () =>
+            cancelMutation.mutate(id!, {
+              onSuccess: (res) => {
+                if (!res.success) Alert.alert('Error', res.error?.message ?? 'Could not cancel booking');
+              },
+            }),
+        },
+      ]
+    );
+  };
 
   const handleConfirmMoveIn = () => {
     // Extra dialog because this releases escrow — irreversible action.
@@ -349,6 +370,16 @@ export default function TenantBookingDetailScreen() {
             title="Pay Now"
             onPress={() => router.push({ pathname: '/(tenant)/payment/[bookingId]', params: { bookingId: booking.id } } as any)}
             style={styles.actionBtn}
+          />
+        )}
+        {(booking.status === 'REQUESTED' || booking.status === 'ACCEPTED') && (
+          <Button
+            title="Cancel Booking"
+            variant="outline"
+            onPress={handleCancelBooking}
+            isLoading={cancelMutation.isPending}
+            style={[styles.actionBtn, { marginTop: spacing.sm, borderColor: colors.error }]}
+            textStyle={{ color: colors.error }}
           />
         )}
         {booking.status === 'PAID_ESCROW' && (

@@ -24,8 +24,15 @@ export function useLogin() {
 }
 
 export function useRegister() {
+  const setAuth = useAuthStore((state) => state.setAuth);
+
   return useMutation({
     mutationFn: (data: RegisterRequest) => register(data),
+    onSuccess: (res) => {
+      if (res.success && res.data && (res.data as any).accessToken) {
+        setAuth((res.data as any).user, (res.data as any).accessToken, (res.data as any).refreshToken);
+      }
+    }
   });
 }
 

@@ -21,7 +21,7 @@ import {
   Platform,
   ActivityIndicator,
 } from 'react-native';
-import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
+import Animated, { FadeInUp, FadeInDown, LinearTransition } from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
@@ -172,7 +172,7 @@ export default function LandlordListingsScreen() {
   return (
     <View style={styles.screen}>
       {/* Header with logout */}
-      <View style={styles.topBar}>
+      <Animated.View entering={FadeInDown.springify()} style={styles.topBar}>
         <View>
           <Text style={styles.greeting}>Welcome back,</Text>
           <Text style={styles.name}>{user?.fullName}</Text>
@@ -180,9 +180,11 @@ export default function LandlordListingsScreen() {
         <TouchableOpacity onPress={() => logoutMutation.mutate()} style={styles.logoutBtn}>
           <Ionicons name="log-out-outline" size={22} color={colors.textSecondary} />
         </TouchableOpacity>
-      </View>
+      </Animated.View>
 
-      <Text style={styles.sectionTitle}>My Listings ({myProperties.length})</Text>
+      <Animated.Text entering={FadeInDown.delay(100).springify()} style={styles.sectionTitle}>
+        My Listings ({myProperties.length})
+      </Animated.Text>
 
       {isLoading ? (
         <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.xl }} />
@@ -215,12 +217,14 @@ export default function LandlordListingsScreen() {
       )}
 
       {/* FAB to create a new listing */}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => router.push('/listings/new' as any)}
-      >
-        <Ionicons name="add" size={28} color={colors.surface} />
-      </TouchableOpacity>
+      <Animated.View entering={FadeInUp.delay(300).springify()} style={styles.fabContainer}>
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => router.push('/listings/new' as any)}
+        >
+          <Ionicons name="add" size={28} color={colors.surface} />
+        </TouchableOpacity>
+      </Animated.View>
     </View>
   );
 }
@@ -343,10 +347,12 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.medium,
   },
   // FAB
-  fab: {
+  fabContainer: {
     position: 'absolute',
     bottom: Platform.OS === 'ios' ? 100 : 80,
     right: spacing.lg,
+  },
+  fab: {
     width: 58,
     height: 58,
     borderRadius: 29,

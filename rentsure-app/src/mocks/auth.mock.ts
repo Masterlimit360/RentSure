@@ -38,7 +38,7 @@ export async function mockRegister(
     email: req.email,
     phone: req.phone,
     role: req.role,
-    isVerifiedEmail: false,
+    isVerifiedEmail: true,
     status: 'ACTIVE',
     createdAt: new Date().toISOString(),
   };

@@ -1,16 +1,6 @@
-/**
- * Payments API endpoints.
- * 
- * Handles the boundary between the frontend and the real backend for payment flows.
- * 
- * IMPORTANT: The frontend NEVER verifies payments itself. It only requests
- * initialization, presents the checkout URL returned by the backend, and polls
- * this API for the final status. The backend relies exclusively on Paystack
- * webhooks to securely verify payments.
- */
-
-import { apiClient, USE_MOCKS } from './client';
+import { USE_MOCKS } from './client';
 import * as mocks from '@/mocks/payments.mock';
+import { supabase, mapSupabaseError } from './supabase';
 import type {
   ApiResponse,
   InitializePaymentResponse,
@@ -18,59 +8,105 @@ import type {
 } from '@/types';
 import type { Payment } from '@/types';
 
-/**
- * Initiates the payment process for a booking.
- * Returns a checkout URL (either a real Paystack URL or a mock internal route)
- * and a reference string.
- */
+const ts = () => new Date().toISOString();
+
 export async function initializePayment(
   bookingId: string
 ): Promise<ApiResponse<InitializePaymentResponse>> {
   if (USE_MOCKS) return mocks.mockInitializePayment(bookingId);
-  const response = await apiClient.post<ApiResponse<InitializePaymentResponse>>(
-    `/payments/initialize/${bookingId}`
-  );
-  return response.data;
+  
+  const { data, error } = await supabase.functions.invoke('paystack-init', {
+    body: { bookingId }
+  });
+
+  if (error || data?.error) {
+    return { success: false, data: null, error: error ? mapSupabaseError(error) : { code: 'PAYMENT_INIT_ERROR', message: data?.error }, timestamp: ts() };
+  }
+
+  return {
+    success: true,
+    data: {
+      checkoutUrl: data.checkoutUrl,
+      paystackRef: data.paystackRef,
+    },
+    error: null,
+    timestamp: ts(),
+  };
 }
 
-/**
- * Polls the backend for the current status of a payment.
- * 
- * IMPORTANT: This is the ONLY way the frontend determines if a payment succeeded.
- * The backend relies on Paystack webhooks to update the status in the real database,
- * and this endpoint simply reads that status.
- */
 export async function getPaymentStatus(
   bookingId: string
 ): Promise<ApiResponse<PaymentStatusResponse>> {
   if (USE_MOCKS) return mocks.mockGetPaymentStatus(bookingId);
-  const response = await apiClient.get<ApiResponse<PaymentStatusResponse>>(
-    `/payments/${bookingId}/status`
-  );
-  return response.data;
+  
+  // Fetch booking and payment in parallel since they're independent reads
+  const [bookingRes, paymentRes] = await Promise.all([
+    supabase.from('bookings').select('status').eq('id', bookingId).single(),
+    supabase.from('payments').select('*').eq('booking_id', bookingId).single(),
+  ]);
+
+  if (bookingRes.error || !bookingRes.data) {
+    return { success: false, data: null, error: bookingRes.error ? mapSupabaseError(bookingRes.error) : { code: 'NOT_FOUND', message: 'Booking not found' }, timestamp: ts() };
+  }
+
+  const payment = paymentRes.data;
+
+  // Map to the PaymentStatusResponse contract shape
+  const escrowStatus: import('@/types').EscrowStatus =
+    bookingRes.data.status === 'PAID_ESCROW' || payment?.escrow_status === 'HELD'
+      ? 'HELD'
+      : payment?.escrow_status === 'PENDING'
+        ? 'PENDING_VERIFICATION'
+        : 'PENDING_VERIFICATION'; // Default when no payment exists yet
+
+  return {
+    success: true,
+    data: {
+      bookingId,
+      amount: payment?.amount ?? 0,
+      escrowStatus,
+      paidAt: payment?.paid_at ?? '',
+      releasedAt: payment?.released_at,
+    },
+    error: null,
+    timestamp: ts(),
+  };
 }
 
-/**
- * Retrieves the billing history for a given user.
- * For tenants, this is a history of their payments.
- * For landlords, this is a history of their rent payouts.
- */
 export async function getBillingHistory(
   userId: string,
   role: 'TENANT' | 'LANDLORD'
 ): Promise<ApiResponse<Payment[]>> {
   if (USE_MOCKS) return mocks.mockGetBillingHistory(userId, role);
-  const response = await apiClient.get<ApiResponse<Payment[]>>(
-    `/payments/history?userId=${userId}&role=${role}`
-  );
-  return response.data;
+  
+  const { data, error } = await supabase
+    .from('payments')
+    .select('*, bookings(tenant_id, properties(landlord_id))');
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+
+  // Filter in memory since querying nested foreign tables with OR is complex via JS API
+  const filtered: Payment[] = (data || [])
+    .filter((p: any) => {
+      if (role === 'TENANT') return p.bookings?.tenant_id === userId;
+      return p.bookings?.properties?.landlord_id === userId;
+    })
+    .map((p: any) => ({
+      id: p.id,
+      bookingId: p.booking_id,
+      paystackRef: p.paystack_ref,
+      amount: p.amount,
+      fee: p.fee,
+      escrowStatus: p.escrow_status,
+      paidAt: p.paid_at,
+      releasedAt: p.released_at,
+    }));
+
+  return { success: true, data: filtered, error: null, timestamp: ts() };
 }
 
-/**
- * Records a real Paystack payment provisionally.
- * In a fully integrated backend, this wouldn't exist; the backend would listen for Paystack webhooks.
- * For this frontend-only phase, we explicitly tell the mock DB to record the payment as PENDING_VERIFICATION.
- */
 export async function recordRealPayment(
   bookingId: string,
   amount: number,
@@ -78,10 +114,6 @@ export async function recordRealPayment(
 ): Promise<ApiResponse<{ success: boolean }>> {
   if (USE_MOCKS) return mocks.mockRecordRealPayment(bookingId, amount, ref);
   
-  // If we had a real backend, we'd hit an endpoint like /payments/provisional
-  const response = await apiClient.post<ApiResponse<{ success: boolean }>>(
-    `/payments/provisional`,
-    { bookingId, amount, ref }
-  );
-  return response.data;
+  // Real backend uses webhooks exclusively. This is a no-op in Supabase-direct mode.
+  return { success: true, data: { success: true }, error: null, timestamp: ts() };
 }

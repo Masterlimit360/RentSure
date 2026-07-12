@@ -10,6 +10,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
 import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -71,14 +72,15 @@ export default function LoginScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
-          <View style={styles.header}>
+          <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.header}>
             <Text style={styles.title}>Welcome back</Text>
             <Text style={styles.subtitle}>Sign in to manage your rentals.</Text>
-          </View>
+          </Animated.View>
 
           <View style={styles.glassCard}>
             <View style={styles.form}>
-              <Controller
+              <Animated.View entering={FadeInUp.delay(200).springify()}>
+                <Controller
                 control={control}
                 name="email"
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -94,7 +96,9 @@ export default function LoginScreen() {
                   />
                 )}
               />
+              </Animated.View>
 
+              <Animated.View entering={FadeInUp.delay(300).springify()}>
               <Controller
                 control={control}
                 name="password"
@@ -119,30 +123,35 @@ export default function LoginScreen() {
                   />
                 )}
               />
+              </Animated.View>
 
-              <Button
-                title="Sign In"
-                onPress={handleSubmit(onSubmit)}
-                isLoading={loginMutation.isPending}
-                style={styles.signInBtn}
-              />
+              <Animated.View entering={FadeInUp.delay(400).springify()}>
+                <Button
+                  title="Sign In"
+                  onPress={handleSubmit(onSubmit)}
+                  isLoading={loginMutation.isPending}
+                  style={styles.signInBtn}
+                />
+              </Animated.View>
 
-              <View style={styles.footer}>
+              <Animated.View entering={FadeInUp.delay(500).springify()} style={styles.footer}>
                 <Text style={styles.footerText}>Don't have an account? </Text>
-                <Link href="/(auth)/register" style={styles.link}>
-                  Register here
+                <Link href="/(auth)/register" asChild>
+                  <TouchableOpacity>
+                    <Text style={styles.link}>Register here</Text>
+                  </TouchableOpacity>
                 </Link>
-              </View>
+              </Animated.View>
 
               {/* Helper for testing the mock environment */}
               {__DEV__ && (
-                <View style={styles.hints}>
+                <Animated.View entering={FadeInUp.delay(600).springify()} style={styles.hints}>
                   <Text style={styles.hintTitle}>Test Accounts:</Text>
                   <Text style={styles.hintText}>tenant@rentsure.com</Text>
                   <Text style={styles.hintText}>landlord@rentsure.com</Text>
                   <Text style={styles.hintText}>admin@rentsure.com</Text>
                   <Text style={styles.hintText}>Pass: {SEED_PASSWORD}</Text>
-                </View>
+                </Animated.View>
               )}
             </View>
           </View>

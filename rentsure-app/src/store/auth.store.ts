@@ -11,7 +11,7 @@
 
 import { create } from 'zustand';
 import * as SecureStore from 'expo-secure-store';
-import { setTokens, clearTokens } from '@/api/client';
+
 import type { User } from '@/types';
 
 interface AuthState {
@@ -38,8 +38,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   isAuthenticated: false,
 
   setAuth: async (user, accessToken, refreshToken) => {
-    /* Update API client interceptors */
-    setTokens(accessToken, refreshToken);
 
     /* Persist to SecureStore */
     try {
@@ -54,8 +52,6 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   clearAuth: async () => {
-    /* Clear API client interceptors */
-    clearTokens();
 
     /* Clear SecureStore */
     try {
@@ -77,7 +73,7 @@ export const useAuthStore = create<AuthState>((set) => ({
 
       if (storedUser && accessToken && refreshToken) {
         const user = JSON.parse(storedUser);
-        setTokens(accessToken, refreshToken);
+
         set({ user, accessToken, refreshToken, isAuthenticated: true });
       }
     } catch (e) {

@@ -40,6 +40,16 @@ export async function mockListProperties(
     results = db.properties.filter((p) => p.status === 'AVAILABLE');
   }
 
+  if (filters.query) {
+    const qLower = filters.query.toLowerCase();
+    results = results.filter(
+      (p) =>
+        p.city.toLowerCase().includes(qLower) ||
+        p.title.toLowerCase().includes(qLower) ||
+        p.area.toLowerCase().includes(qLower)
+    );
+  }
+
   if (filters.city) {
     const cityLower = filters.city.toLowerCase();
     results = results.filter((p) => p.city.toLowerCase() === cityLower);

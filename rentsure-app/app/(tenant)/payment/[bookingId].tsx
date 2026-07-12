@@ -37,6 +37,7 @@ import { useInitializePayment, usePaymentStatus } from '@/hooks/usePayments';
 import { useMyBookings } from '@/hooks/useBookings';
 import { useAuthStore } from '@/store/auth.store';
 import { mockPayBooking } from '@/mocks/bookings.mock';
+import { USE_MOCKS } from '@/api/client';
 import { Button } from '@/components/ui/Button';
 import { Screen } from '@/components/ui/Screen';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
@@ -88,7 +89,7 @@ export default function PaymentScreen() {
 
   const handlePayNow = async () => {
     if (!bookingId) return;
-    if (process.env.EXPO_PUBLIC_USE_MOCKS === 'true') {
+    if (USE_MOCKS) {
       // Trigger mock flow directly
       handlePaystackSuccess('MOCK_REF_' + Date.now());
     } else {
@@ -103,7 +104,7 @@ export default function PaymentScreen() {
     // Client-reported success is provisional.
     // Integration phase: backend webhook + verify (sk) flips PENDING_VERIFICATION → HELD 
     // and becomes the only trusted path. Do not build any feature that irreversibly trusts PENDING_VERIFICATION.
-    if (process.env.EXPO_PUBLIC_USE_MOCKS === 'true') {
+    if (USE_MOCKS) {
       await mockPayBooking(bookingId!);
     } else {
       const ref = typeof res === 'string' ? res : (res.reference || 'unknown');

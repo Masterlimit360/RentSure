@@ -8,6 +8,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, TextInput } from 'react-native';
+import Animated, { FadeInUp, FadeInDown, FadeIn } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout, useUpdateProfile } from '@/hooks/useAuth';
@@ -57,9 +58,9 @@ export default function TenantProfileScreen() {
   return (
     <Screen noPadding>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.headerBg} />
+        <Animated.View entering={FadeIn.duration(500)} style={styles.headerBg} />
         {/* Avatar & Header */}
-        <View style={styles.profileHeader}>
+        <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.profileHeader}>
           <View style={styles.avatarContainer}>
             <View style={styles.avatar}>
               <Text style={styles.avatarText}>
@@ -110,10 +111,10 @@ export default function TenantProfileScreen() {
               </View>
             </>
           )}
-        </View>
+        </Animated.View>
 
         {/* Payment Methods Section (Requested by User) */}
-        <View style={styles.section}>
+        <Animated.View entering={FadeInUp.delay(200).springify()} style={styles.section}>
           <Text style={styles.sectionTitle}>Payment & Billing</Text>
           <View style={styles.card}>
             <TouchableOpacity style={styles.row} onPress={() => router.push('/(tenant)/payment-methods' as any)}>
@@ -138,12 +139,22 @@ export default function TenantProfileScreen() {
               <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
             </TouchableOpacity>
           </View>
-        </View>
+        </Animated.View>
 
         {/* Settings Section */}
-        <View style={styles.section}>
+        <Animated.View entering={FadeInUp.delay(300).springify()} style={styles.section}>
           <Text style={styles.sectionTitle}>Settings</Text>
           <View style={styles.card}>
+            <TouchableOpacity style={styles.row} onPress={() => router.push('/(tenant)/preferences' as any)}>
+              <View style={styles.rowIcon}>
+                <Ionicons name="options-outline" size={22} color={colors.primary} />
+              </View>
+              <View style={styles.rowContent}>
+                <Text style={styles.rowTitle}>My Preferences</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+            </TouchableOpacity>
+            <View style={styles.divider} />
             <TouchableOpacity style={styles.row} onPress={() => router.push('/(tenant)/notifications' as any)}>
               <View style={styles.rowIcon}>
                 <Ionicons name="notifications-outline" size={22} color={colors.primary} />
@@ -163,11 +174,13 @@ export default function TenantProfileScreen() {
               </View>
             </TouchableOpacity>
           </View>
-        </View>
+        </Animated.View>
 
-        <TouchableOpacity onPress={handleVersionClick} style={styles.versionContainer} activeOpacity={1}>
-          <Text style={styles.versionText}>RentSure App v1.0.0 (Demo)</Text>
-        </TouchableOpacity>
+        <Animated.View entering={FadeInUp.delay(400).springify()}>
+          <TouchableOpacity onPress={handleVersionClick} style={styles.versionContainer} activeOpacity={1}>
+            <Text style={styles.versionText}>RentSure App v1.0.0 (Demo)</Text>
+          </TouchableOpacity>
+        </Animated.View>
       </ScrollView>
 
       {showDevMenu && (

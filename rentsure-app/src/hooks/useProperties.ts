@@ -42,10 +42,11 @@ export function useInfiniteProperties(filters: Omit<PropertyFilters, 'page'>) {
   });
 }
 
-export function useProperties(filters: PropertyFilters) {
+export function useProperties(filters: PropertyFilters, options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: queryKeys.propertyList(filters),
     queryFn: () => listProperties(filters),
+    enabled: options?.enabled,
   });
 }
 

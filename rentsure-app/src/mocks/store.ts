@@ -23,6 +23,7 @@ import type {
   Verification,
   Notification,
   BookingStatus,
+  TenantPreferences,
 } from '@/types';
 
 // ---------------------------------------------------------------------------
@@ -582,6 +583,7 @@ export const db = {
   bookings: [] as Booking[],
   payments: [] as Payment[],
   agreements: [] as Agreement[],
+  tenantPreferences: [] as TenantPreferences[],
   reviews: [] as Review[],
   verifications: [] as Verification[],
   notifications: [] as Notification[],
@@ -698,6 +700,20 @@ export async function initDb() {
       db.reviews = [...seedReviews];
       db.verifications = [...seedVerifications];
       db.notifications = [...seedNotifications];
+
+      db.tenantPreferences = [
+        {
+          userId: '11111111-1111-1111-1111-111111111111',
+          budgetMaxPerYear: 12000,
+          preferredCities: ['Accra'],
+          preferredAreas: ['East Legon'],
+          propertyTypes: ['APARTMENT'],
+          minBedrooms: 1,
+          requiredAmenities: [],
+          niceToHaveAmenities: [],
+          updatedAt: new Date().toISOString()
+        }
+      ];
     }
 
     // Perform 72h expiry sweep on ACCEPTED bookings
@@ -754,13 +770,14 @@ export async function resetDb() {
  * there too (and vice versa), or the mock and real behavior will diverge.
  */
 export const VALID_TRANSITIONS: Record<BookingStatus, BookingStatus[]> = {
-  REQUESTED: ['ACCEPTED', 'REJECTED'],
-  ACCEPTED: ['PAID_ESCROW', 'EXPIRED'],
+  REQUESTED: ['ACCEPTED', 'REJECTED', 'CANCELLED'],
+  ACCEPTED: ['EXPIRED', 'PAID_ESCROW', 'CANCELLED'],
   REJECTED: [],
   EXPIRED: [],
   PAID_ESCROW: ['MOVED_IN'],
   MOVED_IN: ['COMPLETED'],
   COMPLETED: [],
+  CANCELLED: [],
 };
 
 /**

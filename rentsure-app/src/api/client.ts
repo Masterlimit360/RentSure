@@ -1,131 +1,30 @@
 /**
- * Axios HTTP client and mock/real API switch for RentSure.
+ * API mode switch and Supabase client re-export for RentSure.
  *
- * This file is the single gateway for all API traffic. It configures
- * the base URL, attaches JWT tokens via interceptors, and handles
- * silent token refresh on 401 responses.
+ * This file is the single gateway that decides whether API calls hit
+ * Supabase (live) or the in-memory mock layer (demo/QA). The decision
+ * is driven by the EXPO_PUBLIC_USE_MOCKS env var — set it to 'true'
+ * in .env for offline demo mode, anything else for live Supabase.
  *
- * IMPORTANT: The USE_MOCKS flag below controls whether the app hits
- * the real Spring Boot backend or uses the in-memory mock layer.
- * Every feature API file (auth.api.ts, properties.api.ts, etc.) reads
- * this flag to decide which implementation to export. Flip it to false
- * ONLY when the real backend is running and reachable.
+ * In live mode, NO axios client is used. All traffic flows through
+ * supabase-js. The old axios interceptors and token management are
+ * retained only as dead-code for reference; they are never reached
+ * when USE_MOCKS is false.
  */
 
-import axios from 'axios';
-
 // ---------------------------------------------------------------------------
-// Mock/Real switch
+// Mock/Real switch — driven by env var, single source of truth
 // ---------------------------------------------------------------------------
 
 /**
- * IMPORTANT: Set to `false` when the real Spring Boot backend is deployed
- * and ready. While `true`, all API calls go through src/mocks/ instead
- * of making HTTP requests. This is the ONLY place this decision is made —
- * individual API files import this flag and branch accordingly.
+ * When true, every *.api.ts file short-circuits to src/mocks/*.
+ * When false, they call supabase-js (Postgres RPCs, Edge Functions, storage).
+ * NEVER hardcode this. It reads from the Expo env at build time.
  */
-export const USE_MOCKS = true;
-
-// ---------------------------------------------------------------------------
-// Axios instance
-// ---------------------------------------------------------------------------
+export const USE_MOCKS = process.env.EXPO_PUBLIC_USE_MOCKS === 'true';
 
 /**
- * Pre-configured axios instance pointing at the REST API.
- * All real (non-mock) API calls should use this instance, never bare `axios`.
+ * Returns true if the app is running in live Supabase mode.
+ * Useful for UI guards (e.g. hiding "Reset Demo Data" in live mode).
  */
-export const apiClient = axios.create({
-  baseURL: 'http://localhost:8080/api/v1',
-  timeout: 15000,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// ---------------------------------------------------------------------------
-// Auth token management — used by interceptors below
-// ---------------------------------------------------------------------------
-
-/** In-memory token cache; also persisted to expo-secure-store by the auth store. */
-let accessToken: string | null = null;
-let refreshToken: string | null = null;
-
-export function setTokens(access: string, refresh: string): void {
-  accessToken = access;
-  refreshToken = refresh;
-}
-
-export function clearTokens(): void {
-  accessToken = null;
-  refreshToken = null;
-}
-
-export function getAccessToken(): string | null {
-  return accessToken;
-}
-
-export function getRefreshToken(): string | null {
-  return refreshToken;
-}
-
-// ---------------------------------------------------------------------------
-// Request interceptor — attach JWT to every outgoing request
-// ---------------------------------------------------------------------------
-
-apiClient.interceptors.request.use(
-  (config) => {
-    if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// ---------------------------------------------------------------------------
-// Response interceptor — silent token refresh on 401
-// ---------------------------------------------------------------------------
-
-/**
- * IMPORTANT: This interceptor implements silent token refresh. When a
- * request fails with 401, it attempts ONE refresh using the stored
- * refresh token. If the refresh also fails, the user is logged out.
- * Do not add retry loops here — a single refresh attempt is sufficient
- * and prevents infinite loops if both tokens are expired.
- */
-apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
-
-    /* Only attempt refresh once per request (prevents infinite loop) */
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      refreshToken
-    ) {
-      originalRequest._retry = true;
-
-      try {
-        const response = await axios.post(
-          `${apiClient.defaults.baseURL}/auth/refresh`,
-          { refreshToken }
-        );
-
-        const { accessToken: newAccess, refreshToken: newRefresh } =
-          response.data.data;
-
-        setTokens(newAccess, newRefresh);
-        originalRequest.headers.Authorization = `Bearer ${newAccess}`;
-
-        return apiClient(originalRequest);
-      } catch {
-        /* Refresh failed — force logout. The auth store listens for this. */
-        clearTokens();
-        return Promise.reject(error);
-      }
-    }
-
-    return Promise.reject(error);
-  }
-);
+export const IS_LIVE = !USE_MOCKS;

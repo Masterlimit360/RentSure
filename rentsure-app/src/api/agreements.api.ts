@@ -1,42 +1,61 @@
-/**
- * Agreements API endpoints.
- *
- * A digital rental agreement is auto-created when a booking reaches PAID_ESCROW.
- * Both the tenant and landlord must sign before move-in — the UI blocks the
- * "Confirm Move-in" action until both signatures are present.
- */
-
-import { apiClient, USE_MOCKS } from './client';
+import { USE_MOCKS } from './client';
 import * as mocks from '@/mocks/agreements.mock';
+import { supabase, mapSupabaseError } from './supabase';
 import type { ApiResponse, SignAgreementRequest } from '@/types';
 import type { Agreement } from '@/types';
 
-/**
- * Fetch the agreement for a specific booking.
- * Preconditions: booking must be in PAID_ESCROW state or later.
- * @throws AGREEMENT_NOT_FOUND if no agreement exists for this booking yet.
- */
-export async function getAgreement(bookingId: string): Promise<ApiResponse<Agreement>> {
-  if (USE_MOCKS) return mocks.mockGetAgreement(bookingId);
-  const response = await apiClient.get<ApiResponse<Agreement>>(`/agreements/${bookingId}`);
-  return response.data;
+const ts = () => new Date().toISOString();
+
+function mapToAgreement(data: any): Agreement {
+  return {
+    id: data.id,
+    bookingId: data.booking_id,
+    pdfUrl: data.pdf_url,
+    tenantSignedAt: data.tenant_signed_at,
+    landlordSignedAt: data.landlord_signed_at,
+  };
 }
 
-/**
- * Sign the agreement for a booking.
- * Preconditions: Caller must be a party to the booking (tenant or landlord).
- * Each party can only sign once — duplicate calls return ALREADY_SIGNED.
- * @throws AGREEMENT_NOT_FOUND if no agreement exists.
- * @throws ALREADY_SIGNED if this party has already signed.
- */
+export async function getAgreement(bookingId: string): Promise<ApiResponse<Agreement>> {
+  if (USE_MOCKS) return mocks.mockGetAgreement(bookingId);
+  
+  const { data, error } = await supabase
+    .from('agreements')
+    .select('*')
+    .eq('booking_id', bookingId)
+    .single();
+
+  if (error || !data) {
+    return { success: false, data: null, error: error ? mapSupabaseError(error) : { code: 'AGREEMENT_NOT_FOUND', message: 'Agreement not found' }, timestamp: ts() };
+  }
+
+  return { success: true, data: mapToAgreement(data), error: null, timestamp: ts() };
+}
+
 export async function signAgreement(
   bookingId: string,
   req: SignAgreementRequest
 ): Promise<ApiResponse<Agreement>> {
   if (USE_MOCKS) return mocks.mockSignAgreement(bookingId, req);
-  const response = await apiClient.post<ApiResponse<Agreement>>(
-    `/agreements/${bookingId}/sign`,
-    req
-  );
-  return response.data;
+  
+  // RLS will ensure they only update if they are a party to the booking
+  const updateData: any = {};
+  if (req.role === 'TENANT') {
+    updateData.tenant_signed_at = new Date().toISOString();
+  } else {
+    updateData.landlord_signed_at = new Date().toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from('agreements')
+    .update(updateData)
+    .eq('booking_id', bookingId)
+    .select('*')
+    .single();
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+
+  return { success: true, data: mapToAgreement(data), error: null, timestamp: ts() };
 }

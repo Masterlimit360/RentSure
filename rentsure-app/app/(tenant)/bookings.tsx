@@ -27,6 +27,7 @@ import {
   Platform,
   TextInput,
   Image,
+  KeyboardAvoidingView,
 } from 'react-native';
 import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
@@ -53,6 +54,7 @@ const STATUS_CONFIG: Record<BookingStatus, { label: string; bg: string; fg: stri
   COMPLETED:   { label: 'Completed',   bg: '#D1FAE5', fg: '#065F46' },
   REJECTED:    { label: 'Rejected',    bg: '#FEE2E2', fg: '#991B1B' },
   EXPIRED:     { label: 'Expired',     bg: '#F3F4F6', fg: '#6B7280' },
+  CANCELLED:   { label: 'Cancelled',   bg: '#FEE2E2', fg: '#991B1B' },
 };
 
 /** Active bookings require tenant attention; past are terminal states. */
@@ -157,48 +159,53 @@ function ReviewModal({ visible, onClose, onSubmit, isLoading }: ReviewModalProps
 
   return (
     <Modal visible={visible} animationType="slide" transparent onRequestClose={onClose}>
-      <View style={styles.overlay}>
-        <View style={styles.sheet}>
-          <View style={styles.sheetHeader}>
-            <Text style={styles.sheetTitle}>Leave a Review</Text>
-            <TouchableOpacity onPress={onClose}>
-              <Ionicons name="close" size={24} color={colors.text} />
-            </TouchableOpacity>
-          </View>
-
-          <Text style={styles.fieldLabel}>Your Rating</Text>
-          <View style={styles.starRow}>
-            {[1, 2, 3, 4, 5].map((n) => (
-              <TouchableOpacity key={n} onPress={() => setRating(n)}>
-                <Ionicons
-                  name={n <= rating ? 'star' : 'star-outline'}
-                  size={34}
-                  color={n <= rating ? colors.accent : colors.border}
-                />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={{ flex: 1 }}
+      >
+        <View style={styles.overlay}>
+          <View style={styles.sheet}>
+            <View style={styles.sheetHeader}>
+              <Text style={styles.sheetTitle}>Leave a Review</Text>
+              <TouchableOpacity onPress={onClose}>
+                <Ionicons name="close" size={24} color={colors.text} />
               </TouchableOpacity>
-            ))}
+            </View>
+
+            <Text style={styles.fieldLabel}>Your Rating</Text>
+            <View style={styles.starRow}>
+              {[1, 2, 3, 4, 5].map((n) => (
+                <TouchableOpacity key={n} onPress={() => setRating(n)}>
+                  <Ionicons
+                    name={n <= rating ? 'star' : 'star-outline'}
+                    size={34}
+                    color={n <= rating ? colors.accent : colors.border}
+                  />
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <Text style={styles.fieldLabel}>Comment</Text>
+            <TextInput
+              style={styles.textArea}
+              placeholder="Describe your experience with the landlord and property…"
+              placeholderTextColor={colors.textSecondary}
+              multiline
+              numberOfLines={4}
+              textAlignVertical="top"
+              value={comment}
+              onChangeText={setComment}
+            />
+
+            <Button
+              title="Submit Review"
+              onPress={handleSubmit}
+              isLoading={isLoading}
+              style={styles.submitBtn}
+            />
           </View>
-
-          <Text style={styles.fieldLabel}>Comment</Text>
-          <TextInput
-            style={styles.textArea}
-            placeholder="Describe your experience with the landlord and property…"
-            placeholderTextColor={colors.textSecondary}
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-            value={comment}
-            onChangeText={setComment}
-          />
-
-          <Button
-            title="Submit Review"
-            onPress={handleSubmit}
-            isLoading={isLoading}
-            style={styles.submitBtn}
-          />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

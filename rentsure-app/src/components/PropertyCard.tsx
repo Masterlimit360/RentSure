@@ -12,6 +12,9 @@ import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
 import type { Property, BookingStatus } from '@/types';
 import { formatCurrency } from '@/utils/format';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { useAuthStore } from '@/store/auth.store';
+import { usePreferences } from '@/hooks/usePreferences';
+import { computeCompatibility } from '@/utils/compatibility';
 
 interface PropertyCardProps {
   property: Property;
@@ -26,6 +29,10 @@ export function PropertyCard({ property, index = 0, activeBookingStatus, activeB
   // Pick the first photo or use a placeholder
   const mainPhoto = property.media.find((m) => m.mediaType === 'PHOTO')?.url;
   const imageUrl = mainPhoto || 'https://via.placeholder.com/400x300?text=No+Image';
+
+  const { user } = useAuthStore();
+  const { data: prefs } = usePreferences(user?.role === 'TENANT' ? user.id : undefined);
+  const score = prefs ? computeCompatibility(prefs, property) : null;
 
   const getStatusDisplay = () => {
     switch(activeBookingStatus) {
@@ -63,6 +70,17 @@ export function PropertyCard({ property, index = 0, activeBookingStatus, activeB
             <View style={[styles.statusBanner, { backgroundColor: statusInfo.color }]}>
               <Ionicons name={statusInfo.icon} size={16} color={colors.surface} />
               <Text style={styles.statusBannerText}>{statusInfo.text}</Text>
+            </View>
+          )}
+          {score && (
+            <View style={[
+              styles.scoreBadge, 
+              { backgroundColor: score.total >= 75 ? colors.success : score.total >= 50 ? colors.warning : colors.textSecondary }
+            ]}>
+              {score.factors.some(f => f.score === 0 && f.key === 'AMENITIES' && f.detail.startsWith('Missing:')) && (
+                <View style={styles.dealbreakerDot} />
+              )}
+              <Text style={styles.scoreBadgeText}>{score.total}% match</Text>
             </View>
           )}
         </View>
@@ -156,6 +174,33 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   statusBannerText: {
+    color: colors.surface,
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+  },
+  scoreBadge: {
+    position: 'absolute',
+    top: spacing.md,
+    right: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 6,
+    borderRadius: borderRadius.pill,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 4,
+  },
+  dealbreakerDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#DC2626',
+    marginRight: 4,
+  },
+  scoreBadgeText: {
     color: colors.surface,
     fontSize: typography.sizes.sm,
     fontWeight: typography.weights.bold,

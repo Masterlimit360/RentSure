@@ -1,3 +1,11 @@
+/**
+ * Developer Tools bottom sheet.
+ *
+ * In MOCK mode: shows full QA toolkit (reset DB, time shift, account switch, row counts).
+ * In LIVE mode: hides all mock-specific actions; only shows the mode badge
+ * and a link to the Supabase dashboard for debugging.
+ */
+
 import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -5,6 +13,9 @@ import { useAuthStore } from '@/store/auth.store';
 import { db, resetDb, flushDb } from '@/mocks/store';
 import { typography, colors, spacing, borderRadius } from '@/constants/theme';
 import { useRouter } from 'expo-router';
+import { USE_MOCKS, IS_LIVE } from '@/api/client';
+import { supabase } from '@/api/supabase';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface DevMenuProps {
   visible: boolean;
@@ -13,6 +24,7 @@ interface DevMenuProps {
 
 export function DevMenu({ visible, onClose }: DevMenuProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const handleResetDb = () => {
     Alert.alert('Reset DB', 'Are you sure?', [
@@ -26,16 +38,30 @@ export function DevMenu({ visible, onClose }: DevMenuProps) {
     ]);
   };
 
+  /**
+   * In live mode, logging out also clears the TanStack Query cache
+   * so no stale Supabase data lingers between accounts.
+   */
+  const handleLiveLogout = async () => {
+    Alert.alert('Log Out', 'Sign out and clear cache?', [
+      { text: 'Cancel', style: 'cancel' },
+      { text: 'Log Out', style: 'destructive', onPress: async () => {
+        await supabase.auth.signOut();
+        queryClient.clear();
+        useAuthStore.getState().clearAuth();
+        onClose();
+        router.replace('/(auth)/login' as any);
+      }}
+    ]);
+  };
+
   const handleSwitchAccount = (userId: string, role: string) => {
-    // Hot swap user session
     const user = db.users.find(u => u.id === userId);
     if (user) {
-      // Create fake token response
       const fakeToken = `mock-access-${user.id}-${Date.now()}`;
       const fakeRefresh = `mock-refresh-${user.id}-${Date.now()}`;
       useAuthStore.getState().setAuth(user, fakeToken, fakeRefresh);
       onClose();
-      // Route appropriately
       if (role === 'TENANT') router.replace('/(tenant)/' as any);
       else if (role === 'LANDLORD') router.replace('/(landlord)/' as any);
       else if (role === 'ADMIN') router.replace('/(admin)/' as any);
@@ -44,7 +70,6 @@ export function DevMenu({ visible, onClose }: DevMenuProps) {
   };
 
   const handleSimulateTime = async () => {
-    // Shifts requestedAt of ACCEPTED bookings back by 73 hours
     let changed = 0;
     const shiftMs = 73 * 60 * 60 * 1000;
     const now = Date.now();
@@ -60,7 +85,6 @@ export function DevMenu({ visible, onClose }: DevMenuProps) {
 
     if (changed > 0) {
       await flushDb();
-      // Note: the background expiration check is in initDb, we can force it here
       const SEVENTY_TWO_HOURS = 72 * 60 * 60 * 1000;
       let expired = 0;
       db.bookings.forEach(b => {
@@ -76,7 +100,7 @@ export function DevMenu({ visible, onClose }: DevMenuProps) {
     }
     
     onClose();
-    Alert.alert('Time Shifted', `Shifted 73h. ${changed} bookings updated, ${changed} expired.`);
+    Alert.alert('Time Shifted', `Shifted 73h. ${changed} bookings updated.`);
   };
 
   const handleViewCounts = () => {
@@ -100,9 +124,9 @@ Notifications: ${db.notifications.length}
           <View style={styles.header}>
             <View>
               <Text style={styles.headerTitle}>Developer Tools</Text>
-              <View style={[styles.modeBadge, { backgroundColor: process.env.EXPO_PUBLIC_USE_MOCKS === 'true' ? colors.warning + '20' : colors.success + '20' }]}>
-                <Text style={[styles.modeBadgeText, { color: process.env.EXPO_PUBLIC_USE_MOCKS === 'true' ? colors.warning : colors.success }]}>
-                  {process.env.EXPO_PUBLIC_USE_MOCKS === 'true' ? 'Mock Mode: ACTIVE' : 'Live Payments: ACTIVE'}
+              <View style={[styles.modeBadge, { backgroundColor: USE_MOCKS ? colors.warning + '20' : colors.success + '20' }]}>
+                <Text style={[styles.modeBadgeText, { color: USE_MOCKS ? colors.warning : colors.success }]}>
+                  {USE_MOCKS ? '🧪 Mock Mode' : '🟢 Live (Supabase)'}
                 </Text>
               </View>
             </View>
@@ -112,36 +136,51 @@ Notifications: ${db.notifications.length}
           </View>
 
           <ScrollView style={styles.body} showsVerticalScrollIndicator={false}>
-            {/* Global Actions */}
-            <Text style={styles.sectionTitle}>Global Actions</Text>
-            <TouchableOpacity style={styles.actionRow} onPress={handleResetDb}>
-              <Ionicons name="trash-outline" size={20} color={colors.error} />
-              <Text style={[styles.actionText, { color: colors.error }]}>Reset Mock DB</Text>
-            </TouchableOpacity>
-            
-            <TouchableOpacity style={styles.actionRow} onPress={handleSimulateTime}>
-              <Ionicons name="time-outline" size={20} color={colors.primary} />
-              <Text style={styles.actionText}>Simulate +73h (Trigger Expiry)</Text>
-            </TouchableOpacity>
+            {/* ---- LIVE-MODE ACTIONS ---- */}
+            {IS_LIVE && (
+              <>
+                <Text style={styles.sectionTitle}>Live Mode</Text>
+                <TouchableOpacity style={styles.actionRow} onPress={handleLiveLogout}>
+                  <Ionicons name="log-out-outline" size={20} color={colors.error} />
+                  <Text style={[styles.actionText, { color: colors.error }]}>Log Out & Clear Cache</Text>
+                </TouchableOpacity>
+              </>
+            )}
 
-            <TouchableOpacity style={styles.actionRow} onPress={handleViewCounts}>
-              <Ionicons name="stats-chart-outline" size={20} color={colors.primary} />
-              <Text style={styles.actionText}>View DB Row Counts</Text>
-            </TouchableOpacity>
+            {/* ---- MOCK-ONLY ACTIONS (hidden in live mode) ---- */}
+            {USE_MOCKS && (
+              <>
+                <Text style={styles.sectionTitle}>Global Actions</Text>
+                <TouchableOpacity style={styles.actionRow} onPress={handleResetDb}>
+                  <Ionicons name="trash-outline" size={20} color={colors.error} />
+                  <Text style={[styles.actionText, { color: colors.error }]}>Reset Mock DB</Text>
+                </TouchableOpacity>
+                
+                <TouchableOpacity style={styles.actionRow} onPress={handleSimulateTime}>
+                  <Ionicons name="time-outline" size={20} color={colors.primary} />
+                  <Text style={styles.actionText}>Simulate +73h (Trigger Expiry)</Text>
+                </TouchableOpacity>
 
-            {/* Fast Account Switching */}
-            <Text style={[styles.sectionTitle, { marginTop: spacing.lg }]}>Fast Account Switch</Text>
-            {db.users.map(u => (
-              <TouchableOpacity key={u.id} style={styles.userRow} onPress={() => handleSwitchAccount(u.id, u.role)}>
-                <View style={styles.avatar}>
-                  <Text style={styles.avatarText}>{u.fullName[0]}</Text>
-                </View>
-                <View style={styles.userInfo}>
-                  <Text style={styles.userName}>{u.fullName}</Text>
-                  <Text style={styles.userRole}>{u.role}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
+                <TouchableOpacity style={styles.actionRow} onPress={handleViewCounts}>
+                  <Ionicons name="stats-chart-outline" size={20} color={colors.primary} />
+                  <Text style={styles.actionText}>View DB Row Counts</Text>
+                </TouchableOpacity>
+
+                {/* Fast Account Switching — mock only */}
+                <Text style={[styles.sectionTitle, { marginTop: spacing.lg }]}>Fast Account Switch</Text>
+                {db.users.map(u => (
+                  <TouchableOpacity key={u.id} style={styles.userRow} onPress={() => handleSwitchAccount(u.id, u.role)}>
+                    <View style={styles.avatar}>
+                      <Text style={styles.avatarText}>{u.fullName[0]}</Text>
+                    </View>
+                    <View style={styles.userInfo}>
+                      <Text style={styles.userName}>{u.fullName}</Text>
+                      <Text style={styles.userRole}>{u.role}</Text>
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </>
+            )}
           </ScrollView>
         </View>
       </View>

@@ -18,7 +18,7 @@ import {
 import { TouchableOpacity, Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Swipeable } from 'react-native-gesture-handler';
+import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useNotifications, useMarkAllRead, useClearAllNotifications, useDeleteNotification } from '@/hooks/useNotifications';
 import { useNotificationsStore } from '@/store/notifications.store';
 import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
@@ -105,7 +105,8 @@ export function NotificationsScreen({ userId }: NotificationsScreenProps) {
   }
 
   return (
-    <Screen noPadding>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Screen noPadding>
       <View style={styles.topBar}>
         <Text style={styles.topBarTitle}>Notifications</Text>
         {notifications.length > 0 && (
@@ -165,6 +166,7 @@ export function NotificationsScreen({ userId }: NotificationsScreenProps) {
         )}
       />
     </Screen>
+    </GestureHandlerRootView>
   );
 }
 

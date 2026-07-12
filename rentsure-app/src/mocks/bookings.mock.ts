@@ -315,6 +315,41 @@ export async function mockPayBooking(
   });
 }
 
+export async function mockCancelBooking(bookingId: string): Promise<ApiResponse<Booking>> {
+  return withWriteLock(async () => {
+    await simulateLatency();
+    const user = requireAuth();
+    if (!user || user.role !== 'TENANT') return wrapError('UNAUTHORIZED', 'Only tenants can cancel bookings');
+
+    const booking = db.bookings.find(b => b.id === bookingId);
+    if (!booking) return wrapError('NOT_FOUND', 'Booking not found');
+    if (booking.tenantId !== user.id) return wrapError('FORBIDDEN', 'Not your booking');
+
+    if (booking.status !== 'REQUESTED' && booking.status !== 'ACCEPTED') {
+      return wrapError('INVALID_STATE', 'Cannot cancel from this state');
+    }
+
+    const result = transitionBooking(bookingId, 'CANCELLED');
+    if (result.success) {
+      const property = db.properties.find(p => p.id === booking.propertyId);
+      if (property) {
+        db.notifications.push({
+          id: generateId(),
+          userId: property.landlordId,
+          type: 'BOOKING_CANCELLED',
+          title: 'Booking Cancelled',
+          body: `The tenant has cancelled the booking for ${property.title}.`,
+          bookingId: booking.id,
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        });
+      }
+      await flushDb();
+    }
+    return result;
+  });
+}
+
 // ---------------------------------------------------------------------------
 // Internal helper
 // ---------------------------------------------------------------------------

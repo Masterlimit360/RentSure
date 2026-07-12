@@ -25,17 +25,28 @@ import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { PropertyCard } from '@/components/PropertyCard';
-import { useInfiniteProperties } from '@/hooks/useProperties';
+import { useInfiniteProperties, useProperties } from '@/hooks/useProperties';
 import { useAuthStore } from '@/store/auth.store';
 import { useMyBookings } from '@/hooks/useBookings';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useRouter } from 'expo-router';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { usePreferences } from '@/hooks/usePreferences';
+import { computeCompatibility } from '@/utils/compatibility';
 import type { PropertyType } from '@/types';
 
 export default function TenantIndex() {
   const { user } = useAuthStore();
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
-  const [cityFilter, setCityFilter] = useState('');
+  const [queryFilter, setQueryFilter] = useState('');
   const [isFilterVisible, setFilterVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [sortByMatch, setSortByMatch] = useState(false);
+
+  const { data: prefs } = usePreferences(user?.id);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   // Filter states
   const [tempType, setTempType] = useState<PropertyType | undefined>();
@@ -53,11 +64,18 @@ export default function TenantIndex() {
     refetch,
     isRefetching,
   } = useInfiniteProperties({
-    city: cityFilter || undefined,
+    query: queryFilter || undefined,
     type: activeType,
     maxPrice: activeMaxPrice,
     // Minimum price is usually requested in advanced filtering, omitting for simplicity unless requested
   });
+
+  const { data: suggestionsData, isFetching: isFetchingSuggestions } = useProperties(
+    { query: debouncedSearchQuery, size: 5 },
+    { enabled: debouncedSearchQuery.length > 1 }
+  );
+  
+  const suggestions = suggestionsData?.data?.content || [];
 
   const { data: bookingsData } = useMyBookings(user?.id ?? '', 'TENANT');
   const activeBookings = bookingsData?.data?.filter(b => 
@@ -66,11 +84,21 @@ export default function TenantIndex() {
 
   const properties = data?.pages.flatMap((page) => page.data?.content || []) || [];
 
+  let displayProperties = [...properties];
+  if (prefs && sortByMatch) {
+    displayProperties.sort((a, b) => {
+      const scoreA = computeCompatibility(prefs, a).total;
+      const scoreB = computeCompatibility(prefs, b).total;
+      return scoreB - scoreA;
+    });
+  }
+
   const applyFilters = () => {
     setActiveType(tempType);
     const parsedPrice = parseInt(tempMaxPrice, 10);
     setActiveMaxPrice(isNaN(parsedPrice) ? undefined : parsedPrice);
-    setCityFilter(searchQuery);
+    setQueryFilter(searchQuery);
+    setIsFocused(false);
     setFilterVisible(false);
   };
 
@@ -80,7 +108,8 @@ export default function TenantIndex() {
     setActiveType(undefined);
     setActiveMaxPrice(undefined);
     setSearchQuery('');
-    setCityFilter('');
+    setQueryFilter('');
+    setIsFocused(false);
     setFilterVisible(false);
   };
 
@@ -98,32 +127,71 @@ export default function TenantIndex() {
 
   return (
     <Screen>
-      <View style={styles.searchContainer}>
-        <View style={styles.searchBar}>
-          <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search by city (e.g. Accra, Kumasi)"
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            onSubmitEditing={() => setCityFilter(searchQuery)}
-            returnKeyType="search"
-          />
+      <View style={{ zIndex: 10 }}>
+        <View style={styles.searchContainer}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search by city, title, or area..."
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => {
+                // Short delay to allow tap on suggestion to register before blur hides it
+                setTimeout(() => setIsFocused(false), 200);
+              }}
+              onSubmitEditing={() => {
+                setQueryFilter(searchQuery);
+                setIsFocused(false);
+              }}
+              returnKeyType="search"
+            />
+          </View>
+          <TouchableOpacity
+            style={[styles.filterButton, Boolean(activeType || activeMaxPrice) && styles.filterButtonActive]}
+            onPress={() => {
+              setTempType(activeType);
+              setTempMaxPrice(activeMaxPrice ? activeMaxPrice.toString() : '');
+              setFilterVisible(true);
+            }}
+          >
+            <Ionicons
+              name="options"
+              size={24}
+              color={(activeType || activeMaxPrice) ? colors.surface : colors.text}
+            />
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          style={[styles.filterButton, Boolean(activeType || activeMaxPrice) && styles.filterButtonActive]}
-          onPress={() => {
-            setTempType(activeType);
-            setTempMaxPrice(activeMaxPrice ? activeMaxPrice.toString() : '');
-            setFilterVisible(true);
-          }}
-        >
-          <Ionicons
-            name="options"
-            size={24}
-            color={(activeType || activeMaxPrice) ? colors.surface : colors.text}
-          />
-        </TouchableOpacity>
+
+        {isFocused && searchQuery.length > 1 && (
+          <View style={styles.suggestionsContainer}>
+            {isFetchingSuggestions ? (
+              <Text style={styles.suggestionsLoading}>Searching...</Text>
+            ) : suggestions.length > 0 ? (
+              suggestions.map((item) => (
+                <TouchableOpacity
+                  key={item.id}
+                  style={styles.suggestionItem}
+                  onPress={() => {
+                    setIsFocused(false);
+                    setSearchQuery(item.title);
+                    router.push(`/(tenant)/property/${item.id}`);
+                  }}
+                >
+                  <Ionicons name="location-outline" size={20} color={colors.textSecondary} />
+                  <View style={{ marginLeft: spacing.sm, flex: 1 }}>
+                    <Text style={styles.suggestionTitle} numberOfLines={1}>{item.title}</Text>
+                    <Text style={styles.suggestionSubtitle}>{item.area}, {item.city}</Text>
+                  </View>
+                  <Text style={styles.suggestionPrice}>GHS {item.pricePerYear}</Text>
+                </TouchableOpacity>
+              ))
+            ) : (
+              <Text style={styles.suggestionsLoading}>No properties found matching "{searchQuery}"</Text>
+            )}
+          </View>
+        )}
       </View>
 
       {isLoading ? (
@@ -150,7 +218,7 @@ export default function TenantIndex() {
         </View>
       ) : (
         <FlatList
-          data={properties}
+          data={displayProperties}
           keyExtractor={(item) => item.id}
           renderItem={({ item, index }) => {
             const activeBooking = activeBookings.find(b => b.propertyId === item.id);
@@ -165,6 +233,28 @@ export default function TenantIndex() {
               onRefresh={refetch}
               tintColor={colors.primary}
             />
+          }
+          ListHeaderComponent={
+            <View style={{ marginBottom: spacing.md }}>
+              {!prefs ? (
+                <View style={styles.ctaCard}>
+                  <Text style={styles.ctaTitle}>Get personal match scores — 2 minutes</Text>
+                  <Text style={styles.ctaDesc}>Take a quick quiz to see how well each property fits your budget and lifestyle.</Text>
+                  <Button title="Take Quiz" onPress={() => router.push('/(tenant)/preferences' as any)} />
+                </View>
+              ) : (
+                <View style={styles.sortToggleRow}>
+                  <Text style={styles.sortToggleText}>Sort by Best Match</Text>
+                  <TouchableOpacity
+                    style={[styles.sortToggleBtn, sortByMatch && styles.sortToggleBtnActive]}
+                    onPress={() => setSortByMatch(!sortByMatch)}
+                  >
+                    <View style={[styles.sortToggleThumb, sortByMatch && styles.sortToggleThumbActive]} />
+                  </TouchableOpacity>
+                  <Text style={styles.sortToggleNote}>(loaded results only)</Text>
+                </View>
+              )}
+            </View>
           }
           onEndReached={() => {
             if (hasNextPage && !isFetchingNextPage) {
@@ -278,6 +368,50 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderColor: colors.primary,
   },
+  suggestionsContainer: {
+    position: 'absolute',
+    top: spacing.md + 48 + spacing.sm,
+    left: 0,
+    right: 48 + spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    zIndex: 100,
+    maxHeight: 300,
+  },
+  suggestionItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  suggestionTitle: {
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.medium,
+    color: colors.text,
+  },
+  suggestionSubtitle: {
+    fontSize: typography.sizes.sm,
+    color: colors.textSecondary,
+    marginTop: 2,
+  },
+  suggestionPrice: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+    color: colors.primary,
+  },
+  suggestionsLoading: {
+    padding: spacing.md,
+    textAlign: 'center',
+    color: colors.textSecondary,
+  },
   listContent: {
     paddingBottom: spacing.xl,
     flexGrow: 1,
@@ -306,8 +440,72 @@ const styles = StyleSheet.create({
   },
   footerLoading: {
     textAlign: 'center',
-    padding: spacing.md,
+    paddingVertical: spacing.md,
     color: colors.textSecondary,
+  },
+  ctaCard: {
+    backgroundColor: '#EFF6FF',
+    padding: spacing.md,
+    borderRadius: borderRadius.lg,
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  ctaTitle: {
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.bold,
+    color: colors.primary,
+    marginBottom: spacing.xs,
+  },
+  ctaDesc: {
+    fontSize: typography.sizes.sm,
+    color: colors.textSecondary,
+    marginBottom: spacing.md,
+  },
+  sortToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  sortToggleText: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.medium,
+    color: colors.text,
+    flex: 1,
+  },
+  sortToggleBtn: {
+    width: 44,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: colors.border,
+    padding: 2,
+    justifyContent: 'center',
+  },
+  sortToggleBtnActive: {
+    backgroundColor: colors.primary,
+  },
+  sortToggleThumb: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1,
+    elevation: 2,
+  },
+  sortToggleThumbActive: {
+    transform: [{ translateX: 20 }],
+  },
+  sortToggleNote: {
+    fontSize: 10,
+    color: colors.textSecondary,
+    marginLeft: spacing.sm,
   },
   emptyContainer: {
     flex: 1,

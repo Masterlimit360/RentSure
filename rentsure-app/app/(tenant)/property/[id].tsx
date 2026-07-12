@@ -21,6 +21,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { useProperty } from '@/hooks/useProperties';
@@ -32,6 +33,8 @@ import { Button } from '@/components/ui/Button';
 import { Screen } from '@/components/ui/Screen';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
+import { usePreferences } from '@/hooks/usePreferences';
+import { computeCompatibility } from '@/utils/compatibility';
 import type { Review } from '@/types';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -46,6 +49,7 @@ export default function PropertyDetailScreen() {
   const { data: reviewsData } = usePropertyReviews(id || '');
   const createBookingMutation = useCreateBooking();
   const { data: bookingsData } = useMyBookings(user?.id ?? '', 'TENANT');
+  const { data: prefs } = usePreferences(user?.role === 'TENANT' ? user.id : undefined);
 
   const activeBooking = bookingsData?.data?.find(b => 
     b.propertyId === id && 
@@ -56,9 +60,17 @@ export default function PropertyDetailScreen() {
   const [isBookingModalVisible, setBookingModalVisible] = useState(false);
   
   // Booking Form State
-  // Real app: use a native date picker. For mock: simple text input.
-  const [moveInDate, setMoveInDate] = useState('2025-01-01');
+  const [date, setDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [moveInDate, setMoveInDate] = useState(date.toISOString().split('T')[0]);
   const [durationMonths, setDurationMonths] = useState('12');
+
+  const onDateChange = (event: any, selectedDate?: Date) => {
+    const currentDate = selectedDate || date;
+    setShowDatePicker(Platform.OS === 'ios');
+    setDate(currentDate);
+    setMoveInDate(currentDate.toISOString().split('T')[0]);
+  };
 
   if (isPropertyLoading) {
     return (
@@ -84,6 +96,7 @@ export default function PropertyDetailScreen() {
 
   const reviews = reviewsData?.data || [];
   const photos = property.media.filter((m) => m.mediaType === 'PHOTO');
+  const score = prefs ? computeCompatibility(prefs, property) : null;
 
   const handleBookingSubmit = () => {
     if (!user) {
@@ -193,6 +206,51 @@ export default function PropertyDetailScreen() {
             <Text style={styles.priceUnit}> / yr</Text>
           </Text>
 
+          {/* Compatibility Breakdown */}
+          {score && (
+            <View style={styles.section}>
+              <View style={styles.scoreHeaderRow}>
+                <Text style={styles.sectionTitle}>Compatibility Match</Text>
+                <View style={[
+                  styles.scoreBadgeLarge, 
+                  { backgroundColor: score.total >= 75 ? colors.success : score.total >= 50 ? colors.warning : colors.textSecondary }
+                ]}>
+                  {score.factors.some(f => f.score === 0 && f.key === 'AMENITIES' && f.detail.startsWith('Missing:')) && (
+                    <View style={styles.dealbreakerDotLarge} />
+                  )}
+                  <Text style={styles.scoreBadgeTextLarge}>{score.total}%</Text>
+                </View>
+              </View>
+              
+              <View style={styles.factorsContainer}>
+                {score.factors.map(factor => (
+                  <TouchableOpacity 
+                    key={factor.key} 
+                    style={styles.factorRow}
+                    onPress={() => router.push('/(tenant)/preferences')}
+                  >
+                    <View style={styles.factorHeader}>
+                      <Text style={styles.factorLabel}>{factor.label}</Text>
+                      <Text style={styles.factorScore}>{factor.score} / {factor.maxScore}</Text>
+                    </View>
+                    <View style={styles.factorBarBg}>
+                      <View 
+                        style={[
+                          styles.factorBarFill, 
+                          { 
+                            width: `${factor.maxScore > 0 ? (factor.score / factor.maxScore) * 100 : 0}%`,
+                            backgroundColor: factor.score === factor.maxScore ? colors.success : (factor.score > 0 ? colors.primary : colors.textSecondary)
+                          }
+                        ]} 
+                      />
+                    </View>
+                    <Text style={styles.factorDetail}>{factor.detail}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
+
           {/* Amenities Chips */}
           <View style={styles.section}>
             <Text style={styles.sectionTitle}>Amenities</Text>
@@ -301,27 +359,44 @@ export default function PropertyDetailScreen() {
                     </TouchableOpacity>
                   </View>
 
-                  <Text style={styles.inputLabel}>Move-in Date (YYYY-MM-DD)</Text>
-                  <View style={styles.inputContainer}>
-                    <TextInput
-                      style={styles.textInput}
-                      value={moveInDate}
-                      onChangeText={setMoveInDate}
-                      placeholder="2025-01-01"
-                    />
-                  </View>
+                  <Text style={styles.inputLabel}>Move-in Date</Text>
+                  {Platform.OS === 'ios' ? (
+                    <View style={styles.datePickerContainer}>
+                      <DateTimePicker
+                        value={date}
+                        mode="date"
+                        display="default"
+                        onChange={onDateChange}
+                      />
+                    </View>
+                  ) : (
+                    <View>
+                      <TouchableOpacity 
+                        style={[styles.inputContainer, styles.datePickerBtn]} 
+                        onPress={() => setShowDatePicker(true)}
+                      >
+                        <Text style={styles.textInput}>{moveInDate}</Text>
+                        <Ionicons name="calendar-outline" size={24} color={colors.primary} />
+                      </TouchableOpacity>
+                      {showDatePicker && (
+                        <DateTimePicker
+                          value={date}
+                          mode="date"
+                          display="default"
+                          onChange={onDateChange}
+                        />
+                      )}
+                    </View>
+                  )}
 
                   <Text style={styles.inputLabel}>Duration (Months)</Text>
-                  <View style={styles.inputContainer}>
+                  <View style={[styles.inputContainer, styles.compactInput]}>
                     <TextInput
                       style={styles.textInput}
                       value={durationMonths}
                       onChangeText={setDurationMonths}
                       keyboardType="number-pad"
                     />
-                    <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
-                      <Text style={styles.inputDoneText}>Done</Text>
-                    </TouchableOpacity>
                   </View>
 
                   <View style={styles.totalContainer}>
@@ -615,6 +690,17 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
     marginTop: spacing.md,
   },
+  datePickerContainer: {
+    alignItems: 'flex-start',
+    marginBottom: spacing.sm,
+  },
+  datePickerBtn: {
+    justifyContent: 'space-between',
+    paddingRight: spacing.md,
+  },
+  compactInput: {
+    width: 120,
+  },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -658,5 +744,70 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     color: colors.primary,
+  },
+  scoreHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: spacing.sm,
+  },
+  scoreBadgeLarge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.pill,
+  },
+  scoreBadgeTextLarge: {
+    color: colors.surface,
+    fontSize: typography.sizes.md,
+    fontWeight: typography.weights.bold,
+  },
+  dealbreakerDotLarge: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#DC2626',
+    marginRight: 6,
+  },
+  factorsContainer: {
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    gap: spacing.md,
+  },
+  factorRow: {
+    gap: 4,
+  },
+  factorHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  factorLabel: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+    color: colors.text,
+  },
+  factorScore: {
+    fontSize: typography.sizes.sm,
+    color: colors.textSecondary,
+    fontWeight: typography.weights.medium,
+  },
+  factorBarBg: {
+    height: 6,
+    backgroundColor: colors.border,
+    borderRadius: 3,
+    overflow: 'hidden',
+  },
+  factorBarFill: {
+    height: '100%',
+    borderRadius: 3,
+  },
+  factorDetail: {
+    fontSize: typography.sizes.sm,
+    color: colors.textSecondary,
+    marginTop: 2,
   },
 });
