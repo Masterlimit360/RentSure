@@ -1,4 +1,22 @@
--- Fix is_admin to be STABLE and bulletproof against auth.uid() errors
+-- ============================================================
+-- Migration: Fix is_admin() + backfill public.profiles
+-- ============================================================
+--
+-- IMPORTANT: Direct INSERT into auth.users is BANNED.
+-- GoTrue does not accept externally-hashed passwords written via SQL.
+-- Any row in auth.users whose encrypted_password was not written by
+-- GoTrue itself will return HTTP 500 on sign-in.
+--
+-- Demo accounts MUST be created via:
+--   - Supabase Dashboard → Authentication → Users → Add User (auto-confirm)
+--   - OR the seed script: scripts/seed-auth-users.js  (calls admin API)
+--
+-- This migration only handles the public.* side:
+--   1. Hardens is_admin() so it never throws
+--   2. Backfills public.profiles for any auth.users rows that are missing one
+-- ============================================================
+
+-- 1. Harden is_admin() — must never raise, even when called with auth.uid() = NULL
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN
 LANGUAGE plpgsql
@@ -8,7 +26,6 @@ AS $$
 DECLARE
   v_uid UUID;
 BEGIN
-  -- Safely get the auth.uid()
   BEGIN
     v_uid := auth.uid();
   EXCEPTION WHEN OTHERS THEN
@@ -25,49 +42,19 @@ BEGIN
 END;
 $$;
 
--- Seed the exact test accounts into auth.users if they do not exist
--- This guarantees they will work in production without manual signup
-DO $$
-DECLARE
-  v_pass VARCHAR := 'Test1234!';
-  v_encrypted_pass VARCHAR;
-  v_tenant_id UUID := gen_random_uuid();
-  v_landlord_id UUID := gen_random_uuid();
-  v_admin_id UUID := gen_random_uuid();
-BEGIN
-  CREATE EXTENSION IF NOT EXISTS pgcrypto;
-  v_encrypted_pass := crypt(v_pass, gen_salt('bf'));
-
-  -- 1. Tenant
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'tenant@rentsure.com') THEN
-    INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, aud, role, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
-    VALUES (v_tenant_id, '00000000-0000-0000-0000-000000000000', 'tenant@rentsure.com', v_encrypted_pass, NOW(), 'authenticated', 'authenticated', '{"provider": "email", "providers": ["email"]}', '{"full_name": "Test Tenant", "phone": "0500000001", "role": "TENANT"}', NOW(), NOW());
-  END IF;
-
-  -- 2. Landlord
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'landlord@rentsure.com') THEN
-    INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, aud, role, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
-    VALUES (v_landlord_id, '00000000-0000-0000-0000-000000000000', 'landlord@rentsure.com', v_encrypted_pass, NOW(), 'authenticated', 'authenticated', '{"provider": "email", "providers": ["email"]}', '{"full_name": "Test Landlord", "phone": "0500000002", "role": "LANDLORD"}', NOW(), NOW());
-  END IF;
-
-  -- 3. Admin
-  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'admin@rentsure.com') THEN
-    INSERT INTO auth.users (id, instance_id, email, encrypted_password, email_confirmed_at, aud, role, raw_app_meta_data, raw_user_meta_data, created_at, updated_at)
-    VALUES (v_admin_id, '00000000-0000-0000-0000-000000000000', 'admin@rentsure.com', v_encrypted_pass, NOW(), 'authenticated', 'authenticated', '{"provider": "email", "providers": ["email"]}', '{"full_name": "System Admin", "phone": "0500000003", "role": "ADMIN"}', NOW(), NOW());
-  END IF;
-END;
-$$;
-
--- Backfill missing profiles for the test accounts (if the signup trigger failed)
+-- 2. Backfill public.profiles for any auth.users that are missing a profile row.
+--    This fixes the case where the on_auth_user_created trigger failed during
+--    a previous seeding attempt.
 DO $$
 DECLARE
   u record;
   v_role VARCHAR(20);
 BEGIN
-  FOR u IN 
-    SELECT id, email, raw_user_meta_data 
-    FROM auth.users 
+  FOR u IN
+    SELECT id, email, raw_user_meta_data
+    FROM auth.users
     WHERE email IN ('tenant@rentsure.com', 'landlord@rentsure.com', 'admin@rentsure.com')
+      AND id NOT IN (SELECT id FROM public.profiles)
   LOOP
     IF u.email = 'admin@rentsure.com' THEN
       v_role := 'ADMIN';
@@ -77,17 +64,25 @@ BEGIN
       v_role := 'TENANT';
     END IF;
 
-    -- Insert safely, generate a fake phone if not present to avoid UNIQUE constraint violations
-    -- on subsequent seeded users
     INSERT INTO public.profiles (id, full_name, phone, role, is_verified)
     VALUES (
       u.id,
       COALESCE(u.raw_user_meta_data->>'full_name', split_part(u.email, '@', 1)),
-      COALESCE(u.raw_user_meta_data->>'phone', left(gen_random_uuid()::text, 15)),
+      -- Use a unique fake phone to avoid UNIQUE constraint collisions
+      '+2330' || lpad((floor(random() * 900000000) + 100000000)::text, 9, '0'),
       v_role,
       true
     )
-    ON CONFLICT (id) DO NOTHING;
+    ON CONFLICT (id) DO UPDATE
+      SET role        = EXCLUDED.role,
+          is_verified = true;
   END LOOP;
 END;
 $$;
+
+-- 3. Confirm and un-ban any of the demo users that might be banned or unconfirmed.
+UPDATE auth.users
+SET
+  email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
+  banned_until       = NULL
+WHERE email IN ('tenant@rentsure.com', 'landlord@rentsure.com', 'admin@rentsure.com');
