@@ -18,6 +18,18 @@ public class PropertySpecification {
             city == null ? null : cb.equal(cb.lower(root.get("city")), city.toLowerCase());
     }
 
+    public static Specification<Property> matchesQuery(String search) {
+        return (root, query, cb) -> {
+            if (search == null || search.trim().isEmpty()) return null;
+            String likePattern = "%" + search.toLowerCase() + "%";
+            return cb.or(
+                cb.like(cb.lower(root.get("title")), likePattern),
+                cb.like(cb.lower(root.get("city")), likePattern),
+                cb.like(cb.lower(root.get("area")), likePattern)
+            );
+        };
+    }
+
     public static Specification<Property> hasType(PropertyType type) {
         return (root, query, cb) -> 
             type == null ? null : cb.equal(root.get("propertyType"), type);

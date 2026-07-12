@@ -26,6 +26,7 @@ public class PropertyController {
 
     @GetMapping
     public ApiResponse<PaginatedResponse<PropertyDto>> getProperties(
+            @RequestParam(required = false) String query,
             @RequestParam(required = false) String city,
             @RequestParam(required = false) PropertyType type,
             @RequestParam(required = false) BigDecimal minPrice,
@@ -39,7 +40,7 @@ public class PropertyController {
             requesterId = UUID.fromString((String) authentication.getPrincipal());
         }
 
-        return ApiResponse.success(propertyService.search(city, type, minPrice, maxPrice, page, size, requesterId));
+        return ApiResponse.success(propertyService.search(query, city, type, minPrice, maxPrice, page, size, requesterId));
     }
 
     @GetMapping("/{id}")

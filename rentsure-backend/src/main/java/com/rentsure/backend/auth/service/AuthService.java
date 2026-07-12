@@ -63,10 +63,11 @@ public class AuthService {
                 .phone(request.getPhone())
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
                 .role(request.getRole())
+                .verifiedEmail(true) // BYPASS EMAIL VERIFICATION FOR NOW
                 .build();
         userRepository.save(user);
 
-        generateAndStoreOtp(user.getEmail());
+        // generateAndStoreOtp(user.getEmail()); // BYPASSED
     }
 
     /**

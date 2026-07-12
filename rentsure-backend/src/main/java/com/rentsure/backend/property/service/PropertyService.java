@@ -54,7 +54,7 @@ public class PropertyService {
      */
     @Transactional(readOnly = true)
     public PaginatedResponse<PropertyDto> search(
-            String city, PropertyType type, BigDecimal minPrice, BigDecimal maxPrice, 
+            String query, String city, PropertyType type, BigDecimal minPrice, BigDecimal maxPrice, 
             int page, int size, UUID requesterId) {
 
         // Default bounds: min 1, max 50
@@ -62,7 +62,8 @@ public class PropertyService {
         size = Math.min(50, Math.max(1, size));
         Pageable pageable = PageRequest.of(page, size);
 
-        Specification<Property> spec = Specification.where(PropertySpecification.hasCity(city))
+        Specification<Property> spec = Specification.where(PropertySpecification.matchesQuery(query))
+                .and(PropertySpecification.hasCity(city))
                 .and(PropertySpecification.hasType(type))
                 .and(PropertySpecification.priceGreaterThanOrEq(minPrice))
                 .and(PropertySpecification.priceLessThanOrEq(maxPrice))

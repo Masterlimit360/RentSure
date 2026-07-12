@@ -1,6 +1,11 @@
 spring:
   application:
     name: rentsure-backend
+  datasource:
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 10000
+      connection-test-query: SELECT 1
   profiles:
     active: dev
   jackson:
@@ -14,3 +19,9 @@ app:
     secret: ${JWT_SECRET:vErYsEcReTjWtKeYtHaTiSaTlEaSt256BiTsLoNg}
     access-token-expiration-minutes: 15
     refresh-token-expiration-days: 7
+
+  storage:
+    supabase:
+      url: https://nxujvinvafvfsavdlqwj.supabase.co
+      anon-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54dWp2aW52YWZ2ZnNhdmRscXdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NTgxNTgsImV4cCI6MjA5OTQzNDE1OH0.Veu006UvNDlbxf9tiQd9cuwap3HebE2mRTxgibJFuUE
+      bucket: media

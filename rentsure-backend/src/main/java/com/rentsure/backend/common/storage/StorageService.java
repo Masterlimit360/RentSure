@@ -20,4 +20,14 @@ public interface StorageService {
      * Stores raw bytes as a file.
      */
     String store(byte[] content, String filename, String prefix) throws IOException;
+
+    /**
+     * Generates a pre-signed, short-lived URL for accessing a private file.
+     * @param filepath The full path/identifier of the file in storage
+     * @param expiresInSeconds Number of seconds until the URL expires
+     * @return The signed URL
+     */
+    default String getSignedUrl(String filepath, int expiresInSeconds) {
+        throw new UnsupportedOperationException("Signed URLs not supported by this storage provider");
+    }
 }
