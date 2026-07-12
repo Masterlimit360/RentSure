@@ -8,6 +8,7 @@ interface PaystackCheckoutProps {
   visible: boolean;
   amountPesewas: number;
   email: string;
+  phone?: string;
   paystackKey: string;
   reference: string;
   bookingId: string;
@@ -19,6 +20,7 @@ export function PaystackCheckout({
   visible,
   amountPesewas,
   email,
+  phone,
   paystackKey,
   reference,
   bookingId,
@@ -84,6 +86,7 @@ export function PaystackCheckout({
           var handler = PaystackPop.setup({
             key: '${paystackKey}',
             email: '${email}',
+            phone: '${phone || ''}',
             amount: ${amountPesewas},
             currency: 'GHS',
             ref: '${reference}',

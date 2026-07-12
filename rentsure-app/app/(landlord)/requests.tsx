@@ -18,10 +18,10 @@ import {
   FlatList,
   TouchableOpacity,
   Modal,
-  ActivityIndicator,
   Platform,
   Alert,
   Image,
+  TextInput,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
@@ -268,11 +268,25 @@ export default function LandlordRequestsScreen() {
   const rejectMutation = useRejectBooking();
 
   const [rejectTarget, setRejectTarget] = useState<Booking | null>(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<BookingStatus | 'ALL'>('ALL');
 
-  // Newest first so the landlord sees the most recent requests at the top
-  const bookings = [...(data?.data ?? [])].sort(
-    (a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime()
-  );
+  // Filter and sort bookings
+  const bookings = [...(data?.data ?? [])]
+    .filter(b => {
+      // Status filter
+      if (statusFilter !== 'ALL' && b.status !== statusFilter) return false;
+      // Search filter
+      if (searchQuery) {
+        const qLower = searchQuery.toLowerCase();
+        const refMatch = b.bookingRef?.toLowerCase().includes(qLower);
+        const tenantMatch = b.tenantName?.toLowerCase().includes(qLower);
+        const propertyMatch = b.propertyTitle?.toLowerCase().includes(qLower);
+        if (!refMatch && !tenantMatch && !propertyMatch) return false;
+      }
+      return true;
+    })
+    .sort((a, b) => new Date(b.requestedAt).getTime() - new Date(a.requestedAt).getTime());
 
   const handleAccept = (booking: Booking) => {
     Alert.alert(
@@ -307,9 +321,39 @@ export default function LandlordRequestsScreen() {
   };
 
   return (
-    <Screen noPadding>
+    <Screen noPadding style={{ backgroundColor: colors.background }}>
       <View style={styles.topBar}>
         <Text style={styles.heading}>Booking Requests</Text>
+        <View style={styles.searchRow}>
+          <View style={styles.searchBar}>
+            <Ionicons name="search" size={20} color={colors.textSecondary} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search ref, tenant, property..."
+              placeholderTextColor={colors.textSecondary}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
+            />
+            {searchQuery.length > 0 && (
+              <TouchableOpacity onPress={() => setSearchQuery('')}>
+                <Ionicons name="close-circle" size={16} color={colors.textSecondary} />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+        <View style={styles.filterRow}>
+          {['ALL', 'REQUESTED', 'ACCEPTED', 'PAID_ESCROW', 'MOVED_IN', 'COMPLETED'].map((status) => (
+            <TouchableOpacity
+              key={status}
+              style={[styles.filterChip, statusFilter === status && styles.filterChipActive]}
+              onPress={() => setStatusFilter(status as any)}
+            >
+              <Text style={[styles.filterChipText, statusFilter === status && styles.filterChipTextActive]}>
+                {status === 'ALL' ? 'All' : status === 'PAID_ESCROW' ? 'Payment Held' : status === 'MOVED_IN' ? 'Moved In' : status.charAt(0) + status.slice(1).toLowerCase()}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </View>
 
       {isLoading ? (
@@ -362,6 +406,52 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     color: colors.text,
+    marginBottom: spacing.md,
+  },
+  searchRow: {
+    marginBottom: spacing.sm,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.background,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.sm,
+    height: 40,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  searchInput: {
+    flex: 1,
+    marginLeft: spacing.xs,
+    fontSize: typography.sizes.sm,
+    color: colors.text,
+  },
+  filterRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.xs,
+  },
+  filterChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: borderRadius.pill,
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  filterChipActive: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+  },
+  filterChipText: {
+    fontSize: typography.sizes.xs,
+    color: colors.textSecondary,
+    fontWeight: typography.weights.medium,
+  },
+  filterChipTextActive: {
+    color: colors.surface,
+    fontWeight: typography.weights.bold,
   },
   list: {
     padding: spacing.md,

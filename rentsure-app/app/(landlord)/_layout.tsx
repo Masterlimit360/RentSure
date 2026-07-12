@@ -8,6 +8,8 @@ import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useNotificationsStore } from '@/store/notifications.store';
+import { useAuthStore } from '@/store/auth.store';
+import { useMyBookings } from '@/hooks/useBookings';
 
 function InboxButton() {
   const { unreadCount } = useNotificationsStore();
@@ -26,6 +28,11 @@ function InboxButton() {
 }
 
 export default function LandlordLayout() {
+  const { user } = useAuthStore();
+  const { data: bookingsData } = useMyBookings(user?.id ?? '', 'LANDLORD');
+  
+  const pendingRequestsCount = bookingsData?.data?.filter(b => b.status === 'REQUESTED').length || 0;
+
   return (
     <Tabs
       screenOptions={{
@@ -55,6 +62,7 @@ export default function LandlordLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="mail" size={size} color={color} />
           ),
+          tabBarBadge: pendingRequestsCount > 0 ? pendingRequestsCount : undefined,
         }}
       />
       <Tabs.Screen

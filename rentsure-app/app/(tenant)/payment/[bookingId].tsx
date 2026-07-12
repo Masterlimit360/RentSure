@@ -192,6 +192,7 @@ export default function PaymentScreen() {
               visible={isCheckoutVisible}
               paystackKey={process.env.EXPO_PUBLIC_PAYSTACK_KEY || "pk_test_dummy"}
               email={user?.email || "tenant@rentsure.com"}
+              phone={user?.phone}
               amountPesewas={amountPesewas}
               reference={booking.bookingRef + '_' + Date.now()}
               bookingId={bookingId!}
