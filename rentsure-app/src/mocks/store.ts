@@ -374,7 +374,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Water Tank"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.365Z"
@@ -399,7 +399,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -426,7 +426,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Water Tank"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -452,7 +452,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Water Tank"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -477,7 +477,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -503,7 +503,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "Parking"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -528,7 +528,7 @@ export const seedProperties: Property[] = [
       "Air Conditioning",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -553,7 +553,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -576,7 +576,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "Water Tank"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -601,7 +601,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -625,7 +625,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -651,7 +651,7 @@ export const seedProperties: Property[] = [
       "Parking",
       "Water Tank"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -676,7 +676,7 @@ export const seedProperties: Property[] = [
       "Air Conditioning",
       "Parking"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -701,7 +701,7 @@ export const seedProperties: Property[] = [
       "Pool",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -726,7 +726,7 @@ export const seedProperties: Property[] = [
       "Gym",
       "Balcony"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -751,7 +751,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -774,7 +774,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Parking"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -799,7 +799,7 @@ export const seedProperties: Property[] = [
       "Pool",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -826,7 +826,7 @@ export const seedProperties: Property[] = [
       "WiFi",
       "Security"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -852,7 +852,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Backup Generator"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -878,7 +878,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Parking"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -902,7 +902,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -927,7 +927,7 @@ export const seedProperties: Property[] = [
       "Pool",
       "Balcony"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -951,7 +951,7 @@ export const seedProperties: Property[] = [
       "Water Tank",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -977,7 +977,7 @@ export const seedProperties: Property[] = [
       "WiFi",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1003,7 +1003,7 @@ export const seedProperties: Property[] = [
       "Parking",
       "WiFi"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1029,7 +1029,7 @@ export const seedProperties: Property[] = [
       "Security",
       "Backup Generator"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1054,7 +1054,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "WiFi"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1078,7 +1078,7 @@ export const seedProperties: Property[] = [
       "Pool",
       "Security"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1103,7 +1103,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1126,7 +1126,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Security"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1149,7 +1149,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1172,7 +1172,7 @@ export const seedProperties: Property[] = [
       "Gym",
       "Backup Generator"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1198,7 +1198,7 @@ export const seedProperties: Property[] = [
       "Pool",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1222,7 +1222,7 @@ export const seedProperties: Property[] = [
       "WiFi",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1247,7 +1247,7 @@ export const seedProperties: Property[] = [
       "WiFi",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1270,7 +1270,7 @@ export const seedProperties: Property[] = [
       "Pool",
       "Security"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1294,7 +1294,7 @@ export const seedProperties: Property[] = [
       "WiFi",
       "Air Conditioning"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1317,7 +1317,7 @@ export const seedProperties: Property[] = [
       "WiFi",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1340,7 +1340,7 @@ export const seedProperties: Property[] = [
       "Balcony",
       "Water Tank"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1364,7 +1364,7 @@ export const seedProperties: Property[] = [
       "Water Tank",
       "Gym"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1391,7 +1391,7 @@ export const seedProperties: Property[] = [
       "Water Tank",
       "WiFi"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1415,7 +1415,7 @@ export const seedProperties: Property[] = [
       "Water Tank",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1441,7 +1441,7 @@ export const seedProperties: Property[] = [
       "Security",
       "WiFi"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1465,7 +1465,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1488,7 +1488,7 @@ export const seedProperties: Property[] = [
       "Gym",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1511,7 +1511,7 @@ export const seedProperties: Property[] = [
       "Backup Generator",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1537,7 +1537,7 @@ export const seedProperties: Property[] = [
       "Air Conditioning",
       "Balcony"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1560,7 +1560,7 @@ export const seedProperties: Property[] = [
       "Gym",
       "Parking"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1586,7 +1586,7 @@ export const seedProperties: Property[] = [
       "Water Tank",
       "Pool"
     ],
-    "isVerified": true,
+    "isVerified": false,
     "status": "AVAILABLE",
     "media": [],
     "createdAt": "2026-07-12T21:54:13.366Z"
@@ -1741,7 +1741,459 @@ export const seedAgreements: Agreement[] = [
   },
 ];
 
-export const seedVerifications: Verification[] = [];
+export const seedVerifications: Verification[] = [
+  // --- Injected Verifications for SQL Properties ---
+  {
+    id: 'v-sql-0',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-1',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-0/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.118Z'
+  },
+  {
+    id: 'v-sql-1',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-2',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-1/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-2',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-3',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-2/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-3',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-4',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-3/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-4',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-5',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-4/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-5',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-6',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-5/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-6',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-7',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-6/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-7',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-8',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-7/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-8',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-9',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-8/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-9',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-10',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-9/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-10',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-11',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-10/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-11',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-12',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-11/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-12',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-13',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-12/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-13',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-14',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-13/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-14',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-15',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-14/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-15',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-16',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-15/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-16',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-17',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-16/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-17',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-18',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-17/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-18',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-19',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-18/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-19',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-20',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-19/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-20',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-21',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-20/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-21',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-22',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-21/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-22',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-23',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-22/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-23',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-24',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-23/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-24',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-25',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-24/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-25',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-26',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-25/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-26',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-27',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-26/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-27',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-28',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-27/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-28',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-29',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-28/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-29',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-30',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-29/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-30',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-31',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-30/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-31',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-32',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-31/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-32',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-33',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-32/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-33',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-34',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-33/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-34',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-35',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-34/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-35',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-36',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-35/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-36',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-37',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-36/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-37',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-38',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-37/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-38',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-39',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-38/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-39',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-40',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-39/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-40',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-41',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-40/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-41',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-42',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-41/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-42',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-43',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-42/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-43',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-44',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-43/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-44',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-45',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-44/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-45',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-46',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-45/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-46',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-47',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-46/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-47',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-48',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-47/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-48',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-49',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-48/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+  {
+    id: 'v-sql-49',
+    landlordId: 'u-landlord-001',
+    propertyId: 'p-sql-50',
+    docType: 'LAND_TITLE',
+    docUrl: 'https://picsum.photos/seed/doc-49/800/1200',
+    status: 'PENDING',
+    submittedAt: '2026-07-12T22:22:47.124Z'
+  },
+];
 
 // Seed notifications — realistic entries for the tenant and landlord
 export const seedNotifications: Notification[] = [
