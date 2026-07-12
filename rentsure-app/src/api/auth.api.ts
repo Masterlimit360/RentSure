@@ -40,7 +40,8 @@ export async function register(
 ): Promise<ApiResponse<User>> {
   if (USE_MOCKS) return mocks.mockRegister(req);
   
-  const { data, error } = await supabase.auth.signUp({
+  // Step 1: Create the account (email confirmation is DISABLED in Supabase dashboard)
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email: req.email,
     password: req.password,
     options: {
@@ -48,34 +49,42 @@ export async function register(
         full_name: req.fullName,
         phone: req.phone,
         role: req.role,
-      }
-    }
+      },
+    },
   });
 
-  if (error) {
-    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  if (signUpError) {
+    return { success: false, data: null, error: mapSupabaseError(signUpError), timestamp: ts() };
   }
 
-  if (!data.user) {
-    return { success: false, data: null, error: { code: 'UNKNOWN_ERROR', message: 'User not returned' }, timestamp: ts() };
-  }
+  // Step 2: Sign in immediately — no email verification step
+  const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
+    email: req.email,
+    password: req.password,
+  });
 
-  const user = await mapSupabaseUser(data.user);
-
-  if (data.session) {
-    return { 
-      success: true, 
-      data: {
-        user,
-        accessToken: data.session.access_token,
-        refreshToken: data.session.refresh_token,
-      } as any, 
-      error: null, 
-      timestamp: ts() 
+  if (loginError) {
+    // Account was created but auto-login failed — send them to login screen
+    return {
+      success: true,
+      data: null as any,
+      error: null,
+      timestamp: ts(),
     };
   }
 
-  return { success: true, data: user, error: null, timestamp: ts() };
+  const user = await mapSupabaseUser(loginData.user);
+
+  return {
+    success: true,
+    data: {
+      user,
+      accessToken: loginData.session.access_token,
+      refreshToken: loginData.session.refresh_token,
+    } as any,
+    error: null,
+    timestamp: ts(),
+  };
 }
 
 export async function verifyEmail(

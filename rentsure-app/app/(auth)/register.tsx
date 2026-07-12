@@ -9,7 +9,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity } from 'react-native';
-import { Link, useRouter } from 'expo-router';
+import { Link } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
 import { useForm, Controller } from 'react-hook-form';
@@ -43,7 +43,6 @@ type RegisterForm = z.infer<typeof registerSchema>;
 
 export default function RegisterScreen() {
   const [showPassword, setShowPassword] = useState(false);
-  const router = useRouter();
   const registerMutation = useRegister();
   const showToast = useToastStore((state) => state.showToast);
 
@@ -70,19 +69,14 @@ export default function RegisterScreen() {
     registerMutation.mutate(data, {
       onSuccess: (res) => {
         if (res.success) {
-          if ((res.data as any).accessToken) {
-            showToast('Registration successful! Welcome to RentSure.');
-            // Do NOT router.replace, the global _layout listener will handle it!
-          } else {
-            showToast('Registration successful! Please check your email to verify your account.');
-            router.replace('/(auth)/login');
-          }
+          showToast('Welcome to RentSure!', 'success');
+          // _layout.tsx auth listener handles redirect automatically
         } else {
-          showToast(res.error?.message || 'Registration failed', 'error');
+          showToast(res.error?.message || 'Registration failed. Please try again.', 'error');
         }
       },
       onError: () => {
-        showToast('Network error occurred. Please try again.', 'error');
+        showToast('No connection. Check your internet and try again.', 'error');
       },
     });
   };
