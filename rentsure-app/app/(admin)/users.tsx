@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Platform, Alert, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Platform, Alert, Modal, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAdminUsers, useSuspendUser, useReactivateUser } from '@/hooks/useAdmin';
 import { Screen } from '@/components/ui/Screen';
@@ -27,7 +27,7 @@ function UserSkeleton() {
 }
 
 export default function AdminUsers() {
-  const [filters, setFilters] = useState<AdminUserFilters>({});
+  const [filters, setFilters] = useState<AdminUserFilters & { search?: string }>({});
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const { data, isLoading, isRefetching, refetch } = useAdminUsers(filters);
   const suspendMutation = useSuspendUser();
@@ -110,7 +110,7 @@ export default function AdminUsers() {
             style={styles.searchInput}
             placeholder="Search users..."
             value={filters.search}
-            onChangeText={(text) => setFilters(prev => ({ ...prev, search: text }))}
+            onChangeText={(text: string) => setFilters(prev => ({ ...prev, search: text }))}
             placeholderTextColor={colors.textSecondary}
           />
         </View>

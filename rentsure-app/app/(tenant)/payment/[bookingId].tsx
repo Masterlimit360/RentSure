@@ -28,6 +28,7 @@ import {
   Alert,
   Platform,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -59,6 +60,7 @@ export default function PaymentScreen() {
   const [timedOut, setTimedOut] = useState(false);
 
   const [isCheckoutVisible, setCheckoutVisible] = useState(false);
+  const [phoneInput, setPhoneInput] = useState(user?.phone || '');
 
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -182,6 +184,17 @@ export default function PaymentScreen() {
 
             <Text style={styles.refNote}>Ref: {booking.bookingRef}</Text>
 
+            <View style={styles.phoneInputContainer}>
+              <Text style={styles.phoneInputLabel}>Mobile Money Phone Number</Text>
+              <TextInput
+                style={styles.phoneInput}
+                value={phoneInput}
+                onChangeText={setPhoneInput}
+                placeholder="e.g. 0241234567"
+                keyboardType="phone-pad"
+              />
+            </View>
+
             <Button
               title="Pay with Paystack"
               onPress={handlePayNow}
@@ -192,7 +205,7 @@ export default function PaymentScreen() {
               visible={isCheckoutVisible}
               paystackKey={process.env.EXPO_PUBLIC_PAYSTACK_KEY || "pk_test_dummy"}
               email={user?.email || "tenant@rentsure.com"}
-              phone={user?.phone}
+              phone={phoneInput}
               amountPesewas={amountPesewas}
               reference={booking.bookingRef + '_' + Date.now()}
               bookingId={bookingId!}
@@ -364,6 +377,24 @@ const styles = StyleSheet.create({
   escrowTitle: { fontWeight: typography.weights.bold, color: colors.text, marginBottom: 4 },
   escrowBody: { fontSize: typography.sizes.sm, color: colors.textSecondary, lineHeight: 20 },
   refNote: { fontSize: typography.sizes.sm, color: colors.textSecondary, marginBottom: spacing.lg },
+  phoneInputContainer: {
+    marginBottom: spacing.lg,
+  },
+  phoneInputLabel: {
+    fontSize: typography.sizes.sm,
+    fontWeight: typography.weights.bold,
+    color: colors.text,
+    marginBottom: spacing.xs,
+  },
+  phoneInput: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.md,
+    height: 48,
+    fontSize: typography.sizes.md,
+    backgroundColor: colors.surface,
+  },
   cta: { marginTop: spacing.sm, marginBottom: 0 },
   // Processing
   processingContainer: {

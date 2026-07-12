@@ -139,7 +139,7 @@ export function PaystackCheckout({
           </TouchableOpacity>
         </View>
         <WebView
-          source={{ html: htmlContent }}
+          source={{ html: htmlContent, baseUrl: 'https://paystack.com' }}
           onMessage={handleMessage}
           javaScriptEnabled={true}
           domStorageEnabled={true}
