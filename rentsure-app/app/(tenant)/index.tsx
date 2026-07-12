@@ -16,6 +16,9 @@ import {
   Modal,
   TextInput,
   Platform,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '@/components/ui/Screen';
@@ -179,45 +182,59 @@ export default function TenantIndex() {
 
       {/* Filter Modal */}
       <Modal visible={isFilterVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Filters</Text>
-              <TouchableOpacity onPress={() => setFilterVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
-              </TouchableOpacity>
-            </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalOverlay}>
+              <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+                <View style={styles.modalContent}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>Filters</Text>
+                    <TouchableOpacity onPress={() => setFilterVisible(false)}>
+                      <Ionicons name="close" size={24} color={colors.text} />
+                    </TouchableOpacity>
+                  </View>
 
-            <Text style={styles.filterSectionTitle}>Property Type</Text>
-            <View style={styles.chipsContainer}>
-              {(['APARTMENT', 'HOUSE', 'STUDIO'] as PropertyType[]).map((type) => (
-                <TouchableOpacity
-                  key={type}
-                  style={[styles.chip, tempType === type && styles.chipActive]}
-                  onPress={() => setTempType(tempType === type ? undefined : type)}
-                >
-                  <Text style={[styles.chipText, tempType === type && styles.chipTextActive]}>
-                    {type}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                  <Text style={styles.filterSectionTitle}>Property Type</Text>
+                  <View style={styles.chipsContainer}>
+                    {(['APARTMENT', 'HOUSE', 'STUDIO'] as PropertyType[]).map((type) => (
+                      <TouchableOpacity
+                        key={type}
+                        style={[styles.chip, tempType === type && styles.chipActive]}
+                        onPress={() => setTempType(tempType === type ? undefined : type)}
+                      >
+                        <Text style={[styles.chipText, tempType === type && styles.chipTextActive]}>
+                          {type}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
 
-            <Text style={styles.filterSectionTitle}>Max Price (GHS / year)</Text>
-            <TextInput
-              style={styles.priceInput}
-              keyboardType="number-pad"
-              placeholder="e.g. 15000"
-              value={tempMaxPrice}
-              onChangeText={setTempMaxPrice}
-            />
+                  <Text style={styles.filterSectionTitle}>Max Price (GHS / year)</Text>
+                  <View style={styles.priceInputContainer}>
+                    <TextInput
+                      style={styles.priceInput}
+                      keyboardType="number-pad"
+                      placeholder="e.g. 15000"
+                      value={tempMaxPrice}
+                      onChangeText={setTempMaxPrice}
+                    />
+                    <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
+                      <Text style={styles.inputDoneText}>Done</Text>
+                    </TouchableOpacity>
+                  </View>
 
-            <View style={styles.modalFooter}>
-              <Button title="Reset" onPress={clearFilters} variant="outline" style={{ flex: 1 }} />
-              <Button title="Apply Filters" onPress={applyFilters} style={{ flex: 2 }} />
+                  <View style={styles.modalFooter}>
+                    <Button title="Reset" onPress={clearFilters} variant="outline" style={{ flex: 1 }} />
+                    <Button title="Apply Filters" onPress={applyFilters} style={{ flex: 2 }} />
+                  </View>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
-          </View>
-        </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     </Screen>
   );
@@ -365,12 +382,29 @@ const styles = StyleSheet.create({
     color: colors.surface,
     fontWeight: typography.weights.bold,
   },
-  priceInput: {
+  priceInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: borderRadius.md,
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+  },
+  priceInput: {
+    flex: 1,
+    height: 48,
+    fontSize: typography.sizes.md,
+    color: colors.text,
+  },
+  inputDoneButton: {
+    paddingLeft: spacing.sm,
+    justifyContent: 'center',
+    height: '100%',
+  },
+  inputDoneText: {
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
     fontSize: typography.sizes.md,
   },
   modalFooter: {

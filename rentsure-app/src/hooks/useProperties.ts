@@ -16,6 +16,7 @@ import type { PropertyFilters, CreatePropertyRequest, UpdatePropertyRequest } fr
 export const queryKeys = {
   properties: ['properties'] as const,
   propertyList: (filters: PropertyFilters) => ['properties', 'list', filters] as const,
+  propertyInfiniteList: (filters: PropertyFilters) => ['properties', 'infinite', filters] as const,
   propertyDetail: (id: string) => ['properties', 'detail', id] as const,
 };
 
@@ -28,7 +29,7 @@ export const queryKeys = {
  */
 export function useInfiniteProperties(filters: Omit<PropertyFilters, 'page'>) {
   return useInfiniteQuery({
-    queryKey: queryKeys.propertyList(filters),
+    queryKey: queryKeys.propertyInfiniteList(filters),
     queryFn: ({ pageParam = 0 }) => listProperties({ ...filters, page: pageParam as number }),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
