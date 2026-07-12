@@ -381,7 +381,6 @@ export default function TenantPaymentMethodsScreen() {
               />
             </ScrollView>
           </View>
-                </View>
               </TouchableWithoutFeedback>
             </View>
           </TouchableWithoutFeedback>

@@ -383,7 +383,6 @@ export default function PayoutAccountsScreen() {
               />
             </ScrollView>
           </View>
-                </View>
               </TouchableWithoutFeedback>
             </View>
           </TouchableWithoutFeedback>
