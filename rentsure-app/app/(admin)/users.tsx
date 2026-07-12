@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Platform, Alert } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, Platform, Alert, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAdminUsers, useSuspendUser, useReactivateUser } from '@/hooks/useAdmin';
 import { Screen } from '@/components/ui/Screen';

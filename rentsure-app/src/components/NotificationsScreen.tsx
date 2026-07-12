@@ -135,14 +135,14 @@ export function NotificationsScreen({ userId }: NotificationsScreenProps) {
               renderRightActions={() => (
                 <TouchableOpacity
                   style={styles.deleteAction}
-                  onPress={() => deleteMutation.mutate({ notificationId: item.id }, { onSuccess: () => refetch() })}
+                  onPress={() => deleteMutation.mutate({ notificationId: item.id, userId }, { onSuccess: () => refetch() })}
                 >
                   <Ionicons name="trash" size={24} color="#FFF" />
                 </TouchableOpacity>
               )}
               onSwipeableOpen={(direction) => {
                 if (direction === 'right') {
-                  deleteMutation.mutate({ notificationId: item.id }, { onSuccess: () => refetch() });
+                  deleteMutation.mutate({ notificationId: item.id, userId }, { onSuccess: () => refetch() });
                 }
               }}
             >
