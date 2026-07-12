@@ -37,6 +37,19 @@ serve(async (req) => {
     if (booking.tenant_id !== user.id) throw new Error('Unauthorized for this booking')
     if (booking.status !== 'ACCEPTED') throw new Error('Booking is not in ACCEPTED state')
 
+    // DOUBLE-BOOKING RACE FIX: Check if property is already paid for by someone else
+    const { data: competingBookings, error: competingError } = await supabase
+      .from('bookings')
+      .select('id')
+      .eq('property_id', booking.property_id)
+      .neq('id', booking.id)
+      .in('status', ['PAID_ESCROW', 'MOVED_IN'])
+      
+    if (competingError) throw new Error('Failed to verify property availability')
+    if (competingBookings && competingBookings.length > 0) {
+      throw new Error('This property has already been paid for by another tenant.')
+    }
+
     const amountInPesewas = Math.round(booking.total_amount * 100)
     
     // Call Paystack

@@ -82,6 +82,7 @@ export interface User {
   phone: string;
   role: UserRole;
   isVerifiedEmail: boolean;
+  isVerified?: boolean;
   verificationStatus?: VerificationStatus; // Used by landlords to verify identity
   status: UserStatus;
   createdAt: string;

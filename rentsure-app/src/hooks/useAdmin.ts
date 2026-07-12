@@ -8,6 +8,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { listUsers, suspendUser, reactivateUser, listAllBookings, releaseEscrow } from '@/api/admin.api';
 import { listVerifications, adminApproveVerification, adminRejectVerification } from '@/api/verifications.api';
 import type { AdminUserFilters } from '@/types';
+import { attentionKeys } from './useAttentionCounts';
 
 export const adminQueryKeys = {
   users: (filters: AdminUserFilters) => ['admin', 'users', filters] as const,
@@ -58,6 +59,8 @@ export function useApproveVerification() {
     mutationFn: (verificationId: string) => adminApproveVerification(verificationId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminQueryKeys.verifications });
+      queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries({ queryKey: attentionKeys.all });
     },
   });
 }
@@ -66,9 +69,11 @@ export function useRejectVerification() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (verificationId: string) => adminRejectVerification(verificationId),
+    mutationFn: ({ verificationId, reason }: { verificationId: string; reason: string }) => 
+      adminRejectVerification(verificationId, reason),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminQueryKeys.verifications });
+      queryClient.invalidateQueries({ queryKey: attentionKeys.all });
     },
   });
 }

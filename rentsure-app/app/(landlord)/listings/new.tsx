@@ -473,7 +473,7 @@ export default function NewListingScreen() {
   const [errors, setErrors] = useState<ValidationErrors>({});
 
   // Verification guard
-  if (user?.verificationStatus !== 'APPROVED') {
+  if (!user?.isVerified) {
     return (
       <Screen noPadding>
         <View style={styles.topBar}>
@@ -486,26 +486,22 @@ export default function NewListingScreen() {
 
         <View style={styles.unverifiedContainer}>
           <Ionicons 
-            name={user?.verificationStatus === 'PENDING' ? 'time-outline' : 'shield-checkmark-outline'} 
+            name="shield-half" 
             size={64} 
             color={colors.primary} 
           />
           <Text style={styles.unverifiedTitle}>
-            {user?.verificationStatus === 'PENDING' ? 'Verification Pending' : 'Verification Required'}
+            Verification Required
           </Text>
           <Text style={styles.unverifiedDesc}>
-            {user?.verificationStatus === 'PENDING' 
-              ? 'Your identity documents are currently being reviewed. You will be able to create listings once approved.'
-              : 'To ensure a safe platform for our tenants, all landlords must verify their identity before creating listings.'}
+            To ensure a safe platform for our tenants, all landlords must verify their identity before creating listings.
           </Text>
           
-          {user?.verificationStatus !== 'PENDING' && (
-            <Button 
-              title="Get Verified Now" 
-              onPress={() => router.replace('/(landlord)/verify' as any)}
-              style={styles.verifyBtn}
-            />
-          )}
+          <Button 
+            title="Get Verified Now" 
+            onPress={() => router.replace('/(landlord)/verify?mode=identity' as any)}
+            style={styles.verifyBtn}
+          />
         </View>
       </Screen>
     );
@@ -521,6 +517,25 @@ export default function NewListingScreen() {
     }
     setErrors({});
     setStep((s) => s + 1);
+  };
+
+  const handleBack = () => {
+    if (step > 0) {
+      setStep((s) => s - 1);
+    } else {
+      if (form.title || form.description) {
+        Alert.alert(
+          'Discard Draft?',
+          'Are you sure you want to go back? Your progress will be lost.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            { text: 'Discard', style: 'destructive', onPress: () => router.back() }
+          ]
+        );
+      } else {
+        router.back();
+      }
+    }
   };
 
   const handleSubmit = () => {
@@ -562,7 +577,7 @@ export default function NewListingScreen() {
     <Screen noPadding>
       {/* Header */}
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => (step === 0 ? router.back() : setStep((s) => s - 1))}>
+        <TouchableOpacity onPress={handleBack}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
         <Text style={styles.topBarTitle}>{STEP_TITLES[step]}</Text>
@@ -804,7 +819,10 @@ const styles = StyleSheet.create({
   },
   // Nav bar
   navBar: {
-    padding: spacing.lg,
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    padding: spacing.md,
     backgroundColor: colors.surface,
     borderTopWidth: 1,
     borderTopColor: colors.border,
@@ -814,13 +832,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.xl,
+    gap: spacing.md,
   },
   unverifiedTitle: {
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     color: colors.text,
-    marginTop: spacing.md,
-    marginBottom: spacing.sm,
     textAlign: 'center',
   },
   unverifiedDesc: {
@@ -828,9 +845,9 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
-    marginBottom: spacing.xl,
   },
   verifyBtn: {
+    marginTop: spacing.lg,
     width: '100%',
   },
 });

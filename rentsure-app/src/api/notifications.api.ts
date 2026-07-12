@@ -50,6 +50,22 @@ export async function markAllRead(userId: string): Promise<ApiResponse<{ updated
   return { success: true, data: { updated: data?.length || 0 }, error: null, timestamp: ts() };
 }
 
+export async function clearAllRead(userId: string): Promise<ApiResponse<{ cleared: number }>> {
+  if (USE_MOCKS) return { success: true, data: { cleared: 0 }, error: null, timestamp: ts() };
+  
+  const { data, error } = await supabase
+    .from('notifications')
+    .delete()
+    .eq('is_read', true)
+    .select('id');
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+
+  return { success: true, data: { cleared: data?.length || 0 }, error: null, timestamp: ts() };
+}
+
 export async function clearAllNotifications(userId: string): Promise<ApiResponse<{ cleared: number }>> {
   if (USE_MOCKS) return mocks.mockClearAllNotifications(userId);
   
@@ -69,13 +85,18 @@ export async function clearAllNotifications(userId: string): Promise<ApiResponse
 export async function deleteNotification(notificationId: string): Promise<ApiResponse<void>> {
   if (USE_MOCKS) return mocks.mockDeleteNotification(notificationId);
   
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('notifications')
     .delete()
-    .eq('id', notificationId);
+    .eq('id', notificationId)
+    .select('id');
 
   if (error) {
     return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+  
+  if (!data || data.length === 0) {
+    return { success: false, data: null, error: { code: 'NOT_FOUND', message: 'Notification not found or unauthorized' }, timestamp: ts() };
   }
 
   return { success: true, data: null as any, error: null, timestamp: ts() };

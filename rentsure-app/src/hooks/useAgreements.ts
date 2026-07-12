@@ -7,11 +7,13 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getAgreement, signAgreement } from '@/api/agreements.api';
+import { getAgreementForBooking, signAgreement } from '@/api/agreements.api';
+import { attentionKeys } from './useAttentionCounts';
 import type { SignAgreementRequest } from '@/types';
 
 export const queryKeys = {
   agreement: (bookingId: string) => ['agreements', bookingId] as const,
+  agreements: ['agreements'] as const,
 };
 
 /**
@@ -21,7 +23,7 @@ export const queryKeys = {
 export function useAgreement(bookingId: string) {
   return useQuery({
     queryKey: queryKeys.agreement(bookingId),
-    queryFn: () => getAgreement(bookingId),
+    queryFn: () => getAgreementForBooking(bookingId),
     enabled: !!bookingId,
   });
 }
@@ -39,7 +41,9 @@ export function useSignAgreement() {
     mutationFn: ({ bookingId, req }: { bookingId: string; req: SignAgreementRequest }) =>
       signAgreement(bookingId, req),
     onSuccess: (_, { bookingId }) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.agreement(bookingId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.agreements });
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: attentionKeys.all });
     },
   });
 }

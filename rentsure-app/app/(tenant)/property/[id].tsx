@@ -32,6 +32,7 @@ import { usePropertyReviews } from '@/hooks/useReviews';
 import { useCreateBooking, useMyBookings } from '@/hooks/useBookings';
 import { useAuthStore } from '@/store/auth.store';
 import { useToastStore } from '@/store/toast.store';
+import { supabase } from '@/api/supabase';
 import { Button } from '@/components/ui/Button';
 import { Screen } from '@/components/ui/Screen';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -138,6 +139,16 @@ export default function PropertyDetailScreen() {
       </Screen>
     );
   }
+
+  const [landlordVerified, setLandlordVerified] = useState(false);
+  useEffect(() => {
+    if (property?.landlordId) {
+      supabase.from('profiles').select('is_verified').eq('id', property.landlordId).single()
+        .then(({ data }) => { if (data) setLandlordVerified(data.is_verified); });
+    }
+  }, [property?.landlordId]);
+
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const reviews = reviewsData?.data || [];
   const mediaItems = [...(property.media || [])].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
@@ -271,16 +282,28 @@ export default function PropertyDetailScreen() {
             onRequestClose={() => setImageViewerVisible(false)}
           />
         </View>
-
-        <View style={styles.content}>
+<View style={styles.content}>
           {/* Header Info */}
           <View style={styles.headerRow}>
             <Text style={styles.title}>{property.title}</Text>
+          </View>
+          <View style={styles.badgesRow}>
             {property.isVerified && (
-              <View style={styles.badge}>
+              <View style={[styles.badge, { backgroundColor: '#14B8A6' }]}>
                 <Ionicons name="shield-checkmark" size={14} color={colors.surface} />
-                <Text style={styles.badgeText}>Verified</Text>
+                <Text style={styles.badgeText}>Verified Property</Text>
               </View>
+            )}
+            {landlordVerified && (
+              <View style={[styles.badge, { backgroundColor: '#D97706' }]}>
+                <Ionicons name="person-circle" size={14} color={colors.surface} />
+                <Text style={styles.badgeText}>Verified Landlord</Text>
+              </View>
+            )}
+            {(property.isVerified || landlordVerified) && (
+              <TouchableOpacity onPress={() => setShowTooltip(true)}>
+                <Ionicons name="information-circle-outline" size={20} color={colors.textSecondary} />
+              </TouchableOpacity>
             )}
           </View>
           
@@ -382,7 +405,12 @@ export default function PropertyDetailScreen() {
                 <Ionicons name="person" size={24} color={colors.surface} />
               </View>
               <View style={styles.landlordInfo}>
-                <Text style={styles.landlordName}>ID: {property.landlordId}</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+                  <Text style={styles.landlordName}>ID: {property.landlordId}</Text>
+                  {landlordVerified && (
+                    <Ionicons name="person-circle" size={20} color="#D97706" />
+                  )}
+                </View>
                 <Text style={styles.landlordMeta}>Member since 2023 • 4.8 ⭐️</Text>
               </View>
             </View>
@@ -503,6 +531,31 @@ export default function PropertyDetailScreen() {
           </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
       </Modal>
+
+      {/* Tooltip Modal */}
+      <Modal visible={showTooltip} transparent animationType="fade" onRequestClose={() => setShowTooltip(false)}>
+        <TouchableOpacity style={styles.tooltipOverlay} activeOpacity={1} onPress={() => setShowTooltip(false)}>
+          <View style={styles.tooltipCard}>
+            <Text style={styles.tooltipTitle}>What do these badges mean?</Text>
+            <View style={styles.tooltipRow}>
+              <Ionicons name="shield-checkmark" size={20} color="#14B8A6" />
+              <View style={{ flex: 1, marginLeft: 8 }}>
+                <Text style={styles.tooltipRowTitle}>Verified Property</Text>
+                <Text style={styles.tooltipRowDesc}>We have verified the land title or utility bills for this specific property.</Text>
+              </View>
+            </View>
+            <View style={styles.tooltipRow}>
+              <Ionicons name="person-circle" size={20} color="#D97706" />
+              <View style={{ flex: 1, marginLeft: 8 }}>
+                <Text style={styles.tooltipRowTitle}>Verified Landlord</Text>
+                <Text style={styles.tooltipRowDesc}>We have verified this person's identity using their Ghana Card.</Text>
+              </View>
+            </View>
+            <Button title="Got it" onPress={() => setShowTooltip(false)} style={{ marginTop: spacing.md }} />
+          </View>
+        </TouchableOpacity>
+      </Modal>
+
     </Screen>
   );
 }
@@ -578,22 +631,23 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
   },
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
     marginBottom: spacing.xs,
   },
   title: {
-    flex: 1,
     fontSize: typography.sizes.xl,
     fontWeight: typography.weights.bold,
     color: colors.text,
-    marginRight: spacing.sm,
+  },
+  badgesRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    flexWrap: 'wrap',
+    marginTop: spacing.xs,
   },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.primary,
     paddingHorizontal: spacing.sm,
     paddingVertical: 4,
     borderRadius: borderRadius.pill,

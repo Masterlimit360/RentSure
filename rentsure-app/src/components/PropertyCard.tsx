@@ -4,7 +4,7 @@
  * Used in lists to display a summary of a property.
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -15,6 +15,7 @@ import { colors, spacing, borderRadius, typography, shadows } from '@/constants/
 import { useAuthStore } from '@/store/auth.store';
 import { usePreferences } from '@/hooks/usePreferences';
 import { computeCompatibility } from '@/utils/compatibility';
+import { supabase } from '@/api/supabase';
 
 interface PropertyCardProps {
   property: Property;
@@ -34,6 +35,14 @@ export function PropertyCard({ property, index = 0, activeBookingStatus, activeB
   const { user } = useAuthStore();
   const { data: prefs } = usePreferences(user?.role === 'TENANT' ? user.id : undefined);
   const score = prefs ? computeCompatibility(prefs, property) : null;
+  
+  const [landlordVerified, setLandlordVerified] = useState(false);
+  useEffect(() => {
+    if (property?.landlordId) {
+      supabase.from('profiles').select('is_verified').eq('id', property.landlordId).single()
+        .then(({ data }) => { if (data) setLandlordVerified(data.is_verified); });
+    }
+  }, [property?.landlordId]);
 
   const getStatusDisplay = () => {
     if (activeBookingStatus) {
@@ -96,10 +105,18 @@ export function PropertyCard({ property, index = 0, activeBookingStatus, activeB
           <Text style={styles.title} numberOfLines={1}>
             {property.title}
           </Text>
+        </View>
+        <View style={styles.badgesRow}>
           {property.isVerified && (
-            <View style={styles.badge}>
-              <Ionicons name="shield-checkmark" size={14} color={colors.surface} />
-              <Text style={styles.badgeText}>Verified</Text>
+            <View style={[styles.badge, { backgroundColor: '#14B8A6' }]}>
+              <Ionicons name="shield-checkmark" size={12} color={colors.surface} />
+              <Text style={styles.badgeText}>Prop</Text>
+            </View>
+          )}
+          {landlordVerified && (
+            <View style={[styles.badge, { backgroundColor: '#D97706' }]}>
+              <Ionicons name="person-circle" size={12} color={colors.surface} />
+              <Text style={styles.badgeText}>Host</Text>
             </View>
           )}
         </View>
@@ -213,7 +230,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: 4,
+  },
+  badgesRow: {
+    flexDirection: 'row',
+    gap: spacing.xs,
     marginBottom: spacing.xs,
+    flexWrap: 'wrap',
   },
   title: {
     flex: 1,
@@ -225,9 +248,8 @@ const styles = StyleSheet.create({
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.primary,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     borderRadius: borderRadius.pill,
     gap: 4,
   },

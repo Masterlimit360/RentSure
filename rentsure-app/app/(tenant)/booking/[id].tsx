@@ -25,6 +25,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
 import { useMyBookings, useConfirmMoveIn, useCancelBooking } from '@/hooks/useBookings';
 import { usePaymentStatus } from '@/hooks/usePayments';
+import { useProperty } from '@/hooks/useProperties';
 import { useAgreement, useSignAgreement } from '@/hooks/useAgreements';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
@@ -278,12 +279,15 @@ export default function TenantBookingDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const { user } = useAuthStore();
+  const { data: bookingsData, isLoading: bookingsLoading } = useMyBookings(user?.id ?? '', 'TENANT');
+  const booking = bookingsData?.data?.find((b) => b.id === id);
+  const { data: propertyData } = useProperty(booking?.propertyId ?? '');
+  const property = propertyData?.data;
 
-  const { data: bookingsData, isLoading } = useMyBookings(user?.id ?? '', 'TENANT');
   const moveInMutation = useConfirmMoveIn();
   const cancelMutation = useCancelBooking();
 
-  const booking = bookingsData?.data?.find((b) => b.id === id);
+  const isLoading = bookingsLoading;
 
   const handleCancelBooking = () => {
     Alert.alert(
@@ -382,6 +386,18 @@ export default function TenantBookingDetailScreen() {
         </View>
 
         <TimelineSection booking={booking} />
+
+        {/* PRICE CHANGE WARNING BANNER */}
+        {property && booking.totalAmount !== property.pricePerYear && booking.status === 'REQUESTED' && (
+          <View style={[styles.section, { backgroundColor: colors.warning + '20', padding: spacing.md, borderRadius: 8, borderColor: colors.warning, borderWidth: 1 }]}>
+            <View style={{ flexDirection: 'row', gap: spacing.sm, alignItems: 'center' }}>
+              <Ionicons name="warning" size={24} color={colors.warning} />
+              <Text style={{ flex: 1, color: colors.text, fontSize: 14 }}>
+                The landlord has changed the listing price from {formatCurrency(booking.totalAmount)} to {formatCurrency(property.pricePerYear)} since you requested this booking. Your requested amount of {formatCurrency(booking.totalAmount)} remains locked unless cancelled.
+              </Text>
+            </View>
+          </View>
+        )}
 
         {isPaidOrLater && <PaymentSection bookingId={booking.id} />}
 

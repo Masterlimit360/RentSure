@@ -96,6 +96,17 @@ serve(async (req) => {
       }
     ])
 
+    // 5. Trigger Agreement Generation (Fire and forget to not block webhook response)
+    const generateAgreementUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/generate-agreement`
+    fetch(generateAgreementUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${Deno.env.get('SUPABASE_ANON_KEY')}`
+      },
+      body: JSON.stringify({ bookingId: booking.id })
+    }).catch(err => console.error('Failed to trigger agreement generation:', err))
+
     return new Response('Success', { status: 200 })
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), { status: 400 })

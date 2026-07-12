@@ -8,7 +8,13 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { listNotifications, markAllRead, clearAllNotifications, deleteNotification } from '@/api/notifications.api';
+import {
+  listNotifications,
+  markAllRead,
+  clearAllNotifications,
+  deleteNotification,
+} from '@/api/notifications.api';
+import { attentionKeys } from './useAttentionCounts';
 
 export const queryKeys = {
   notifications: (userId: string) => ['notifications', userId] as const,

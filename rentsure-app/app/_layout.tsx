@@ -1,9 +1,33 @@
 import { Slot, useRouter, useSegments } from 'expo-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React, { useEffect } from 'react';
+import React, { useEffect, ErrorInfo, Component } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 import { Toast } from '@/components/ui/Toast';
 import { initDb } from '@/mocks/store';
+
+// MOCK: Sentry Initialization
+const setupSentry = () => {
+  const originalError = console.error;
+  console.error = (...args) => {
+    // Sentry.captureException(args[0]);
+    originalError(...args);
+  };
+};
+setupSentry();
+
+class GlobalErrorBoundary extends Component<{children: React.ReactNode}, {hasError: boolean}> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.log('GlobalErrorBoundary caught:', error);
+  }
+  render() {
+    if (this.state.hasError) {
+      return null;
+    }
+    return this.props.children;
+  }
+}
 
 // Initialize the TanStack Query client
 const queryClient = new QueryClient({
@@ -52,9 +76,11 @@ export default function RootLayout() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Slot />
-      <Toast />
-    </QueryClientProvider>
+    <GlobalErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <Slot />
+        <Toast />
+      </QueryClientProvider>
+    </GlobalErrorBoundary>
   );
 }

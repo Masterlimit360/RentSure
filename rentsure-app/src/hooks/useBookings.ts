@@ -17,6 +17,7 @@ import {
   cancelBooking,
 } from '@/api/bookings.api';
 import type { CreateBookingRequest } from '@/types';
+import { attentionKeys } from './useAttentionCounts';
 
 export const queryKeys = {
   bookings: ['bookings'] as const,
@@ -49,6 +50,7 @@ export function useCreateBooking() {
       createBooking(tenantId, req),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings });
+      queryClient.invalidateQueries({ queryKey: attentionKeys.all });
     },
   });
 }

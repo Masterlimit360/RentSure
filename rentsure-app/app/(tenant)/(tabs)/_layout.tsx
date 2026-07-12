@@ -5,40 +5,14 @@
  */
 
 import React from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { Tabs, useRouter } from 'expo-router';
+import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { useNotificationsStore } from '@/store/notifications.store';
-import { useAuthStore } from '@/store/auth.store';
-import { useNotifications } from '@/hooks/useNotifications';
-
-function InboxButton() {
-  const { unreadCount } = useNotificationsStore();
-  const router = useRouter();
-
-  return (
-    <TouchableOpacity onPress={() => router.push('/(tenant)/notifications')} style={styles.headerBtn}>
-      <Ionicons name="notifications-outline" size={24} color={colors.text} />
-      {unreadCount > 0 && (
-        <View style={styles.badge}>
-          <View style={styles.badgeInner} />
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-}
+import { useAttentionCounts } from '@/hooks/useAttentionCounts';
+import { StyleSheet, View } from 'react-native';
 
 export default function TenantLayout() {
-  const { user } = useAuthStore();
-  const { data } = useNotifications(user?.id ?? '');
-  const { setUnreadCount, unreadCount } = useNotificationsStore();
-  
-  React.useEffect(() => {
-    if (data?.data) {
-      setUnreadCount(data.data.filter(n => !n.isRead).length);
-    }
-  }, [data?.data, setUnreadCount]);
+  const { tenantActionableCount, unreadNotifications } = useAttentionCounts();
 
   return (
     <Tabs
@@ -65,17 +39,20 @@ export default function TenantLayout() {
         name="bookings"
         options={{
           title: 'My Bookings',
-          headerRight: () => <InboxButton />,
           tabBarIcon: ({ color, size }) => (
-            <View>
-              <Ionicons name="calendar" size={size} color={color} />
-              {unreadCount > 0 && (
-                <View style={[styles.badge, { top: -4, right: -6 }]} >
-                  <View style={styles.badgeInner} />
-                </View>
-              )}
-            </View>
+            <Ionicons name="calendar" size={size} color={color} />
           ),
+          tabBarBadge: tenantActionableCount > 0 ? tenantActionableCount : undefined,
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Alerts',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="notifications" size={size} color={color} />
+          ),
+          tabBarBadge: unreadNotifications > 0 ? unreadNotifications : undefined,
         }}
       />
       <Tabs.Screen
@@ -91,26 +68,4 @@ export default function TenantLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  headerBtn: {
-    marginRight: 16,
-    position: 'relative',
-  },
-  badge: {
-    position: 'absolute',
-    top: -2,
-    right: -2,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: colors.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badgeInner: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: colors.error,
-  },
-});
+const styles = StyleSheet.create({});

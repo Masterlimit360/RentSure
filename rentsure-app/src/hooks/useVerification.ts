@@ -4,14 +4,14 @@
  * Manages landlord verification submission and status updates.
  */
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { submitVerification } from '@/api/verifications.api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { submitVerification, listLandlordVerifications } from '@/api/verifications.api';
 import { useAuthStore } from '@/store/auth.store';
 import type { SubmitVerificationRequest } from '@/types';
 
 export function useSubmitVerification() {
   const queryClient = useQueryClient();
-  const { user, setAuth, accessToken, refreshToken } = useAuthStore();
+  const { user } = useAuthStore();
 
   return useMutation({
     mutationFn: (req: SubmitVerificationRequest) => {
@@ -19,11 +19,17 @@ export function useSubmitVerification() {
       return submitVerification(user.id, req);
     },
     onSuccess: (res) => {
-      if (res.success && user && accessToken && refreshToken) {
-        // Set to PENDING so the Admin app can approve it
-        setAuth({ ...user, verificationStatus: 'PENDING' }, accessToken, refreshToken);
-        queryClient.invalidateQueries({ queryKey: ['auth'] });
+      if (res.success && user) {
+        queryClient.invalidateQueries({ queryKey: ['verifications', user.id] });
       }
     },
+  });
+}
+
+export function useLandlordVerifications(landlordId: string) {
+  return useQuery({
+    queryKey: ['verifications', landlordId],
+    queryFn: () => listLandlordVerifications(landlordId),
+    enabled: !!landlordId,
   });
 }

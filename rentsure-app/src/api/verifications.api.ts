@@ -54,7 +54,7 @@ export async function adminApproveVerification(
   const { data: result, error } = await supabase.rpc('admin_verify', {
     p_verification_id: verificationId,
     p_approve: true,
-    p_notes: null
+    p_reason: null
   });
 
   if (error) {
@@ -67,14 +67,15 @@ export async function adminApproveVerification(
 }
 
 export async function adminRejectVerification(
-  verificationId: string
+  verificationId: string,
+  reason: string
 ): Promise<ApiResponse<Verification>> {
   if (USE_MOCKS) return mocks.mockAdminRejectVerification(verificationId);
   
   const { data: result, error } = await supabase.rpc('admin_verify', {
     p_verification_id: verificationId,
     p_approve: false,
-    p_notes: null
+    p_reason: reason
   });
 
   if (error) {
@@ -83,6 +84,26 @@ export async function adminRejectVerification(
 
   const { data: updated } = await supabase.from('verifications').select('*').eq('id', verificationId).single();
   return { success: true, data: mapToVerification(updated || { id: verificationId, status: 'REJECTED' }), error: null, timestamp: ts() };
+}
+
+export async function listLandlordVerifications(landlordId: string): Promise<ApiResponse<Verification[]>> {
+  if (USE_MOCKS) {
+    const all = await mocks.mockListVerifications();
+    const mine = (all.data?.content || []).filter(v => v.landlordId === landlordId);
+    return { success: true, data: mine, error: null, timestamp: ts() };
+  }
+
+  const { data, error } = await supabase
+    .from('verifications')
+    .select('*')
+    .eq('landlord_id', landlordId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+
+  return { success: true, data: data.map(mapToVerification), error: null, timestamp: ts() };
 }
 
 export async function listVerifications(): Promise<ApiResponse<PaginatedResponse<Verification>>> {

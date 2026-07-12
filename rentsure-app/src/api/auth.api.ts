@@ -30,6 +30,7 @@ async function mapSupabaseUser(authUser: any): Promise<User> {
     role: profile?.role || 'TENANT',
     status: profile?.status || 'ACTIVE',
     isVerifiedEmail: authUser.email_confirmed_at != null,
+    isVerified: profile?.is_verified ?? false,
     createdAt: profile?.created_at || authUser.created_at || '',
   };
 }
@@ -160,6 +161,22 @@ export async function logout(
   
   return { success: true, data: { loggedOut: true }, error: null, timestamp: ts() };
 }
+
+export async function resetPassword(email: string): Promise<ApiResponse<null>> {
+  if (USE_MOCKS) {
+    return { success: true, data: null, error: null, timestamp: ts() };
+  }
+  
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: 'rentsure://reset-password',
+  });
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+  return { success: true, data: null, error: null, timestamp: ts() };
+}
+
 
 export async function updateProfile(
   userId: string,

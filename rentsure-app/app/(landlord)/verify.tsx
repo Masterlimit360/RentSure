@@ -1,8 +1,9 @@
 /**
  * Landlord Verification Screen.
  * 
- * Allows an unverified landlord to submit documentation to prove their identity
- * and ownership. In the mock, this immediately sets them to APPROVED.
+ * Supports two flows:
+ * - mode=identity (Ghana Card only)
+ * - mode=property (Land Title or Utility Bill, requires propertyId)
  */
 
 import React, { useState } from 'react';
@@ -16,10 +17,10 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import { useSubmitVerification } from '@/hooks/useVerification';
+import { useSubmitVerification, useLandlordVerifications } from '@/hooks/useVerification';
 import { useProperties } from '@/hooks/useProperties';
 import { useAuthStore } from '@/store/auth.store';
 import { Screen } from '@/components/ui/Screen';
@@ -27,25 +28,45 @@ import { Button } from '@/components/ui/Button';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import type { VerificationDocType } from '@/types';
 
-const DOC_TYPES: { type: VerificationDocType; label: string }[] = [
+const IDENTITY_DOCS: { type: VerificationDocType; label: string }[] = [
   { type: 'GHANA_CARD', label: 'Ghana Card' },
+];
+
+const PROPERTY_DOCS: { type: VerificationDocType; label: string }[] = [
   { type: 'LAND_TITLE', label: 'Land Title Certificate' },
   { type: 'UTILITY_BILL', label: 'Utility Bill (Water/Electricity)' },
 ];
 
 export default function VerifyScreen() {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const mode = params.mode as 'identity' | 'property' || 'identity';
+  const paramPropertyId = params.propertyId as string | undefined;
+
   const { user } = useAuthStore();
   const verifyMutation = useSubmitVerification();
   const { data: propertiesData } = useProperties({});
+  const { data: verificationsData } = useLandlordVerifications(user?.id || '');
 
   const myProperties = (propertiesData?.data?.content ?? []).filter(
     (p) => p.landlordId === user?.id
   );
+  
+  const propertyOptions = paramPropertyId 
+    ? myProperties.filter(p => p.id === paramPropertyId) 
+    : myProperties;
 
-  const [docType, setDocType] = useState<VerificationDocType>('GHANA_CARD');
-  const [propertyId, setPropertyId] = useState<string | null>(null);
+  const docTypes = mode === 'identity' ? IDENTITY_DOCS : PROPERTY_DOCS;
+  
+  const [docType, setDocType] = useState<VerificationDocType>(docTypes[0].type);
+  const [propertyId, setPropertyId] = useState<string | null>(paramPropertyId || (propertyOptions.length === 1 ? propertyOptions[0].id : null));
   const [imageUri, setImageUri] = useState<string | null>(null);
+
+  // Check if target is pending
+  const existingVerifications = verificationsData?.data || [];
+  const isIdentityPending = existingVerifications.some(v => !v.propertyId && v.status === 'PENDING');
+  const isPropertyPending = propertyId && existingVerifications.some(v => v.propertyId === propertyId && v.status === 'PENDING');
+  const isPending = mode === 'identity' ? isIdentityPending : isPropertyPending;
 
   const handlePickImage = async () => {
     try {
@@ -68,23 +89,23 @@ export default function VerifyScreen() {
       Alert.alert('Missing Image', 'Please upload a photo of your document.');
       return;
     }
-    if (docType !== 'GHANA_CARD' && !propertyId) {
+    if (mode === 'property' && !propertyId) {
       Alert.alert('Missing Property', 'Please select a property for this verification.');
       return;
     }
 
     verifyMutation.mutate(
-      { docType, docUrl: imageUri, propertyId: propertyId || undefined },
+      { docType, docUrl: imageUri, propertyId: mode === 'property' ? (propertyId || undefined) : undefined },
       {
         onSuccess: (res) => {
           if (res.success) {
             Alert.alert(
               'Submitted',
-              'Your documents have been submitted and verified successfully.',
+              'Your documents have been submitted and are under review.',
               [
                 {
                   text: 'OK',
-                  onPress: () => router.replace('/(landlord)/profile'),
+                  onPress: () => router.replace('/(landlord)/(tabs)/profile'),
                 },
               ]
             );
@@ -96,24 +117,81 @@ export default function VerifyScreen() {
     );
   };
 
+  if (mode === 'property' && !user?.isVerified) {
+    return (
+      <Screen noPadding>
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topBarTitle}>Verification Required</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <View style={styles.content}>
+          <View style={styles.emptyContainer}>
+            <Ionicons name="shield-half" size={64} color={colors.warning} />
+            <Text style={styles.emptyText}>Identity Verification Required</Text>
+            <Text style={styles.emptySubtext}>You must verify your identity before you can verify properties.</Text>
+            <Button 
+              title="Verify Identity Now" 
+              onPress={() => router.replace({ pathname: '/(landlord)/verify', params: { mode: 'identity' } } as any)} 
+              style={{ marginTop: spacing.xl }}
+            />
+          </View>
+        </View>
+      </Screen>
+    );
+  }
+
+  if (isPending) {
+    return (
+      <Screen noPadding>
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topBarTitle}>Under Review</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <View style={styles.content}>
+          <View style={styles.emptyContainer}>
+            <Ionicons name="time-outline" size={64} color={colors.primary} />
+            <Text style={styles.emptyText}>Verification Pending</Text>
+            <Text style={styles.emptySubtext}>We are currently reviewing your documents. We will notify you once the process is complete.</Text>
+            <Button 
+              title="Go Back" 
+              onPress={() => router.back()} 
+              style={{ marginTop: spacing.xl }}
+              variant="outline"
+            />
+          </View>
+        </View>
+      </Screen>
+    );
+  }
+
   return (
     <Screen noPadding>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={styles.topBarTitle}>Get Verified</Text>
+        <Text style={styles.topBarTitle}>
+          {mode === 'identity' ? 'Verify Identity' : 'Verify Property'}
+        </Text>
         <View style={{ width: 40 }} />
       </View>
 
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.introText}>
-          To maintain a safe platform for tenants, we require all landlords to verify their identity and property ownership.
+          {mode === 'identity' 
+            ? 'To maintain a safe platform, we require all landlords to verify their identity.'
+            : 'Verify this property to show tenants it is legitimate and increase your bookings.'}
         </Text>
 
         <Text style={styles.sectionTitle}>1. Select Document Type</Text>
         <View style={styles.docTypesList}>
-          {DOC_TYPES.map((doc) => (
+          {docTypes.map((doc) => (
             <TouchableOpacity
               key={doc.type}
               style={[styles.docTypeBtn, docType === doc.type && styles.docTypeActive]}
@@ -131,18 +209,19 @@ export default function VerifyScreen() {
           ))}
         </View>
 
-        {docType !== 'GHANA_CARD' && (
+        {mode === 'property' && (
           <>
             <Text style={styles.sectionTitle}>Select Property to Verify</Text>
-            {myProperties.length === 0 ? (
+            {propertyOptions.length === 0 ? (
               <Text style={styles.emptyPropertiesText}>You need to add a property first.</Text>
             ) : (
               <View style={styles.propertiesList}>
-                {myProperties.map((prop) => (
+                {propertyOptions.map((prop) => (
                   <TouchableOpacity
                     key={prop.id}
                     style={[styles.docTypeBtn, propertyId === prop.id && styles.docTypeActive]}
                     onPress={() => setPropertyId(prop.id)}
+                    disabled={!!paramPropertyId}
                   >
                     <Ionicons
                       name={propertyId === prop.id ? 'radio-button-on' : 'radio-button-off'}
@@ -281,5 +360,21 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.md,
     color: colors.error,
     marginBottom: spacing.xl,
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    paddingTop: 80,
+    gap: spacing.sm,
+  },
+  emptyText: {
+    fontSize: typography.sizes.lg,
+    fontWeight: typography.weights.bold,
+    color: colors.text,
+    marginTop: spacing.md,
+  },
+  emptySubtext: {
+    fontSize: typography.sizes.md,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
 });

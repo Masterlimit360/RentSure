@@ -1,25 +1,18 @@
-/**
- * Landlord Bottom Tab Navigator.
- */
-
 import React from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { useNotificationsStore } from '@/store/notifications.store';
-import { useAuthStore } from '@/store/auth.store';
-import { useNotifications } from '@/hooks/useNotifications';
-import { useMyBookings } from '@/hooks/useBookings';
+import { useAttentionCounts } from '@/hooks/useAttentionCounts';
 
 function InboxButton() {
-  const { unreadCount } = useNotificationsStore();
+  const { unreadNotifications } = useAttentionCounts();
   const router = useRouter();
 
   return (
     <TouchableOpacity onPress={() => router.push('/(landlord)/notifications')} style={styles.headerBtn}>
       <Ionicons name="notifications-outline" size={24} color={colors.text} />
-      {unreadCount > 0 && (
+      {unreadNotifications > 0 && (
         <View style={styles.badge}>
           <View style={styles.badgeInner} />
         </View>
@@ -29,19 +22,7 @@ function InboxButton() {
 }
 
 export default function LandlordLayout() {
-  const { user } = useAuthStore();
-  const { data } = useNotifications(user?.id ?? '');
-  const { setUnreadCount } = useNotificationsStore();
-  
-  React.useEffect(() => {
-    if (data?.data) {
-      setUnreadCount(data.data.filter(n => !n.isRead).length);
-    }
-  }, [data?.data, setUnreadCount]);
-
-  const { data: bookingsData } = useMyBookings(user?.id ?? '', 'LANDLORD');
-  
-  const pendingRequestsCount = bookingsData?.data?.filter(b => b.status === 'REQUESTED').length || 0;
+  const { landlordActionableCount, unreadNotifications } = useAttentionCounts();
 
   return (
     <Tabs
@@ -68,11 +49,10 @@ export default function LandlordLayout() {
         name="requests"
         options={{
           title: 'Requests',
-          headerRight: () => <InboxButton />,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="mail" size={size} color={color} />
           ),
-          tabBarBadge: pendingRequestsCount > 0 ? pendingRequestsCount : undefined,
+          tabBarBadge: landlordActionableCount > 0 ? landlordActionableCount : undefined,
         }}
       />
       <Tabs.Screen

@@ -54,9 +54,10 @@ interface ListingCardProps {
   onHide: (property: Property) => void;
   onEdit: (property: Property) => void;
   onDelete: (property: Property) => void;
+  onVerify: (property: Property) => void;
 }
 
-function ListingCard({ property, index, pendingRequestsCount = 0, onHide, onEdit, onDelete }: ListingCardProps) {
+function ListingCard({ property, index, pendingRequestsCount = 0, onHide, onEdit, onDelete, onVerify }: ListingCardProps) {
   const badge = STATUS_BADGE[property.status];
   const photo = property.media.find((m) => m.mediaType === 'PHOTO')?.url;
 
@@ -105,6 +106,13 @@ function ListingCard({ property, index, pendingRequestsCount = 0, onHide, onEdit
               <Text style={styles.actionBtnText}>
                 {property.status === 'HIDDEN' ? 'Unhide' : 'Hide'}
               </Text>
+            </TouchableOpacity>
+          )}
+
+          {!property.isVerified && (
+            <TouchableOpacity style={styles.actionBtn} onPress={() => onVerify(property)}>
+              <Ionicons name="shield-checkmark-outline" size={14} color={colors.primary} />
+              <Text style={[styles.actionBtnText, { color: colors.primary }]}>Verify</Text>
             </TouchableOpacity>
           )}
 
@@ -258,6 +266,7 @@ export default function LandlordListingsScreen() {
               onHide={handleHide} 
               onEdit={handleEdit} 
               onDelete={handleDelete} 
+              onVerify={(prop) => router.push({ pathname: '/(landlord)/verify', params: { mode: 'property', propertyId: prop.id } } as any)}
             />
           )}
         />

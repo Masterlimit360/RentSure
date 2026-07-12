@@ -12,6 +12,8 @@ import { Ionicons } from '@expo/vector-icons';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout, useUpdateProfile } from '@/hooks/useAuth';
+import { useLandlordVerifications } from '@/hooks/useVerification';
+import { useProperties } from '@/hooks/useProperties';
 import { Screen } from '@/components/ui/Screen';
 import { typography, colors, spacing, borderRadius } from '@/constants/theme';
 import { useRouter } from 'expo-router';
@@ -22,6 +24,18 @@ export default function LandlordProfileScreen() {
   const logoutMutation = useLogout();
   const updateMutation = useUpdateProfile();
   const router = useRouter();
+  
+  const { data: verificationsData } = useLandlordVerifications(user?.id || '');
+  const { data: propertiesData } = useProperties({});
+  
+  const existingVerifications = verificationsData?.data || [];
+  const myProperties = (propertiesData?.data?.content ?? []).filter(p => p.landlordId === user?.id);
+  const verifiedPropertiesCount = myProperties.filter(p => p.isVerified).length;
+  
+  const identityStatus = user?.isVerified 
+    ? 'APPROVED' 
+    : existingVerifications.find(v => !v.propertyId)?.status || 'NONE';
+  const identityReason = existingVerifications.find(v => !v.propertyId && v.status === 'REJECTED')?.rejectionReason;
   
   const [devClicks, setDevClicks] = useState(0);
   const [isEditing, setIsEditing] = useState(false);
@@ -131,26 +145,43 @@ export default function LandlordProfileScreen() {
           </View>
         </Animated.View>
 
-        {user?.verificationStatus !== 'APPROVED' && (
-          <View style={styles.unverifiedBanner}>
-            <Ionicons name={user?.verificationStatus === 'PENDING' ? 'time-outline' : 'alert-circle'} size={24} color="#B45309" />
-            <View style={styles.bannerTextContainer}>
-              <Text style={styles.bannerTitle}>
-                {user?.verificationStatus === 'PENDING' ? 'Verification Pending' : 'Account not verified'}
-              </Text>
-              <Text style={styles.bannerSubtitle}>
-                {user?.verificationStatus === 'PENDING' 
-                  ? 'Your documents are being reviewed by an admin.'
-                  : 'Verify your identity to unlock all landlord features.'}
-              </Text>
+        {/* Verification Section */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Verification Status</Text>
+          <View style={styles.card}>
+            <View style={styles.row}>
+              <View style={[styles.rowIcon, identityStatus === 'APPROVED' ? { backgroundColor: '#D1FAE5' } : identityStatus === 'REJECTED' ? { backgroundColor: '#FEE2E2' } : identityStatus === 'PENDING' ? { backgroundColor: '#FEF3C7' } : {}]}>
+                <Ionicons 
+                  name={identityStatus === 'APPROVED' ? 'checkmark' : identityStatus === 'PENDING' ? 'time' : identityStatus === 'REJECTED' ? 'close' : 'shield-half'} 
+                  size={22} 
+                  color={identityStatus === 'APPROVED' ? colors.success : identityStatus === 'PENDING' ? colors.warning : identityStatus === 'REJECTED' ? colors.error : colors.primary} 
+                />
+              </View>
+              <View style={styles.rowContent}>
+                <Text style={styles.rowTitle}>Identity</Text>
+                <Text style={styles.rowSubtitle}>
+                  {identityStatus === 'APPROVED' ? 'Verified' : identityStatus === 'PENDING' ? 'Under Review' : identityStatus === 'REJECTED' ? `Rejected: ${identityReason || 'Check documents'}` : 'Not verified'}
+                </Text>
+              </View>
+              {identityStatus !== 'APPROVED' && identityStatus !== 'PENDING' && (
+                <TouchableOpacity style={styles.verifyBtnSm} onPress={() => router.push({ pathname: '/(landlord)/verify', params: { mode: 'identity' } } as any)}>
+                  <Text style={styles.verifyBtnTextSm}>Verify</Text>
+                </TouchableOpacity>
+              )}
             </View>
-            {user?.verificationStatus !== 'PENDING' && (
-              <TouchableOpacity style={styles.verifyBtn} onPress={() => router.push('/(landlord)/verify' as any)}>
-                <Text style={styles.verifyBtnText}>Verify</Text>
-              </TouchableOpacity>
-            )}
+            <View style={styles.divider} />
+            <TouchableOpacity style={styles.row} onPress={() => router.push('/(landlord)/(tabs)/index' as any)}>
+              <View style={[styles.rowIcon, verifiedPropertiesCount > 0 ? { backgroundColor: '#D1FAE5' } : {}]}>
+                <Ionicons name="home-outline" size={22} color={verifiedPropertiesCount > 0 ? colors.success : colors.primary} />
+              </View>
+              <View style={styles.rowContent}>
+                <Text style={styles.rowTitle}>Properties</Text>
+                <Text style={styles.rowSubtitle}>{verifiedPropertiesCount} of {myProperties.length} verified</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={20} color={colors.textSecondary} />
+            </TouchableOpacity>
           </View>
-        )}
+        </View>
 
         {/* Dashboard Section */}
         <View style={styles.section}>
@@ -374,40 +405,17 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginLeft: 8,
   },
-  unverifiedBanner: {
-    flexDirection: 'row',
-    backgroundColor: '#FEF3C7',
-    padding: spacing.md,
-    borderRadius: borderRadius.lg,
-    alignItems: 'center',
-    marginBottom: spacing.lg,
-    borderWidth: 1,
-    borderColor: '#FDE68A',
-  },
-  bannerTextContainer: {
-    flex: 1,
-    marginLeft: spacing.sm,
-  },
-  bannerTitle: {
-    fontSize: typography.sizes.md,
     fontWeight: typography.weights.bold,
-    color: '#92400E',
   },
-  bannerSubtitle: {
-    fontSize: 12,
-    color: '#B45309',
-    marginTop: 2,
-  },
-  verifyBtn: {
-    backgroundColor: '#B45309',
+  verifyBtnSm: {
+    backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.xs,
     borderRadius: borderRadius.md,
-    marginLeft: spacing.sm,
   },
-  verifyBtnText: {
+  verifyBtnTextSm: {
     color: '#FFF',
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.xs,
     fontWeight: typography.weights.bold,
   },
   section: {

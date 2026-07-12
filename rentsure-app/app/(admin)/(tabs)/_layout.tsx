@@ -1,25 +1,18 @@
-/**
- * Admin Bottom Tab Navigator.
- */
-
 import React from 'react';
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
-import { useNotificationsStore } from '@/store/notifications.store';
+import { useAttentionCounts } from '@/hooks/useAttentionCounts';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
-import { useAuthStore } from '@/store/auth.store';
-import { useNotifications } from '@/hooks/useNotifications';
 
 function InboxButton() {
-  const { unreadCount } = useNotificationsStore();
+  const { unreadNotifications } = useAttentionCounts();
   const router = useRouter();
 
   return (
     <TouchableOpacity onPress={() => router.push('/(admin)/notifications')} style={styles.headerBtn}>
       <Ionicons name="notifications-outline" size={24} color={colors.text} />
-      {unreadCount > 0 && (
+      {unreadNotifications > 0 && (
         <View style={styles.badge}>
           <View style={styles.badgeInner} />
         </View>
@@ -29,15 +22,7 @@ function InboxButton() {
 }
 
 export default function AdminLayout() {
-  const { user } = useAuthStore();
-  const { data } = useNotifications(user?.id ?? '');
-  const { setUnreadCount } = useNotificationsStore();
-  
-  React.useEffect(() => {
-    if (data?.data) {
-      setUnreadCount(data.data.filter(n => !n.isRead).length);
-    }
-  }, [data?.data, setUnreadCount]);
+  const { adminPendingCount, unreadNotifications } = useAttentionCounts();
 
   return (
     <Tabs
@@ -67,6 +52,7 @@ export default function AdminLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="checkmark-circle" size={size} color={color} />
           ),
+          tabBarBadge: adminPendingCount > 0 ? adminPendingCount : undefined,
         }}
       />
       <Tabs.Screen
