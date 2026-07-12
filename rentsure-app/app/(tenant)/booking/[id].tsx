@@ -159,6 +159,7 @@ interface AgreementSectionProps {
 }
 
 function AgreementSection({ bookingId, signerRole }: AgreementSectionProps) {
+  const router = useRouter();
   const { data, refetch } = useAgreement(bookingId);
   const signMutation = useSignAgreement();
   const [acknowledged, setAcknowledged] = useState(false);
@@ -400,8 +401,7 @@ export default function TenantBookingDetailScreen() {
             variant="outline"
             onPress={handleCancelBooking}
             isLoading={cancelMutation.isPending}
-            style={[styles.actionBtn, { marginTop: spacing.sm, borderColor: colors.error }]}
-            textStyle={{ color: colors.error }}
+            style={[styles.cancelBtn, { borderColor: colors.error }]}
           />
         )}
         {booking.status === 'PAID_ESCROW' && (

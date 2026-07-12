@@ -33,7 +33,7 @@ export default function AgreementScreen() {
     );
   }
 
-  const startDate = new Date(booking.createdAt);
+  const startDate = new Date(booking.moveInDate || Date.now());
   const endDate = new Date(startDate);
   endDate.setMonth(endDate.getMonth() + booking.durationMonths);
 

@@ -143,6 +143,7 @@ function PaymentSection({ bookingId }: { bookingId: string }) {
 // ---------------------------------------------------------------------------
 
 function AgreementSection({ bookingId }: { bookingId: string }) {
+  const router = useRouter();
   const { data, refetch } = useAgreement(bookingId);
   const signMutation = useSignAgreement();
   const [acknowledged, setAcknowledged] = useState(false);
