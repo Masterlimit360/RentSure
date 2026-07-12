@@ -210,7 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    ...,
+    ...shadows.sm,
   },
   cardHeader: {
     flexDirection: 'row',

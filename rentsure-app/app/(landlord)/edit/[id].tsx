@@ -237,7 +237,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     borderRadius: borderRadius.lg,
     gap: spacing.md,
-    ...,
+    ...shadows.sm,
   },
   textArea: {
     height: 100,

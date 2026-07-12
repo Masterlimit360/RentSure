@@ -382,7 +382,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    ...,
+    ...shadows.sm,
   },
   cardHeader: {
     flexDirection: 'row',
