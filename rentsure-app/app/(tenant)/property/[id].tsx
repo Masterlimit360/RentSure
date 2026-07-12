@@ -31,6 +31,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { useToastStore } from '@/store/toast.store';
 import { Button } from '@/components/ui/Button';
 import { Screen } from '@/components/ui/Screen';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import { usePreferences } from '@/hooks/usePreferences';

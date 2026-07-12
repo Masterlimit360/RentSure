@@ -26,7 +26,44 @@ export function PaystackCheckout({
   onCancel,
 }: PaystackCheckoutProps) {
   
-  const htmlContent = `
+  const isMockKey = !paystackKey.startsWith('pk_');
+  
+  const htmlContent = isMockKey ? `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <title>Test Payment</title>
+      <style>
+        body { margin: 0; padding: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background-color: #f9fafb; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+        .card { background: white; padding: 32px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); text-align: center; max-width: 90%; }
+        h2 { color: #111827; margin-bottom: 8px; }
+        p { color: #6B7280; margin-bottom: 24px; }
+        .amount { font-size: 24px; font-weight: bold; color: #059669; margin-bottom: 24px; }
+        .btn { background-color: #059669; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 12px; }
+        .btn-cancel { background-color: #F3F4F6; color: #374151; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <h2>Paystack Demo Mode</h2>
+        <p>You are using a test/invalid API key.</p>
+        <div class="amount">GHS ${(amountPesewas / 100).toFixed(2)}</div>
+        <button class="btn" onclick="success()">Simulate Success</button>
+        <button class="btn btn-cancel" onclick="cancel()">Simulate Cancel</button>
+      </div>
+      <script>
+        function success() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ status: 'success', reference: 'mock_ref_' + Date.now() }));
+        }
+        function cancel() {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ status: 'cancelled' }));
+        }
+      </script>
+    </body>
+    </html>
+  ` : `
     <!DOCTYPE html>
     <html lang="en">
     <head>
