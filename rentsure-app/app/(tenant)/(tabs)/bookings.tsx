@@ -14,7 +14,7 @@
  *   REJECTED / EXPIRED / COMPLETED   → read-only pill
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -251,9 +251,33 @@ export default function TenantBookingsScreen() {
   const [reviewTarget, setReviewTarget] = useState<Booking | null>(null);
 
   const allBookings: Booking[] = data?.data ?? [];
-  const active = allBookings.filter((b) => ACTIVE_STATUSES.includes(b.status));
-  const past = allBookings.filter((b) => !ACTIVE_STATUSES.includes(b.status));
+  
+  // Deduplicate by ID to fix React duplicate key warning
+  const seenIds = new Set<string>();
+  const uniqueBookings = allBookings.filter((b) => {
+    if (seenIds.has(b.id)) return false;
+    seenIds.add(b.id);
+    return true;
+  });
+
+  const active = uniqueBookings.filter((b) => ACTIVE_STATUSES.includes(b.status));
+  const past = uniqueBookings.filter((b) => !ACTIVE_STATUSES.includes(b.status));
   const displayed = activeTab === 'active' ? active : past;
+
+  // 2-second loading fallback
+  const [timedOut, setTimedOut] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (isLoading) {
+      timeoutRef.current = setTimeout(() => setTimedOut(true), 2000);
+    } else {
+      setTimedOut(false);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    }
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+  }, [isLoading]);
+
+  const showSkeleton = isLoading && !timedOut;
 
   const handlePayNow = (booking: Booking) => {
     router.push(`/(tenant)/payment/${booking.id}` as any);
@@ -324,7 +348,7 @@ export default function TenantBookingsScreen() {
         </View>
       </View>
 
-      {isLoading ? (
+      {showSkeleton ? (
         <View style={styles.list}>
           {[1, 2, 3].map((_, i) => <BookingSkeleton key={i} index={i} />)}
         </View>

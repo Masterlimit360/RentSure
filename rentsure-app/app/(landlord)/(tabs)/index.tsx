@@ -9,7 +9,7 @@
  * This screen is the primary landlord landing tab, not a sub-route.
  */
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -158,9 +158,32 @@ export default function LandlordListingsScreen() {
   const softDeleteMutation = useSoftDeleteProperty();
   const hardDeleteMutation = useHardDeleteProperty();
 
-  const myProperties = (data?.data?.content ?? []).filter(
+  const allMyProperties = (data?.data?.content ?? []).filter(
     (p) => p.landlordId === user?.id
   );
+
+  // Deduplicate by ID to fix React duplicate key warning
+  const seenIds = new Set<string>();
+  const myProperties = allMyProperties.filter((p) => {
+    if (seenIds.has(p.id)) return false;
+    seenIds.add(p.id);
+    return true;
+  });
+
+  // 2-second loading fallback
+  const [timedOut, setTimedOut] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (isLoading) {
+      timeoutRef.current = setTimeout(() => setTimedOut(true), 2000);
+    } else {
+      setTimedOut(false);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    }
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+  }, [isLoading]);
+
+  const showSkeleton = isLoading && !timedOut;
 
   const pendingRequestsByProperty = React.useMemo(() => {
     const map: Record<string, number> = {};
@@ -231,7 +254,7 @@ export default function LandlordListingsScreen() {
         My Listings ({myProperties.length})
       </Animated.Text>
 
-      {isLoading ? (
+      {showSkeleton ? (
         <View style={styles.grid}>
           <View style={styles.columnWrapper}>
             <ListingSkeleton index={0} />

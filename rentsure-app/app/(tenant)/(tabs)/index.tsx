@@ -5,7 +5,7 @@
  * and a filter modal to narrow down results.
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Text,
@@ -95,7 +95,31 @@ export default function TenantIndex() {
 
   const properties = data?.pages.flatMap((page) => page.data?.content || []) || [];
 
-  let displayProperties = [...properties];
+  // Deduplicate by id to prevent React "two children with same key" error
+  const seenIds = new Set<string>();
+  const uniqueProperties = properties.filter((p) => {
+    if (seenIds.has(p.id)) return false;
+    seenIds.add(p.id);
+    return true;
+  });
+
+  // 2-second loading fallback: if data hasn't arrived in 2s, stop showing the spinner
+  // and render whatever we have (empty list) so the UI is never permanently blank.
+  const [timedOut, setTimedOut] = useState(false);
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (isLoading) {
+      timeoutRef.current = setTimeout(() => setTimedOut(true), 2000);
+    } else {
+      setTimedOut(false);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    }
+    return () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); };
+  }, [isLoading]);
+
+  const showSkeleton = isLoading && !timedOut;
+
+  let displayProperties = [...uniqueProperties];
   displayProperties.sort((a, b) => {
     // 1. Sort by booked status (unbooked/available first)
     const aIsBooked = a.status === 'RENTED' || activeBookings.some(booking => booking.propertyId === a.id);
@@ -209,9 +233,9 @@ export default function TenantIndex() {
             {isFetchingSuggestions ? (
               <Text style={styles.suggestionsLoading}>Searching...</Text>
             ) : suggestions.length > 0 ? (
-              suggestions.map((item) => (
+              suggestions.map((item, idx) => (
                 <TouchableOpacity
-                  key={item.id}
+                  key={item.id ? `suggestion-${item.id}` : `suggestion-idx-${idx}`}
                   style={styles.suggestionItem}
                   onPress={() => {
                     setIsFocused(false);
@@ -234,7 +258,7 @@ export default function TenantIndex() {
         )}
       </View>
 
-      {isLoading ? (
+      {showSkeleton ? (
         <View style={styles.listContent}>
           {[1, 2, 3].map((item, index) => (
             <View key={item} style={[styles.skeletonCard, { marginTop: index === 0 ? spacing.md : 0 }]}>
