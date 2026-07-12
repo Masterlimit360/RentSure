@@ -237,11 +237,7 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     borderRadius: borderRadius.lg,
     gap: spacing.md,
-    ...Platform.select({
-      ios: shadows.sm,
-      android: shadows.sm,
-      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
-    }),
+    ...,
   },
   textArea: {
     height: 100,

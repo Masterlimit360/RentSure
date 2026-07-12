@@ -19,6 +19,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Screen } from '@/components/ui/Screen';
@@ -34,7 +35,10 @@ import { useRouter } from 'expo-router';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { usePreferences } from '@/hooks/usePreferences';
 import { computeCompatibility } from '@/utils/compatibility';
+import { PROPERTY_TYPES, GHANA_REGIONS } from '@/constants/options';
 import type { PropertyType } from '@/types';
+
+const ALL_CITIES = Array.from(new Set(Object.values(GHANA_REGIONS).flat())).sort();
 
 export default function TenantIndex() {
   const { user } = useAuthStore();
@@ -52,9 +56,13 @@ export default function TenantIndex() {
 
   // Filter states
   const [tempType, setTempType] = useState<PropertyType | undefined>();
+  const [tempCity, setTempCity] = useState<string | undefined>();
+  const [tempMinPrice, setTempMinPrice] = useState<string>('');
   const [tempMaxPrice, setTempMaxPrice] = useState<string>('');
   
   const [activeType, setActiveType] = useState<PropertyType | undefined>();
+  const [activeCity, setActiveCity] = useState<string | undefined>();
+  const [activeMinPrice, setActiveMinPrice] = useState<number | undefined>();
   const [activeMaxPrice, setActiveMaxPrice] = useState<number | undefined>();
 
   const {
@@ -68,8 +76,9 @@ export default function TenantIndex() {
   } = useInfiniteProperties({
     query: queryFilter || undefined,
     type: activeType,
+    city: activeCity,
+    minPrice: activeMinPrice,
     maxPrice: activeMaxPrice,
-    // Minimum price is usually requested in advanced filtering, omitting for simplicity unless requested
   });
 
   const { data: suggestionsData, isFetching: isFetchingSuggestions } = useProperties(
@@ -97,8 +106,11 @@ export default function TenantIndex() {
 
   const applyFilters = () => {
     setActiveType(tempType);
-    const parsedPrice = parseInt(tempMaxPrice, 10);
-    setActiveMaxPrice(isNaN(parsedPrice) ? undefined : parsedPrice);
+    setActiveCity(tempCity);
+    const parsedMin = parseInt(tempMinPrice, 10);
+    const parsedMax = parseInt(tempMaxPrice, 10);
+    setActiveMinPrice(isNaN(parsedMin) ? undefined : parsedMin);
+    setActiveMaxPrice(isNaN(parsedMax) ? undefined : parsedMax);
     setQueryFilter(searchQuery);
     setIsFocused(false);
     setFilterVisible(false);
@@ -106,8 +118,12 @@ export default function TenantIndex() {
 
   const clearFilters = () => {
     setTempType(undefined);
+    setTempCity(undefined);
+    setTempMinPrice('');
     setTempMaxPrice('');
     setActiveType(undefined);
+    setActiveCity(undefined);
+    setActiveMinPrice(undefined);
     setActiveMaxPrice(undefined);
     setSearchQuery('');
     setQueryFilter('');
@@ -128,7 +144,7 @@ export default function TenantIndex() {
   };
 
   return (
-    <Screen>
+    <Screen safeAreaEdges={['top', 'bottom', 'left', 'right']}>
       <View style={{ zIndex: 10 }}>
         <View style={styles.searchContainer}>
           <View style={styles.searchBar}>
@@ -151,9 +167,11 @@ export default function TenantIndex() {
             />
           </View>
           <TouchableOpacity
-            style={[styles.filterButton, Boolean(activeType || activeMaxPrice) && styles.filterButtonActive]}
+            style={[styles.filterButton, Boolean(activeType || activeCity || activeMinPrice || activeMaxPrice) && styles.filterButtonActive]}
             onPress={() => {
               setTempType(activeType);
+              setTempCity(activeCity);
+              setTempMinPrice(activeMinPrice ? activeMinPrice.toString() : '');
               setTempMaxPrice(activeMaxPrice ? activeMaxPrice.toString() : '');
               setFilterVisible(true);
             }}
@@ -161,7 +179,7 @@ export default function TenantIndex() {
             <Ionicons
               name="options"
               size={24}
-              color={(activeType || activeMaxPrice) ? colors.surface : colors.text}
+              color={(activeType || activeCity || activeMinPrice || activeMaxPrice) ? colors.surface : colors.text}
             />
           </TouchableOpacity>
           <TouchableOpacity 
@@ -300,33 +318,59 @@ export default function TenantIndex() {
                     </TouchableOpacity>
                   </View>
 
+                  <Text style={styles.filterSectionTitle}>City</Text>
+                  <View style={styles.chipsContainerScroll}>
+                    <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.sm, paddingRight: spacing.xl }}>
+                      {ALL_CITIES.map((city) => (
+                        <TouchableOpacity
+                          key={city}
+                          style={[styles.chip, tempCity === city && styles.chipActive]}
+                          onPress={() => setTempCity(tempCity === city ? undefined : city)}
+                        >
+                          <Text style={[styles.chipText, tempCity === city && styles.chipTextActive]}>
+                            {city}
+                          </Text>
+                        </TouchableOpacity>
+                      ))}
+                    </ScrollView>
+                  </View>
+
                   <Text style={styles.filterSectionTitle}>Property Type</Text>
                   <View style={styles.chipsContainer}>
-                    {(['APARTMENT', 'HOUSE', 'STUDIO'] as PropertyType[]).map((type) => (
+                    {PROPERTY_TYPES.map((typeObj) => (
                       <TouchableOpacity
-                        key={type}
-                        style={[styles.chip, tempType === type && styles.chipActive]}
-                        onPress={() => setTempType(tempType === type ? undefined : type)}
+                        key={typeObj.value}
+                        style={[styles.chip, tempType === typeObj.value && styles.chipActive]}
+                        onPress={() => setTempType(tempType === typeObj.value ? undefined : typeObj.value)}
                       >
-                        <Text style={[styles.chipText, tempType === type && styles.chipTextActive]}>
-                          {type}
+                        <Text style={[styles.chipText, tempType === typeObj.value && styles.chipTextActive]}>
+                          {typeObj.label}
                         </Text>
                       </TouchableOpacity>
                     ))}
                   </View>
 
-                  <Text style={styles.filterSectionTitle}>Max Price (GHS / year)</Text>
-                  <View style={styles.priceInputContainer}>
-                    <TextInput
-                      style={styles.priceInput}
-                      keyboardType="number-pad"
-                      placeholder="e.g. 15000"
-                      value={tempMaxPrice}
-                      onChangeText={setTempMaxPrice}
-                    />
-                    <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
-                      <Text style={styles.inputDoneText}>Done</Text>
-                    </TouchableOpacity>
+                  <Text style={styles.filterSectionTitle}>Price Range (GHS / yr)</Text>
+                  <View style={styles.priceRow}>
+                    <View style={styles.priceInputContainer}>
+                      <TextInput
+                        style={styles.priceInput}
+                        keyboardType="number-pad"
+                        placeholder="Min"
+                        value={tempMinPrice}
+                        onChangeText={setTempMinPrice}
+                      />
+                    </View>
+                    <Text style={styles.priceDivider}>-</Text>
+                    <View style={styles.priceInputContainer}>
+                      <TextInput
+                        style={styles.priceInput}
+                        keyboardType="number-pad"
+                        placeholder="Max"
+                        value={tempMaxPrice}
+                        onChangeText={setTempMaxPrice}
+                      />
+                    </View>
                   </View>
 
                   <View style={styles.modalFooter}>
@@ -573,6 +617,10 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
+  chipsContainerScroll: {
+    marginHorizontal: -spacing.lg,
+    paddingHorizontal: spacing.lg,
+  },
   chip: {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
@@ -593,7 +641,13 @@ const styles = StyleSheet.create({
     color: colors.surface,
     fontWeight: typography.weights.bold,
   },
+  priceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+  },
   priceInputContainer: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: colors.surface,
@@ -602,21 +656,16 @@ const styles = StyleSheet.create({
     borderRadius: borderRadius.md,
     paddingHorizontal: spacing.md,
   },
+  priceDivider: {
+    fontSize: typography.sizes.md,
+    color: colors.textSecondary,
+    fontWeight: typography.weights.medium,
+  },
   priceInput: {
     flex: 1,
     height: 48,
     fontSize: typography.sizes.sm,
     color: colors.text,
-  },
-  inputDoneButton: {
-    paddingLeft: spacing.sm,
-    justifyContent: 'center',
-    height: '100%',
-  },
-  inputDoneText: {
-    color: colors.primary,
-    fontWeight: typography.weights.bold,
-    fontSize: typography.sizes.md,
   },
   modalFooter: {
     flexDirection: 'row',

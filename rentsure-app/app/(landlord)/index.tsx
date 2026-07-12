@@ -321,11 +321,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    ...Platform.select({
-      ios: shadows.sm,
-      android: shadows.sm,
-      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
-    }),
+    ...,
   },
   cardImage: {
     width: '100%',

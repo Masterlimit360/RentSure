@@ -28,6 +28,8 @@ function InboxButton() {
 }
 
 export default function TenantLayout() {
+  const { unreadCount } = useNotificationsStore();
+  
   return (
     <Tabs
       screenOptions={{
@@ -55,7 +57,14 @@ export default function TenantLayout() {
           title: 'My Bookings',
           headerRight: () => <InboxButton />,
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="calendar" size={size} color={color} />
+            <View>
+              <Ionicons name="calendar" size={size} color={color} />
+              {unreadCount > 0 && (
+                <View style={[styles.badge, { top: -4, right: -6 }]} >
+                  <View style={styles.badgeInner} />
+                </View>
+              )}
+            </View>
           ),
         }}
       />

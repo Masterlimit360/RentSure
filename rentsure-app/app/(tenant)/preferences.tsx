@@ -16,7 +16,7 @@ import { useAuthStore } from '@/store/auth.store';
 import { usePreferences, useUpsertPreferences } from '@/hooks/usePreferences';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import {
   GHANA_REGIONS,
   CITY_AREAS,
@@ -73,7 +73,7 @@ export default function PreferencesScreen() {
           <Skeleton width={120} height={24} />
           <Skeleton width={80} height={20} />
         </View>
-        <View style={styles.indicator}>
+        <View style={styles.progressContainer}>
           <Skeleton width="100%" height={8} radius={4} />
         </View>
         <View style={styles.scrollContent}>
@@ -140,28 +140,26 @@ export default function PreferencesScreen() {
   const isLastStep = step === STEP_TITLES.length - 1;
 
   return (
-    <Screen noPadding style={styles.screen}>
+    <Screen noPadding style={styles.screen} safeAreaEdges={['top', 'bottom', 'left', 'right']}>
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={handleBack}>
+        <TouchableOpacity onPress={handleBack} style={styles.iconBtn}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
         <Text style={styles.topBarTitle}>{STEP_TITLES[step]}</Text>
-        <TouchableOpacity onPress={handleSave}>
+        <TouchableOpacity onPress={handleSave} style={styles.iconBtn}>
           <Text style={styles.skipBtn}>Save & Exit</Text>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.indicator}>
-        {Array.from({ length: STEP_TITLES.length }, (_, i) => (
-          <View
-            key={i}
+      <View style={styles.progressContainer}>
+        <View style={styles.progressBarBg}>
+          <Animated.View 
             style={[
-              styles.indicatorDot,
-              i < step && styles.indicatorDotDone,
-              i === step && styles.indicatorDotActive,
-            ]}
+              styles.progressBarFill, 
+              { width: `${((step + 1) / STEP_TITLES.length) * 100}%` }
+            ]} 
           />
-        ))}
+        </View>
         <Text style={styles.indicatorText}>
           Step {step + 1} of {STEP_TITLES.length}
         </Text>
@@ -199,7 +197,10 @@ export default function PreferencesScreen() {
                   style={[styles.chip, cities.includes(c) && styles.chipSelected]}
                   onPress={() => toggleArrayItem(c, cities, setCities)}
                 >
-                  <Text style={[styles.chipText, cities.includes(c) && styles.chipTextSelected]}>{c}</Text>
+                  <Text style={[styles.chipText, cities.includes(c) && styles.chipTextSelected]}>
+                    {c}
+                  </Text>
+                  {cities.includes(c) && <Ionicons name="checkmark" size={14} color={colors.surface} style={{ marginLeft: 4 }} />}
                 </TouchableOpacity>
               ))}
             </View>
@@ -212,7 +213,10 @@ export default function PreferencesScreen() {
                   style={[styles.chip, areas.includes(a) && styles.chipSelected]}
                   onPress={() => toggleArrayItem(a, areas, setAreas)}
                 >
-                  <Text style={[styles.chipText, areas.includes(a) && styles.chipTextSelected]}>{a}</Text>
+                  <Text style={[styles.chipText, areas.includes(a) && styles.chipTextSelected]}>
+                    {a}
+                  </Text>
+                  {areas.includes(a) && <Ionicons name="checkmark" size={14} color={colors.surface} style={{ marginLeft: 4 }} />}
                 </TouchableOpacity>
               ))}
             </View>
@@ -233,6 +237,7 @@ export default function PreferencesScreen() {
                   <Text style={[styles.chipText, types.includes(t.value) && styles.chipTextSelected]}>
                     {t.label}
                   </Text>
+                  {types.includes(t.value) && <Ionicons name="checkmark" size={14} color={colors.surface} style={{ marginLeft: 4 }} />}
                 </TouchableOpacity>
               ))}
             </View>
@@ -283,6 +288,7 @@ export default function PreferencesScreen() {
                       styles.bucketText,
                       reqAmenities.includes(a) && styles.bucketTextActive
                     ]}>Must</Text>
+                    {reqAmenities.includes(a) && <Ionicons name="checkmark-circle" size={16} color="#fff" style={{ marginLeft: 4 }} />}
                   </TouchableOpacity>
                   <TouchableOpacity
                     style={[
@@ -295,6 +301,7 @@ export default function PreferencesScreen() {
                       styles.bucketText,
                       niceAmenities.includes(a) && styles.bucketTextActive
                     ]}>Nice</Text>
+                    {niceAmenities.includes(a) && <Ionicons name="star" size={14} color="#fff" style={{ marginLeft: 4 }} />}
                   </TouchableOpacity>
                 </View>
               </View>
@@ -326,11 +333,15 @@ const styles = StyleSheet.create({
   topBar: {
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.md,
-    paddingTop: Platform.OS === 'ios' ? 60 : spacing.lg,
-    paddingBottom: spacing.md,
+    paddingVertical: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    ...shadows.sm,
+    zIndex: 10,
+  },
+  iconBtn: {
+    padding: spacing.xs,
   },
   topBarTitle: {
     fontSize: typography.sizes.lg,
@@ -340,36 +351,34 @@ const styles = StyleSheet.create({
   skipBtn: {
     fontSize: typography.sizes.md,
     color: colors.primary,
-    fontWeight: typography.weights.medium,
+    fontWeight: typography.weights.bold,
   },
-  indicator: {
+  progressContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
-    gap: spacing.xs,
+    paddingVertical: spacing.md,
     backgroundColor: colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
   },
-  indicatorDot: {
-    width: 8,
+  progressBarBg: {
+    flex: 1,
     height: 8,
-    borderRadius: 4,
     backgroundColor: colors.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+    marginRight: spacing.md,
   },
-  indicatorDotDone: {
+  progressBarFill: {
+    height: '100%',
     backgroundColor: colors.primary,
-    opacity: 0.5,
-  },
-  indicatorDotActive: {
-    backgroundColor: colors.primary,
-    width: 20,
+    borderRadius: 4,
   },
   indicatorText: {
     fontSize: typography.sizes.sm,
     color: colors.textSecondary,
-    marginLeft: 'auto',
+    fontWeight: typography.weights.bold,
   },
   scrollContent: {
     padding: spacing.lg,
@@ -425,12 +434,15 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   chip: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     paddingVertical: spacing.sm,
     borderRadius: borderRadius.pill,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    ...shadows.sm,
   },
   chipSelected: {
     backgroundColor: colors.primary,
@@ -440,10 +452,11 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.sm,
     color: colors.text,
     textTransform: 'capitalize',
+    fontWeight: typography.weights.medium,
   },
   chipTextSelected: {
     color: colors.surface,
-    fontWeight: typography.weights.medium,
+    fontWeight: typography.weights.bold,
   },
   // Counter
   counterControls: {
@@ -521,6 +534,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: spacing.md,
     paddingBottom: Platform.OS === 'ios' ? 34 : spacing.md,
+    ...shadows.lg,
     borderTopWidth: 1,
     borderTopColor: colors.border,
   },
