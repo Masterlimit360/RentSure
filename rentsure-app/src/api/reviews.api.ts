@@ -12,13 +12,12 @@ export async function createReview(
 ): Promise<ApiResponse<Review>> {
   if (USE_MOCKS) return mocks.mockCreateReview(reviewerId, req);
   
-  const { data, error } = await supabase.from('reviews').insert({
-    booking_id: req.bookingId,
-    reviewer_id: reviewerId,
-    reviewee_id: req.revieweeId,
-    rating: req.rating,
-    comment: req.comment,
-  }).select().single();
+  const { data, error } = await supabase.rpc('submit_review', {
+    p_booking_id: req.bookingId,
+    p_reviewee_id: req.revieweeId,
+    p_rating: req.rating,
+    p_comment: req.comment,
+  });
 
   if (error) {
     return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };

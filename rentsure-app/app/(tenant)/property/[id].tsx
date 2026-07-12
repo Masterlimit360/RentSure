@@ -21,6 +21,9 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
+import ImageViewing from 'react-native-image-viewing';
+import { Video, ResizeMode } from 'expo-av';
+import { Image as ExpoImage } from 'expo-image';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -58,6 +61,8 @@ export default function PropertyDetailScreen() {
   );
 
   const [activeImage, setActiveImage] = useState(0);
+  const [isImageViewerVisible, setImageViewerVisible] = useState(false);
+  const [imageViewerIndex, setImageViewerIndex] = useState(0);
   const [isBookingModalVisible, setBookingModalVisible] = useState(false);
   
   // Booking Form State
@@ -135,7 +140,9 @@ export default function PropertyDetailScreen() {
   }
 
   const reviews = reviewsData?.data || [];
-  const photos = property.media.filter((m) => m.mediaType === 'PHOTO');
+  const mediaItems = [...(property.media || [])].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+  const photoItems = mediaItems.filter((m) => m.mediaType === 'PHOTO');
+  const photoUrls = photoItems.map((m) => ({ uri: m.url }));
   const score = prefs ? computeCompatibility(prefs, property) : null;
 
   const handleBookingSubmit = () => {
@@ -189,7 +196,7 @@ export default function PropertyDetailScreen() {
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
 
-        {/* Photo Gallery */}
+        {/* Media Gallery */}
         <View style={styles.galleryContainer}>
           <ScrollView
             horizontal
@@ -201,20 +208,54 @@ export default function PropertyDetailScreen() {
             }}
             scrollEventThrottle={16}
           >
-            {photos.length > 0 ? (
-              photos.map((photo, index) => (
-                <Image key={index} source={{ uri: photo.url }} style={styles.galleryImage} />
-              ))
+            {mediaItems.length > 0 ? (
+              mediaItems.map((media, index) => {
+                if (media.mediaType === 'VIDEO') {
+                  return (
+                    <View key={index} style={styles.galleryImage}>
+                      <Video
+                        source={{ uri: media.url }}
+                        style={StyleSheet.absoluteFill}
+                        useNativeControls
+                        resizeMode={ResizeMode.COVER}
+                        isLooping={false}
+                      />
+                    </View>
+                  );
+                } else {
+                  return (
+                    <TouchableOpacity 
+                      key={index} 
+                      activeOpacity={0.9} 
+                      onPress={() => {
+                        const photoIndex = photoItems.findIndex(p => p.id === media.id);
+                        if (photoIndex !== -1) {
+                          setImageViewerIndex(photoIndex);
+                          setImageViewerVisible(true);
+                        }
+                      }}
+                    >
+                      <ExpoImage 
+                        source={{ uri: media.url }} 
+                        style={styles.galleryImage} 
+                        contentFit="cover"
+                        transition={300}
+                      />
+                    </TouchableOpacity>
+                  );
+                }
+              })
             ) : (
               <View style={[styles.galleryImage, styles.placeholderImage]}>
-                <Ionicons name="image-outline" size={48} color={colors.textSecondary} />
+                <Ionicons name="image-outline" size={48} color={colors.border} />
+                <Text style={styles.placeholderText}>No media available</Text>
               </View>
             )}
           </ScrollView>
           
-          {photos.length > 1 && (
+          {mediaItems.length > 1 && (
             <View style={styles.dotsContainer}>
-              {photos.map((_, index) => (
+              {mediaItems.map((_, index) => (
                 <View
                   key={index}
                   style={[styles.dot, activeImage === index && styles.dotActive]}
@@ -222,6 +263,13 @@ export default function PropertyDetailScreen() {
               ))}
             </View>
           )}
+
+          <ImageViewing
+            images={photoUrls}
+            imageIndex={imageViewerIndex}
+            visible={isImageViewerVisible}
+            onRequestClose={() => setImageViewerVisible(false)}
+          />
         </View>
 
         <View style={styles.content}>
@@ -500,9 +548,14 @@ const styles = StyleSheet.create({
     height: 300,
   },
   placeholderImage: {
-    backgroundColor: colors.border,
+    backgroundColor: colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  placeholderText: {
+    color: colors.textSecondary,
+    fontSize: typography.sizes.sm,
+    marginTop: spacing.xs,
   },
   dotsContainer: {
     position: 'absolute',

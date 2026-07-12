@@ -37,21 +37,11 @@ export async function signAgreement(
   req: SignAgreementRequest
 ): Promise<ApiResponse<Agreement>> {
   if (USE_MOCKS) return mocks.mockSignAgreement(bookingId, req);
-  
-  // RLS will ensure they only update if they are a party to the booking
-  const updateData: any = {};
-  if (req.role === 'TENANT') {
-    updateData.tenant_signed_at = new Date().toISOString();
-  } else {
-    updateData.landlord_signed_at = new Date().toISOString();
-  }
-
   const { data, error } = await supabase
-    .from('agreements')
-    .update(updateData)
-    .eq('booking_id', bookingId)
-    .select('*')
-    .single();
+    .rpc('sign_agreement', {
+      p_booking_id: bookingId,
+      p_role: req.role,
+    });
 
   if (error) {
     return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };

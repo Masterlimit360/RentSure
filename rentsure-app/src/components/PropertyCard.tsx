@@ -26,8 +26,9 @@ interface PropertyCardProps {
 export function PropertyCard({ property, index = 0, activeBookingStatus, activeBookingId }: PropertyCardProps) {
   const router = useRouter();
 
-  // Pick the first photo or use a placeholder
-  const mainPhoto = property.media.find((m) => m.mediaType === 'PHOTO')?.url;
+  // Pick the first photo based on sort_order or use a placeholder
+  const sortedMedia = [...(property.media || [])].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+  const mainPhoto = sortedMedia.find((m) => m.mediaType === 'PHOTO')?.url;
   const imageUrl = mainPhoto || 'https://via.placeholder.com/400x300?text=No+Image';
 
   const { user } = useAuthStore();
