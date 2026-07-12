@@ -1,4 +1,4 @@
-package com.rentsure.backend.entity.enums;
+package com.rentsure.backend.payment.entity.enums;
 
 public enum EscrowStatus {
     HELD,

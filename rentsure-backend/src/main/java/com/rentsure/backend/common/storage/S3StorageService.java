@@ -19,4 +19,9 @@ public class S3StorageService implements StorageService {
         // IMPORTANT: In prod, implement AWS SDK or S3-compatible client here
         throw new UnsupportedOperationException("S3 Storage not fully implemented yet");
     }
+
+    @Override
+    public String store(byte[] content, String filename, String prefix) throws IOException {
+        throw new UnsupportedOperationException("S3 Storage not fully implemented yet");
+    }
 }

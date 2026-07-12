@@ -49,4 +49,19 @@ public class LocalDiskStorageService implements StorageService {
         
         return baseUrl + "/" + newFilename;
     }
+
+    @Override
+    public String store(byte[] content, String filename, String prefix) throws IOException {
+        String extension = "";
+        if (filename != null && filename.contains(".")) {
+            extension = filename.substring(filename.lastIndexOf("."));
+        }
+
+        String newFilename = prefix + "_" + UUID.randomUUID() + extension;
+        Path targetLocation = Paths.get(baseDir).resolve(newFilename);
+        
+        Files.write(targetLocation, content);
+        
+        return baseUrl + "/" + newFilename;
+    }
 }

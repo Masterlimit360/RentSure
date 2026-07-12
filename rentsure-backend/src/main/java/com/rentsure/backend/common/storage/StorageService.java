@@ -15,4 +15,9 @@ public interface StorageService {
      * @return The absolute public URL where the file can be accessed
      */
     String store(MultipartFile file, String prefix) throws IOException;
+
+    /**
+     * Stores raw bytes as a file.
+     */
+    String store(byte[] content, String filename, String prefix) throws IOException;
 }

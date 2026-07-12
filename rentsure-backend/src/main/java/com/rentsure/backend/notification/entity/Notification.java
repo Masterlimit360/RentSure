@@ -1,5 +1,6 @@
-package com.rentsure.backend.entity;
+package com.rentsure.backend.notification.entity;
 
+import com.rentsure.backend.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,6 +8,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Stores system notifications for users.
+ */
 @Entity
 @Table(name = "notifications")
 @Getter
@@ -24,23 +28,19 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 50)
+    private String type;
+
+    @Column(nullable = false, length = 150)
     private String title;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String message;
-
-    @Column(length = 20)
-    private String type; // e.g. "BOOKING", "PAYMENT", "SYSTEM"
-
-    @Column(length = 100)
-    private String link;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String body;
 
     @Column(nullable = false)
-    @Builder.Default
     private boolean isRead = false;
 
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 }
