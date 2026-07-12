@@ -29,15 +29,14 @@ export async function mockListProperties(
   const user = requireAuth();
   if (!user) return wrapError('UNAUTHORIZED', 'Not authorized');
 
-  // Landlords see ALL of their own properties (any status).
-  // Tenants/everyone else see only AVAILABLE properties from all landlords.
+  // Tenants/everyone else see only non-HIDDEN properties from all landlords.
   let results: Property[];
   if (user.role === 'LANDLORD') {
     results = db.properties.filter(
-      (p) => p.landlordId === user.id || p.status === 'AVAILABLE'
+      (p) => p.landlordId === user.id || p.status !== 'HIDDEN'
     );
   } else {
-    results = db.properties.filter((p) => p.status === 'AVAILABLE');
+    results = db.properties.filter((p) => p.status !== 'HIDDEN');
   }
 
   if (filters.query) {

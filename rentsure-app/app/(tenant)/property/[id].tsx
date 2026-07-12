@@ -165,7 +165,7 @@ export default function PropertyDetailScreen() {
           if (res.success && res.data) {
             setBookingModalVisible(false);
             showToast(`Booking requested! Ref: ${res.data.bookingRef}`);
-            router.push('/(tenant)/bookings');
+            router.push('/(tenant)/bookings' as any);
           } else {
             showToast(res.error?.message || 'Failed to request booking', 'error');
           }

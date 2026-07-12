@@ -35,13 +35,18 @@ export function PropertyCard({ property, index = 0, activeBookingStatus, activeB
   const score = prefs ? computeCompatibility(prefs, property) : null;
 
   const getStatusDisplay = () => {
-    switch(activeBookingStatus) {
-      case 'REQUESTED': return { text: 'Request Pending', color: colors.warning, icon: 'time' as const };
-      case 'ACCEPTED': return { text: 'Booking Accepted - Pay Now', color: colors.success, icon: 'checkmark-circle' as const };
-      case 'PAID_ESCROW': return { text: 'Paid in Escrow', color: colors.primary, icon: 'lock-closed' as const };
-      case 'MOVED_IN': return { text: 'Moved In', color: colors.success, icon: 'home' as const };
-      default: return null;
+    if (activeBookingStatus) {
+      switch(activeBookingStatus) {
+        case 'REQUESTED': return { text: 'Request Pending', color: colors.warning, icon: 'time' as const };
+        case 'ACCEPTED': return { text: 'Booking Accepted - Pay Now', color: colors.success, icon: 'checkmark-circle' as const };
+        case 'PAID_ESCROW': return { text: 'Paid in Escrow', color: colors.primary, icon: 'lock-closed' as const };
+        case 'MOVED_IN': return { text: 'Moved In', color: colors.success, icon: 'home' as const };
+      }
     }
+    if (property.status === 'RENTED') {
+      return { text: 'Rented', color: colors.textSecondary, icon: 'lock-closed' as const };
+    }
+    return null;
   };
 
   const statusInfo = getStatusDisplay();

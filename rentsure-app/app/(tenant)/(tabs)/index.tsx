@@ -97,9 +97,9 @@ export default function TenantIndex() {
 
   let displayProperties = [...properties];
   displayProperties.sort((a, b) => {
-    // 1. Sort by booked status (unbooked first)
-    const aIsBooked = activeBookings.some(booking => booking.propertyId === a.id);
-    const bIsBooked = activeBookings.some(booking => booking.propertyId === b.id);
+    // 1. Sort by booked status (unbooked/available first)
+    const aIsBooked = a.status === 'RENTED' || activeBookings.some(booking => booking.propertyId === a.id);
+    const bIsBooked = b.status === 'RENTED' || activeBookings.some(booking => booking.propertyId === b.id);
     if (aIsBooked && !bIsBooked) return 1;
     if (!aIsBooked && bIsBooked) return -1;
 
