@@ -25,9 +25,9 @@ export function useCreateReview() {
     mutationFn: ({ reviewerId, req }: { reviewerId: string; req: CreateReviewRequest }) =>
       createReview(reviewerId, req),
     onSuccess: (_, variables) => {
-      // Note: In a real app we'd need to know the propertyId to invalidate the correct list,
-      // or we can invalidate all reviews
+      // Invalidate both reviews and bookings because a submitted review transitions booking to COMPLETED
       queryClient.invalidateQueries({ queryKey: ['reviews'] });
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
     },
   });
 }

@@ -32,6 +32,7 @@ import {
 import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
+import { useRouter } from 'expo-router';
 import { useMyBookings, usePayBooking, useConfirmMoveIn } from '@/hooks/useBookings';
 import { useCreateReview } from '@/hooks/useReviews';
 import { Screen } from '@/components/ui/Screen';
@@ -244,6 +245,7 @@ export default function TenantBookingsScreen() {
   const payMutation = usePayBooking();
   const moveInMutation = useConfirmMoveIn();
   const reviewMutation = useCreateReview();
+  const router = useRouter();
 
   const [activeTab, setActiveTab] = useState<'active' | 'past'>('active');
   const [reviewTarget, setReviewTarget] = useState<Booking | null>(null);
@@ -254,22 +256,7 @@ export default function TenantBookingsScreen() {
   const displayed = activeTab === 'active' ? active : past;
 
   const handlePayNow = (booking: Booking) => {
-    Alert.alert(
-      'Confirm Payment',
-      `Pay ${formatCurrency(booking.totalAmount)} into escrow? The landlord receives funds only after you confirm move-in.`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Confirm & Pay',
-          onPress: () =>
-            payMutation.mutate(booking.id, {
-              onSuccess: (res) => {
-                if (!res.success) Alert.alert('Payment Failed', res.error?.message ?? 'Try again');
-              },
-            }),
-        },
-      ]
-    );
+    router.push(`/(tenant)/payment/${booking.id}` as any);
   };
 
   const handleConfirmMoveIn = (booking: Booking) => {
