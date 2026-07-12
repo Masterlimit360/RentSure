@@ -440,7 +440,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: shadows.sm,
       android: shadows.sm,
-      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } as any,
     }),
   },
   heroRef: {
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: shadows.sm,
       android: shadows.sm,
-      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } as any,
     }),
   },
   infoRow: {
@@ -496,6 +496,9 @@ const styles = StyleSheet.create({
   },
   infoKey: { fontSize: typography.sizes.sm, color: colors.textSecondary },
   infoValue: { fontSize: typography.sizes.sm, color: colors.text, fontWeight: typography.weights.medium },
+  cancelBtn: {
+    marginTop: spacing.sm,
+  },
   statusChip: {
     paddingHorizontal: spacing.sm, paddingVertical: 2,
     borderRadius: borderRadius.pill,

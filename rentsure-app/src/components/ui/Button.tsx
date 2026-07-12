@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: shadows.sm,
       android: shadows.sm,
-      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' },
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' } as any,
     }),
   },
   secondaryContainer: {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: shadows.sm,
       android: shadows.sm,
-      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' },
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' } as any,
     }),
   },
   outlineContainer: {

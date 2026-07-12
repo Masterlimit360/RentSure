@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
       android: shadows.md,
       web: {
         boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-      },
+      } as any,
     }),
   },
   imageContainer: {
