@@ -73,45 +73,58 @@ export default function TenantProfileScreen() {
               </View>
             </View>
 
-            {isEditing ? (
-              <View style={styles.editForm}>
+            <View style={styles.profileInfo}>
+              <View style={styles.nameRow}>
+                {isEditing ? (
+                  <TextInput
+                    style={[styles.name, styles.inlineInput]}
+                    value={editForm.fullName}
+                    onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
+                    placeholder="Full Name"
+                    autoFocus
+                  />
+                ) : (
+                  <Text style={styles.name} numberOfLines={1}>{user?.fullName}</Text>
+                )}
+                
+                {isEditing ? (
+                  <View style={styles.actionIconRow}>
+                    <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.iconBtn}>
+                      <Ionicons name="close-circle" size={24} color={colors.error} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleSavePress} style={styles.iconBtn} disabled={updateMutation.isPending}>
+                      {updateMutation.isPending ? (
+                        <ActivityIndicator size="small" color={colors.primary} />
+                      ) : (
+                        <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <TouchableOpacity onPress={handleEditPress} style={styles.editBtn}>
+                    <Ionicons name="pencil" size={16} color={colors.textSecondary} />
+                  </TouchableOpacity>
+                )}
+              </View>
+
+              {isEditing ? (
                 <TextInput
-                  style={styles.input}
-                  value={editForm.fullName}
-                  onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
-                  placeholder="Full Name"
-                />
-                <TextInput
-                  style={styles.input}
+                  style={[styles.phone, styles.inlineInput]}
                   value={editForm.phone}
                   onChangeText={(t) => setEditForm({ ...editForm, phone: t })}
                   placeholder="Phone Number"
                   keyboardType="phone-pad"
                 />
-                <View style={styles.editActions}>
-                  <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.cancelBtn}>
-                    <Text style={styles.cancelBtnText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleSavePress} style={styles.saveBtn} disabled={updateMutation.isPending}>
-                    <Text style={styles.saveBtnText}>{updateMutation.isPending ? 'Saving...' : 'Save'}</Text>
-                  </TouchableOpacity>
-                </View>
+              ) : (
+                <Text style={styles.phone} numberOfLines={1}>{user?.phone || 'No phone set'}</Text>
+              )}
+              
+              <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
+              
+              <View style={styles.roleChip}>
+                <Text style={styles.roleText}>TENANT</Text>
               </View>
-            ) : (
-              <View style={styles.profileInfo}>
-                <View style={styles.nameRow}>
-                  <Text style={styles.name} numberOfLines={1}>{user?.fullName}</Text>
-                  <TouchableOpacity onPress={handleEditPress} style={styles.editBtn}>
-                    <Ionicons name="pencil" size={16} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                </View>
-                <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
-                <Text style={styles.phone} numberOfLines={1}>{user?.phone}</Text>
-                <View style={styles.roleChip}>
-                  <Text style={styles.roleText}>TENANT</Text>
-                </View>
-              </View>
-            )}
+            </View>
           </View>
         </Animated.View>
 
@@ -305,42 +318,24 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: spacing.xl,
   },
-  input: {
+  inlineInput: {
+    padding: 0,
+    margin: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary,
     backgroundColor: '#F3F4F6',
-    borderRadius: borderRadius.md,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    marginBottom: spacing.xs,
-    fontSize: typography.sizes.sm,
-    color: colors.text,
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    flex: 1,
   },
-  editActions: {
+  actionIconRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: spacing.sm,
-    marginTop: spacing.xs,
+    alignItems: 'center',
+    gap: 8,
   },
-  cancelBtn: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: borderRadius.md,
-    backgroundColor: '#F3F4F6',
-  },
-  cancelBtnText: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: typography.weights.medium,
-  },
-  saveBtn: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: borderRadius.md,
-    backgroundColor: colors.primary,
-  },
-  saveBtnText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: typography.weights.bold,
+  iconBtn: {
+    padding: 2,
   },
   section: {
     marginBottom: spacing.lg,

@@ -48,37 +48,54 @@ export default function ProfileScreen() {
               </View>
             </View>
 
-            {isEditing ? (
-              <View style={styles.editForm}>
-                <TextInput
-                  style={styles.input}
-                  value={editForm.fullName}
-                  onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
-                  placeholder="Full Name"
-                />
-                <View style={styles.editActions}>
-                  <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.cancelBtn}>
-                    <Text style={styles.cancelBtnText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleSavePress} style={styles.saveBtn}>
-                    <Text style={styles.saveBtnText}>Save</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            ) : (
-              <View style={styles.profileInfo}>
-                <View style={styles.nameRow}>
+            <View style={styles.profileInfo}>
+              <View style={styles.nameRow}>
+                {isEditing ? (
+                  <TextInput
+                    style={[styles.name, styles.inlineInput]}
+                    value={editForm.fullName}
+                    onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
+                    placeholder="Full Name"
+                    autoFocus
+                  />
+                ) : (
                   <Text style={styles.name} numberOfLines={1}>{user?.fullName}</Text>
+                )}
+                
+                {isEditing ? (
+                  <View style={styles.actionIconRow}>
+                    <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.iconBtn}>
+                      <Ionicons name="close-circle" size={24} color={colors.error} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleSavePress} style={styles.iconBtn}>
+                      <Ionicons name="checkmark-circle" size={24} color={colors.success} />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
                   <TouchableOpacity onPress={handleEditPress} style={styles.editBtn}>
                     <Ionicons name="pencil" size={16} color={colors.textSecondary} />
                   </TouchableOpacity>
-                </View>
-                <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
-                <View style={styles.roleChip}>
-                  <Text style={styles.roleText}>{user?.role || 'USER'}</Text>
-                </View>
+                )}
               </View>
-            )}
+
+              {isEditing ? (
+                <TextInput
+                  style={[styles.phone, styles.inlineInput]}
+                  value={editForm.phone}
+                  onChangeText={(t) => setEditForm({ ...editForm, phone: t })}
+                  placeholder="Phone Number"
+                  keyboardType="phone-pad"
+                />
+              ) : (
+                <Text style={styles.phone} numberOfLines={1}>{user?.phone || 'No phone set'}</Text>
+              )}
+              
+              <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
+              
+              <View style={styles.roleChip}>
+                <Text style={styles.roleText}>{user?.role || 'USER'}</Text>
+              </View>
+            </View>
           </View>
         </Animated.View>
         
@@ -155,6 +172,13 @@ const styles = StyleSheet.create({
     color: colors.text,
     flex: 1,
   },
+  phone: {
+    fontSize: typography.sizes.sm,
+    color: colors.textSecondary,
+    marginBottom: spacing.xs,
+    flexShrink: 1,
+    flexWrap: 'wrap',
+  },
   email: {
     fontSize: typography.sizes.sm,
     color: colors.textSecondary,
@@ -176,45 +200,24 @@ const styles = StyleSheet.create({
     color: colors.surface,
     letterSpacing: 1,
   },
-  input: {
+  inlineInput: {
+    padding: 0,
+    margin: 0,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.primary,
     backgroundColor: '#F3F4F6',
-    borderRadius: 8,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-    marginBottom: spacing.xs,
-    fontSize: typography.sizes.sm,
-    color: colors.text,
-  },
-  editForm: {
+    borderRadius: 4,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
     flex: 1,
   },
-  editActions: {
+  actionIconRow: {
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-    gap: spacing.sm,
-    marginTop: spacing.xs,
+    alignItems: 'center',
+    gap: 8,
   },
-  cancelBtn: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 8,
-    backgroundColor: '#F3F4F6',
-  },
-  cancelBtnText: {
-    color: colors.textSecondary,
-    fontSize: 12,
-    fontWeight: typography.weights.medium,
-  },
-  saveBtn: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 8,
-    backgroundColor: colors.primary,
-  },
-  saveBtnText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: typography.weights.bold,
+  iconBtn: {
+    padding: 2,
   },
   editBtn: {
     padding: 4,
