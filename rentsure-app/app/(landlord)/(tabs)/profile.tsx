@@ -405,8 +405,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginLeft: 8,
   },
-    fontWeight: typography.weights.bold,
-  },
   verifyBtnSm: {
     backgroundColor: colors.primary,
     paddingHorizontal: spacing.md,
