@@ -17,6 +17,9 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -283,43 +286,59 @@ export default function PropertyDetailScreen() {
 
       {/* Booking Modal */}
       <Modal visible={isBookingModalVisible} animationType="slide" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Request Booking</Text>
-              <TouchableOpacity onPress={() => setBookingModalVisible(false)}>
-                <Ionicons name="close" size={24} color={colors.text} />
-              </TouchableOpacity>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalOverlay}>
+              <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+                <View style={styles.modalContent}>
+                  <View style={styles.modalHeader}>
+                    <Text style={styles.modalTitle}>Request Booking</Text>
+                    <TouchableOpacity onPress={() => setBookingModalVisible(false)}>
+                      <Ionicons name="close" size={24} color={colors.text} />
+                    </TouchableOpacity>
+                  </View>
+
+                  <Text style={styles.inputLabel}>Move-in Date (YYYY-MM-DD)</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.textInput}
+                      value={moveInDate}
+                      onChangeText={setMoveInDate}
+                      placeholder="2025-01-01"
+                    />
+                  </View>
+
+                  <Text style={styles.inputLabel}>Duration (Months)</Text>
+                  <View style={styles.inputContainer}>
+                    <TextInput
+                      style={styles.textInput}
+                      value={durationMonths}
+                      onChangeText={setDurationMonths}
+                      keyboardType="number-pad"
+                    />
+                    <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
+                      <Text style={styles.inputDoneText}>Done</Text>
+                    </TouchableOpacity>
+                  </View>
+
+                  <View style={styles.totalContainer}>
+                    <Text style={styles.totalLabel}>Estimated Total</Text>
+                    <Text style={styles.totalPrice}>{formatCurrency(computedTotal)}</Text>
+                  </View>
+
+                  <Button
+                    title="Confirm Request"
+                    onPress={handleBookingSubmit}
+                    isLoading={createBookingMutation.isPending}
+                  />
+                </View>
+              </TouchableWithoutFeedback>
             </View>
-
-            <Text style={styles.inputLabel}>Move-in Date (YYYY-MM-DD)</Text>
-            <TextInput
-              style={styles.textInput}
-              value={moveInDate}
-              onChangeText={setMoveInDate}
-              placeholder="2025-01-01"
-            />
-
-            <Text style={styles.inputLabel}>Duration (Months)</Text>
-            <TextInput
-              style={styles.textInput}
-              value={durationMonths}
-              onChangeText={setDurationMonths}
-              keyboardType="number-pad"
-            />
-
-            <View style={styles.totalContainer}>
-              <Text style={styles.totalLabel}>Estimated Total</Text>
-              <Text style={styles.totalPrice}>{formatCurrency(computedTotal)}</Text>
-            </View>
-
-            <Button
-              title="Confirm Request"
-              onPress={handleBookingSubmit}
-              isLoading={createBookingMutation.isPending}
-            />
-          </View>
-        </View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
       </Modal>
     </Screen>
   );
@@ -596,12 +615,29 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
     marginTop: spacing.md,
   },
-  textInput: {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: borderRadius.md,
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+  },
+  textInput: {
+    flex: 1,
+    height: 48,
+    fontSize: typography.sizes.md,
+    color: colors.text,
+  },
+  inputDoneButton: {
+    paddingLeft: spacing.sm,
+    justifyContent: 'center',
+    height: '100%',
+  },
+  inputDoneText: {
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
     fontSize: typography.sizes.md,
   },
   totalContainer: {

@@ -17,6 +17,9 @@ import {
   TextInput,
   Alert,
   Modal,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -247,9 +250,15 @@ export default function PayoutAccountsScreen() {
 
       {/* Add/Edit Modal */}
       <Modal visible={showAddModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalSheet}>
-            <View style={styles.modalHeader}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={styles.modalOverlay}>
+              <TouchableWithoutFeedback onPress={(e) => e.stopPropagation()}>
+                <View style={styles.modalSheet}>
+                  <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>
                 {editingMethod ? 'Edit Payout Method' : 'Add Payout Method'}
               </Text>
@@ -339,26 +348,33 @@ export default function PayoutAccountsScreen() {
 
               {/* Account Name */}
               <Text style={styles.fieldLabel}>Account Name</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="e.g. Kwame Mensah"
-                value={formAccountName}
-                onChangeText={setFormAccountName}
-                placeholderTextColor={colors.textSecondary}
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder="e.g. Kwame Mensah"
+                  value={formAccountName}
+                  onChangeText={setFormAccountName}
+                  placeholderTextColor={colors.textSecondary}
+                />
+              </View>
 
               {/* Account/Phone Number */}
               <Text style={styles.fieldLabel}>
                 {formType === 'BANK' ? 'Account Number' : 'Phone Number'}
               </Text>
-              <TextInput
-                style={styles.input}
-                placeholder={formType === 'BANK' ? '1234567890' : '0241234567'}
-                value={formAccountNumber}
-                onChangeText={setFormAccountNumber}
-                keyboardType="number-pad"
-                placeholderTextColor={colors.textSecondary}
-              />
+              <View style={styles.inputContainer}>
+                <TextInput
+                  style={styles.input}
+                  placeholder={formType === 'BANK' ? '1234567890' : '0241234567'}
+                  value={formAccountNumber}
+                  onChangeText={setFormAccountNumber}
+                  keyboardType="number-pad"
+                  placeholderTextColor={colors.textSecondary}
+                />
+                <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
+                  <Text style={styles.inputDoneText}>Done</Text>
+                </TouchableOpacity>
+              </View>
 
               <Button
                 title={editingMethod ? 'Save Changes' : 'Add Method'}
@@ -367,8 +383,11 @@ export default function PayoutAccountsScreen() {
               />
             </ScrollView>
           </View>
-        </View>
-      </Modal>
+        </TouchableWithoutFeedback>
+      </View>
+    </TouchableWithoutFeedback>
+  </KeyboardAvoidingView>
+</Modal>
     </Screen>
   );
 }
@@ -587,15 +606,30 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontWeight: typography.weights.bold,
   },
-  input: {
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: colors.background,
     borderRadius: borderRadius.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    fontSize: typography.sizes.md,
-    color: colors.text,
     borderWidth: 1,
     borderColor: colors.border,
+    paddingHorizontal: spacing.md,
+  },
+  input: {
+    flex: 1,
+    height: 48,
+    fontSize: typography.sizes.md,
+    color: colors.text,
+  },
+  inputDoneButton: {
+    paddingLeft: spacing.sm,
+    justifyContent: 'center',
+    height: '100%',
+  },
+  inputDoneText: {
+    color: colors.primary,
+    fontWeight: typography.weights.bold,
+    fontSize: typography.sizes.md,
   },
   saveBtn: {
     marginTop: spacing.xl,
