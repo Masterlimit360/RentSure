@@ -43,7 +43,7 @@ export const seedUsers: User[] = [
     fullName: 'Kwame Mensah',
     email: 'tenant@rentsure.com',
     phone: '+233241234567',
-    role: 'LANDLORD',
+    role: 'TENANT',
     isVerifiedEmail: true,
     status: 'ACTIVE',
     createdAt: '2026-01-15T08:30:00Z',
@@ -358,7 +358,7 @@ export const seedProperties: Property[] = [
   // --- Injected 50 Listings from SQL --- 
   {
     "id": "p-sql-1",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Luxurious House in Tarkwa",
     "description": "This is a highly sought-after 3 bedroom luxurious house in tarkwa. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "HOUSE",
@@ -381,7 +381,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-2",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "4 Bedroom Modern House in Cape Coast",
     "description": "This is a highly sought-after 4 bedroom modern house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "HOUSE",
@@ -406,7 +406,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-3",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "2 Bedroom Beautiful Apartment in Airport Residential",
     "description": "This is a highly sought-after 2 bedroom beautiful apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.",
     "propertyType": "APARTMENT",
@@ -433,7 +433,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-4",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "1 Bedroom Newly Renovated Apartment in Airport Residential",
     "description": "This is a highly sought-after 1 bedroom newly renovated apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.",
     "propertyType": "APARTMENT",
@@ -459,7 +459,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-5",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Spacious Single Room in Ridge",
     "description": "This is a highly sought-after spacious single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "SINGLE_ROOM",
@@ -484,7 +484,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-6",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "4 Bedroom Modern House in Tema",
     "description": "This is a highly sought-after 4 bedroom modern house in tema. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.",
     "propertyType": "HOUSE",
@@ -510,7 +510,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-7",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Spacious House in Madina",
     "description": "This is a highly sought-after 3 bedroom spacious house in madina. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.",
     "propertyType": "HOUSE",
@@ -535,7 +535,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-8",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Newly Renovated Apartment in East Legon",
     "description": "This is a highly sought-after 3 bedroom newly renovated apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.",
     "propertyType": "APARTMENT",
@@ -560,7 +560,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-9",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Stunning Self-Contained in Osu",
     "description": "This is a highly sought-after stunning self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "SELF_CONTAINED",
@@ -583,7 +583,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-10",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Affordable Single Room in Dansoman",
     "description": "This is a highly sought-after affordable single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.",
     "propertyType": "SINGLE_ROOM",
@@ -608,7 +608,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-11",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "4 Bedroom Newly Renovated House in Cape Coast",
     "description": "This is a highly sought-after 4 bedroom newly renovated house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "HOUSE",
@@ -632,7 +632,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-12",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Affordable Self-Contained in Dansoman",
     "description": "This is a highly sought-after affordable self-contained in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "SELF_CONTAINED",
@@ -658,7 +658,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-13",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Affordable House in Kumasi",
     "description": "This is a highly sought-after 3 bedroom affordable house in kumasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.",
     "propertyType": "HOUSE",
@@ -683,7 +683,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-14",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Spacious Self-Contained in Ridge",
     "description": "This is a highly sought-after spacious self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SELF_CONTAINED",
@@ -708,7 +708,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-15",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Modern Single Room in Ridge",
     "description": "This is a highly sought-after modern single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.",
     "propertyType": "SINGLE_ROOM",
@@ -733,7 +733,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-16",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "4 Bedroom Prime House in Obuasi",
     "description": "This is a highly sought-after 4 bedroom prime house in obuasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "HOUSE",
@@ -758,7 +758,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-17",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "1 Bedroom Newly Renovated Apartment in East Legon",
     "description": "This is a highly sought-after 1 bedroom newly renovated apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "APARTMENT",
@@ -781,7 +781,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-18",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "4 Bedroom Modern House in Cape Coast",
     "description": "This is a highly sought-after 4 bedroom modern house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "HOUSE",
@@ -806,7 +806,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-19",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Beautiful Self-Contained in Cantonments",
     "description": "This is a highly sought-after beautiful self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "SELF_CONTAINED",
@@ -833,7 +833,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-20",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Stunning Single Room in Cantonments",
     "description": "This is a highly sought-after stunning single room in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.",
     "propertyType": "SINGLE_ROOM",
@@ -859,7 +859,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-21",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "1 Bedroom Spacious Apartment in Airport Residential",
     "description": "This is a highly sought-after 1 bedroom spacious apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.",
     "propertyType": "APARTMENT",
@@ -885,7 +885,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-22",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Luxurious Single Room in Dansoman",
     "description": "This is a highly sought-after luxurious single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SINGLE_ROOM",
@@ -909,7 +909,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-23",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "5 Bedroom Luxurious House in Cape Coast",
     "description": "This is a highly sought-after 5 bedroom luxurious house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "HOUSE",
@@ -934,7 +934,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-24",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Beautiful House in Takoradi",
     "description": "This is a highly sought-after 3 bedroom beautiful house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.",
     "propertyType": "HOUSE",
@@ -958,7 +958,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-25",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "5 Bedroom Affordable House in Takoradi",
     "description": "This is a highly sought-after 5 bedroom affordable house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.",
     "propertyType": "HOUSE",
@@ -984,7 +984,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-26",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Beautiful Self-Contained in Airport Residential",
     "description": "This is a highly sought-after beautiful self-contained in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "SELF_CONTAINED",
@@ -1010,7 +1010,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-27",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Stunning House in Takoradi",
     "description": "This is a highly sought-after 3 bedroom stunning house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.",
     "propertyType": "HOUSE",
@@ -1036,7 +1036,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-28",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "1 Bedroom Stunning Apartment in East Legon",
     "description": "This is a highly sought-after 1 bedroom stunning apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "APARTMENT",
@@ -1061,7 +1061,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-29",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "5 Bedroom Stunning House in Obuasi",
     "description": "This is a highly sought-after 5 bedroom stunning house in obuasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "HOUSE",
@@ -1085,7 +1085,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-30",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Cozy Self-Contained in Cantonments",
     "description": "This is a highly sought-after cozy self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SELF_CONTAINED",
@@ -1110,7 +1110,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-31",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "1 Bedroom Luxurious Apartment in Airport Residential",
     "description": "This is a highly sought-after 1 bedroom luxurious apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.",
     "propertyType": "APARTMENT",
@@ -1133,7 +1133,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-32",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Modern Apartment in East Legon",
     "description": "This is a highly sought-after 3 bedroom modern apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "APARTMENT",
@@ -1156,7 +1156,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-33",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Modern Single Room in Airport Residential",
     "description": "This is a highly sought-after modern single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "SINGLE_ROOM",
@@ -1179,7 +1179,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-34",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "5 Bedroom Cozy House in Cape Coast",
     "description": "This is a highly sought-after 5 bedroom cozy house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "HOUSE",
@@ -1205,7 +1205,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-35",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Newly Renovated Self-Contained in Cantonments",
     "description": "This is a highly sought-after newly renovated self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SELF_CONTAINED",
@@ -1229,7 +1229,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-36",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Elegant Single Room in East Legon",
     "description": "This is a highly sought-after elegant single room in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.",
     "propertyType": "SINGLE_ROOM",
@@ -1254,7 +1254,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-37",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Beautiful Apartment in Osu",
     "description": "This is a highly sought-after 3 bedroom beautiful apartment in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.",
     "propertyType": "APARTMENT",
@@ -1277,7 +1277,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-38",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Stunning Single Room in Osu",
     "description": "This is a highly sought-after stunning single room in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SINGLE_ROOM",
@@ -1301,7 +1301,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-39",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Newly Renovated Single Room in Dansoman",
     "description": "This is a highly sought-after newly renovated single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.",
     "propertyType": "SINGLE_ROOM",
@@ -1324,7 +1324,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-40",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "4 Bedroom Modern House in Cape Coast",
     "description": "This is a highly sought-after 4 bedroom modern house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "HOUSE",
@@ -1347,7 +1347,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-41",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Luxurious Self-Contained in Cantonments",
     "description": "This is a highly sought-after luxurious self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SELF_CONTAINED",
@@ -1371,7 +1371,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-42",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Cozy Self-Contained in Osu",
     "description": "This is a highly sought-after cozy self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.",
     "propertyType": "SELF_CONTAINED",
@@ -1398,7 +1398,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-43",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Luxurious Self-Contained in Ridge",
     "description": "This is a highly sought-after luxurious self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "SELF_CONTAINED",
@@ -1422,7 +1422,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-44",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Cozy Self-Contained in Spintex",
     "description": "This is a highly sought-after cozy self-contained in spintex. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.",
     "propertyType": "SELF_CONTAINED",
@@ -1448,7 +1448,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-45",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Newly Renovated Single Room in Airport Residential",
     "description": "This is a highly sought-after newly renovated single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.",
     "propertyType": "SINGLE_ROOM",
@@ -1472,7 +1472,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-46",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Luxurious Single Room in Dansoman",
     "description": "This is a highly sought-after luxurious single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.",
     "propertyType": "SINGLE_ROOM",
@@ -1495,7 +1495,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-47",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "5 Bedroom Modern House in Kasoa",
     "description": "This is a highly sought-after 5 bedroom modern house in kasoa. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.",
     "propertyType": "HOUSE",
@@ -1518,7 +1518,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-48",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Luxurious Self-Contained in Osu",
     "description": "This is a highly sought-after luxurious self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.",
     "propertyType": "SELF_CONTAINED",
@@ -1544,7 +1544,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-49",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "3 Bedroom Stunning Apartment in East Legon",
     "description": "This is a highly sought-after 3 bedroom stunning apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.",
     "propertyType": "APARTMENT",
@@ -1567,7 +1567,7 @@ export const seedProperties: Property[] = [
   },
   {
     "id": "p-sql-50",
-    "landlordId": "u-tenant-001",
+    "landlordId": "u-landlord-001",
     "title": "Luxurious Single Room in Airport Residential",
     "description": "This is a highly sought-after luxurious single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.",
     "propertyType": "SINGLE_ROOM",
@@ -1915,7 +1915,7 @@ export async function initDb() {
     // Attempt to load users from the CSV file (single source of truth for users)
     const csvUsers = await loadUsersFromCsv();
     
-    if (jsonDb) {
+    if (jsonDb && Object.keys(jsonDb).length > 0) {
       Object.assign(db, jsonDb);
       if (csvUsers) {
         db.users = csvUsers;

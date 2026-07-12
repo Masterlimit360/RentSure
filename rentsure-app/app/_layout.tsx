@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { useEffect, ErrorInfo, Component } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 import { Toast } from '@/components/ui/Toast';
-import { initDb } from '@/mocks/store';
+import { initDb, resetDb } from '@/mocks/store';
 
 // MOCK: Sentry Initialization
 const setupSentry = () => {
