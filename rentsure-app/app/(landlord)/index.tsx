@@ -27,6 +27,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout } from '@/hooks/useAuth';
 import { useProperties, useSoftDeleteProperty, useHardDeleteProperty } from '@/hooks/useProperties';
+import { useMyBookings } from '@/hooks/useBookings';
 import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import type { Property, PropertyStatus } from '@/types';
@@ -49,12 +50,13 @@ const STATUS_BADGE: Record<PropertyStatus, { label: string; color: string }> = {
 interface ListingCardProps {
   property: Property;
   index: number;
+  pendingRequestsCount?: number;
   onHide: (property: Property) => void;
   onEdit: (property: Property) => void;
   onDelete: (property: Property) => void;
 }
 
-function ListingCard({ property, index, onHide, onEdit, onDelete }: ListingCardProps) {
+function ListingCard({ property, index, pendingRequestsCount = 0, onHide, onEdit, onDelete }: ListingCardProps) {
   const badge = STATUS_BADGE[property.status];
   const photo = property.media.find((m) => m.mediaType === 'PHOTO')?.url;
 
@@ -74,6 +76,13 @@ function ListingCard({ property, index, onHide, onEdit, onDelete }: ListingCardP
       <View style={[styles.statusBadge, { backgroundColor: badge.color }]}>
         <Text style={styles.statusBadgeText}>{badge.label}</Text>
       </View>
+
+      {/* Notification Badge for pending requests */}
+      {pendingRequestsCount > 0 && (
+        <View style={styles.notificationBadge}>
+          <Text style={styles.notificationBadgeText}>{pendingRequestsCount}</Text>
+        </View>
+      )}
 
       <View style={styles.cardBody}>
         <Text style={styles.cardTitle} numberOfLines={1}>{property.title}</Text>
@@ -137,12 +146,23 @@ export default function LandlordListingsScreen() {
   // landlordId filter is not in our current PropertyFilters, so we filter client-side
   // from all properties. In production the API would accept a landlordId param.
   const { data, isLoading, refetch } = useProperties({});
+  const { data: bookingsData } = useMyBookings(user?.id ?? '', 'LANDLORD');
   const softDeleteMutation = useSoftDeleteProperty();
   const hardDeleteMutation = useHardDeleteProperty();
 
   const myProperties = (data?.data?.content ?? []).filter(
     (p) => p.landlordId === user?.id
   );
+
+  const pendingRequestsByProperty = React.useMemo(() => {
+    const map: Record<string, number> = {};
+    bookingsData?.data?.forEach(b => {
+      if (b.status === 'REQUESTED') {
+        map[b.propertyId] = (map[b.propertyId] || 0) + 1;
+      }
+    });
+    return map;
+  }, [bookingsData]);
 
   const handleHide = (property: Property) => {
     const action = property.status === 'HIDDEN' ? 'unhide' : 'hide';
@@ -234,6 +254,7 @@ export default function LandlordListingsScreen() {
             <ListingCard 
               property={item} 
               index={index}
+              pendingRequestsCount={pendingRequestsByProperty[item.id]}
               onHide={handleHide} 
               onEdit={handleEdit} 
               onDelete={handleDelete} 
@@ -340,6 +361,23 @@ const styles = StyleSheet.create({
     fontWeight: typography.weights.bold,
     color: '#fff',
     textTransform: 'uppercase',
+  },
+  notificationBadge: {
+    position: 'absolute',
+    top: spacing.xs,
+    left: spacing.xs,
+    backgroundColor: '#DC2626',
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...shadows.sm,
+  },
+  notificationBadgeText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: typography.weights.bold,
   },
   cardBody: {
     padding: spacing.sm,
