@@ -31,7 +31,8 @@ import {
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { Paystack } from 'react-native-paystack-webview';
+import { PaystackCheckout } from '@/components/PaystackCheckout';
+import { recordRealPayment } from '@/api/payments.api';
 import { useInitializePayment, usePaymentStatus } from '@/hooks/usePayments';
 import { useMyBookings } from '@/hooks/useBookings';
 import { useAuthStore } from '@/store/auth.store';
@@ -56,8 +57,9 @@ export default function PaymentScreen() {
   const [pollingEnabled, setPollingEnabled] = useState(false);
   const [timedOut, setTimedOut] = useState(false);
 
+  const [isCheckoutVisible, setCheckoutVisible] = useState(false);
+
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const paystackWebViewRef = useRef<any>(null);
 
   const { data: bookingsData } = useMyBookings(user?.id ?? '', 'TENANT');
   const initMutation = useInitializePayment();
@@ -70,10 +72,14 @@ export default function PaymentScreen() {
   const rent = booking?.totalAmount ?? 0;
   const serviceFee = Math.round(rent * SERVICE_FEE_RATE);
   const total = rent + serviceFee;
+  const amountPesewas = Math.round(total * 100);
 
-  // When polling resolves with HELD status, advance to receipt
+  // When polling resolves with HELD or PENDING_VERIFICATION status, advance to receipt
   useEffect(() => {
-    if (statusData?.data?.escrowStatus === 'HELD' && stage === 'processing') {
+    if (
+      (statusData?.data?.escrowStatus === 'HELD' || statusData?.data?.escrowStatus === 'PENDING_VERIFICATION') &&
+      stage === 'processing'
+    ) {
       setPollingEnabled(false);
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       setStage('receipt');
@@ -82,13 +88,28 @@ export default function PaymentScreen() {
 
   const handlePayNow = async () => {
     if (!bookingId) return;
-    paystackWebViewRef.current?.startTransaction();
+    if (process.env.EXPO_PUBLIC_USE_MOCKS === 'true') {
+      // Trigger mock flow directly
+      handlePaystackSuccess('MOCK_REF_' + Date.now());
+    } else {
+      setCheckoutVisible(true);
+    }
   };
 
   const handlePaystackSuccess = async (res: any) => {
     setStage('processing');
-    // Simulate webhook hit to transition booking to PAID_ESCROW
-    await mockPayBooking(bookingId!);
+    setCheckoutVisible(false);
+    
+    // Client-reported success is provisional.
+    // Integration phase: backend webhook + verify (sk) flips PENDING_VERIFICATION → HELD 
+    // and becomes the only trusted path. Do not build any feature that irreversibly trusts PENDING_VERIFICATION.
+    if (process.env.EXPO_PUBLIC_USE_MOCKS === 'true') {
+      await mockPayBooking(bookingId!);
+    } else {
+      const ref = typeof res === 'string' ? res : (res.reference || 'unknown');
+      await recordRealPayment(bookingId!, amountPesewas, ref);
+    }
+    
     setPollingEnabled(true);
     timeoutRef.current = setTimeout(() => {
       setPollingEnabled(false);
@@ -96,7 +117,8 @@ export default function PaymentScreen() {
     }, POLL_TIMEOUT_MS);
   };
 
-  const handlePaystackCancel = (e: any) => {
+  const handlePaystackCancel = () => {
+    setCheckoutVisible(false);
     Alert.alert('Payment Cancelled', 'You cancelled the transaction.');
   };
 
@@ -170,13 +192,15 @@ export default function PaymentScreen() {
               style={styles.cta}
             />
 
-            <Paystack  
-              paystackKey={process.env.EXPO_PUBLIC_PAYSTACK_PUBLIC_KEY || "pk_test_dummy"}
-              billingEmail={user?.email || "tenant@rentsure.com"}
-              amount={total}
+            <PaystackCheckout  
+              visible={isCheckoutVisible}
+              paystackKey={process.env.EXPO_PUBLIC_PAYSTACK_KEY || "pk_test_dummy"}
+              email={user?.email || "tenant@rentsure.com"}
+              amountPesewas={amountPesewas}
+              reference={booking.bookingRef + '_' + Date.now()}
+              bookingId={bookingId!}
               onCancel={handlePaystackCancel}
               onSuccess={handlePaystackSuccess}
-              ref={paystackWebViewRef}
             />
           </>
         )}
@@ -234,9 +258,15 @@ export default function PaymentScreen() {
               </View>
               <View style={styles.receiptRow}>
                 <Text style={styles.receiptKey}>Escrow Status</Text>
-                <View style={styles.heldBadge}>
-                  <Text style={styles.heldBadgeText}>HELD</Text>
-                </View>
+                {statusData.data.escrowStatus === 'PENDING_VERIFICATION' ? (
+                  <View style={[styles.heldBadge, { backgroundColor: colors.warning + '20' }]}>
+                    <Text style={[styles.heldBadgeText, { color: colors.warning }]}>PENDING</Text>
+                  </View>
+                ) : (
+                  <View style={styles.heldBadge}>
+                    <Text style={styles.heldBadgeText}>HELD</Text>
+                  </View>
+                )}
               </View>
             </View>
 
@@ -244,10 +274,16 @@ export default function PaymentScreen() {
               <Ionicons name="lock-closed" size={24} color={colors.primary} />
               <View style={styles.escrowTextBlock}>
                 <Text style={styles.escrowTitle}>Funds in escrow</Text>
-                <Text style={styles.escrowBody}>
-                  Your payment is secured. Sign the rental agreement and confirm move-in
-                  to release funds to your landlord.
-                </Text>
+                {statusData.data.escrowStatus === 'PENDING_VERIFICATION' ? (
+                  <Text style={styles.escrowBody}>
+                    Payment received — confirmation pending. We will verify your payment with Paystack momentarily.
+                  </Text>
+                ) : (
+                  <Text style={styles.escrowBody}>
+                    Your payment is secured. Sign the rental agreement and confirm move-in
+                    to release funds to your landlord.
+                  </Text>
+                )}
               </View>
             </View>
 

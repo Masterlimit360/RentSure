@@ -107,3 +107,43 @@ export async function mockGetBillingHistory(
 
   return wrapResponse(payments);
 }
+
+/**
+ * Mocks the backend recording of a real Paystack payment.
+ * Transitions booking to PAID_ESCROW and sets escrowStatus to PENDING_VERIFICATION.
+ */
+export async function mockRecordRealPayment(
+  bookingId: string,
+  amount: number,
+  ref: string
+): Promise<ApiResponse<{ success: boolean }>> {
+  await simulateLatency();
+
+  const booking = db.bookings.find((b) => b.id === bookingId);
+  if (!booking) {
+    return wrapError('BOOKING_NOT_FOUND', 'Booking not found');
+  }
+
+  const rent = booking.totalAmount;
+  const fee = Math.round(rent * 0.05);
+
+  // Create payment record
+  const newPayment: Payment = {
+    id: generateId(),
+    bookingId,
+    amount: rent + fee, // Store in GHS
+    fee,
+    escrowStatus: 'PENDING_VERIFICATION',
+    paidAt: new Date().toISOString(),
+    paystackRef: ref,
+  };
+  
+  db.payments.push(newPayment);
+
+  // Transition booking
+  booking.status = 'PAID_ESCROW';
+
+  flushDb();
+
+  return wrapResponse({ success: true });
+}

@@ -53,6 +53,33 @@ To learn more about developing your project with Expo, look at the following res
 Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
+
+## 🧪 Payment Testing Protocol
+
+This app uses Paystack for payments. Since we don't have a backend yet, the frontend handles the checkout via a secure WebView and marks payments as `PENDING_VERIFICATION` in the mock database.
+
+### Mode Toggling
+Toggle `EXPO_PUBLIC_USE_MOCKS` in your `.env` file to switch between the local sandbox and real Paystack payments.
+- `true`: Uses the internal dummy flow.
+- `false`: Uses the real Paystack WebView.
+
+### Test Key Instructions (`pk_test_...`)
+1. Ensure `.env` has `EXPO_PUBLIC_USE_MOCKS=false` and a valid Paystack test key.
+2. Go through the booking flow to the Payment screen.
+3. Tap "Pay with Paystack".
+4. When the Paystack modal opens, enter one of the test cards:
+   - Success: `4084 0840 8408 4081` (CVV: `123`, Expiry: any future date, PIN: `1234` or OTP `123456`)
+   - Insufficient Funds: `4084 0840 8408 4082`
+5. Upon success, the UI will display "Payment received — confirmation pending" because the backend webhook hasn't run yet.
+
+### Live Key Instructions (`pk_live_...`)
+*Warning: Real money will be deducted.*
+1. Set a valid live key in `.env`.
+2. Perform a test transaction for the smallest possible amount (e.g. GHS 1).
+3. Confirm the charge succeeded in your bank.
+4. Go to your Paystack Dashboard and **refund** the transaction immediately.
+
+## 🤝 Contributing
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
 
 ## Paystack Environment Variables

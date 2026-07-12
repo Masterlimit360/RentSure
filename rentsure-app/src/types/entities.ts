@@ -51,7 +51,7 @@ export type BookingStatus =
  * RELEASED → landlord received funds (triggered by tenant confirmMoveIn).
  * REFUNDED → tenant got money back (admin dispute resolution).
  */
-export type EscrowStatus = 'HELD' | 'RELEASED' | 'REFUNDED';
+export type EscrowStatus = 'PENDING_VERIFICATION' | 'HELD' | 'RELEASED' | 'REFUNDED';
 
 export type VerificationDocType = 'GHANA_CARD' | 'LAND_TITLE' | 'UTILITY_BILL';
 export type VerificationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';

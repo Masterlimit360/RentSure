@@ -66,3 +66,22 @@ export async function getBillingHistory(
   return response.data;
 }
 
+/**
+ * Records a real Paystack payment provisionally.
+ * In a fully integrated backend, this wouldn't exist; the backend would listen for Paystack webhooks.
+ * For this frontend-only phase, we explicitly tell the mock DB to record the payment as PENDING_VERIFICATION.
+ */
+export async function recordRealPayment(
+  bookingId: string,
+  amount: number,
+  ref: string
+): Promise<ApiResponse<{ success: boolean }>> {
+  if (USE_MOCKS) return mocks.mockRecordRealPayment(bookingId, amount, ref);
+  
+  // If we had a real backend, we'd hit an endpoint like /payments/provisional
+  const response = await apiClient.post<ApiResponse<{ success: boolean }>>(
+    `/payments/provisional`,
+    { bookingId, amount, ref }
+  );
+  return response.data;
+}

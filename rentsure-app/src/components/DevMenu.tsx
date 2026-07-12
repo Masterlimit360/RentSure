@@ -98,7 +98,14 @@ Notifications: ${db.notifications.length}
       <View style={styles.overlay}>
         <View style={styles.sheet}>
           <View style={styles.header}>
-            <Text style={styles.headerTitle}>Developer Tools</Text>
+            <View>
+              <Text style={styles.headerTitle}>Developer Tools</Text>
+              <View style={[styles.modeBadge, { backgroundColor: process.env.EXPO_PUBLIC_USE_MOCKS === 'true' ? colors.warning + '20' : colors.success + '20' }]}>
+                <Text style={[styles.modeBadgeText, { color: process.env.EXPO_PUBLIC_USE_MOCKS === 'true' ? colors.warning : colors.success }]}>
+                  {process.env.EXPO_PUBLIC_USE_MOCKS === 'true' ? 'Mock Mode: ACTIVE' : 'Live Payments: ACTIVE'}
+                </Text>
+              </View>
+            </View>
             <TouchableOpacity onPress={onClose} style={styles.closeBtn}>
               <Ionicons name="close" size={24} color={colors.text} />
             </TouchableOpacity>
@@ -167,6 +174,17 @@ const styles = StyleSheet.create({
     fontSize: typography.sizes.lg,
     fontWeight: typography.weights.bold,
     color: colors.text,
+  },
+  modeBadge: {
+    marginTop: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 4,
+    borderRadius: borderRadius.sm,
+    alignSelf: 'flex-start',
+  },
+  modeBadgeText: {
+    fontSize: 10,
+    fontWeight: typography.weights.bold,
   },
   closeBtn: {
     padding: spacing.xs,
