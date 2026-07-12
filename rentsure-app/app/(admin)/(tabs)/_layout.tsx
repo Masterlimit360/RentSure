@@ -9,6 +9,8 @@ import { colors } from '@/constants/theme';
 import { useNotificationsStore } from '@/store/notifications.store';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useAuthStore } from '@/store/auth.store';
+import { useNotifications } from '@/hooks/useNotifications';
 
 function InboxButton() {
   const { unreadCount } = useNotificationsStore();
@@ -27,6 +29,16 @@ function InboxButton() {
 }
 
 export default function AdminLayout() {
+  const { user } = useAuthStore();
+  const { data } = useNotifications(user?.id ?? '');
+  const { setUnreadCount } = useNotificationsStore();
+  
+  React.useEffect(() => {
+    if (data?.data) {
+      setUnreadCount(data.data.filter(n => !n.isRead).length);
+    }
+  }, [data?.data, setUnreadCount]);
+
   return (
     <Tabs
       screenOptions={{

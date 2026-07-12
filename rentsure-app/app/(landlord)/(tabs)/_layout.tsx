@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useNotificationsStore } from '@/store/notifications.store';
 import { useAuthStore } from '@/store/auth.store';
+import { useNotifications } from '@/hooks/useNotifications';
 import { useMyBookings } from '@/hooks/useBookings';
 
 function InboxButton() {
@@ -29,6 +30,15 @@ function InboxButton() {
 
 export default function LandlordLayout() {
   const { user } = useAuthStore();
+  const { data } = useNotifications(user?.id ?? '');
+  const { setUnreadCount } = useNotificationsStore();
+  
+  React.useEffect(() => {
+    if (data?.data) {
+      setUnreadCount(data.data.filter(n => !n.isRead).length);
+    }
+  }, [data?.data, setUnreadCount]);
+
   const { data: bookingsData } = useMyBookings(user?.id ?? '', 'LANDLORD');
   
   const pendingRequestsCount = bookingsData?.data?.filter(b => b.status === 'REQUESTED').length || 0;

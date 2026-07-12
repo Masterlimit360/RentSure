@@ -10,6 +10,8 @@ import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '@/constants/theme';
 import { useNotificationsStore } from '@/store/notifications.store';
+import { useAuthStore } from '@/store/auth.store';
+import { useNotifications } from '@/hooks/useNotifications';
 
 function InboxButton() {
   const { unreadCount } = useNotificationsStore();
@@ -28,8 +30,16 @@ function InboxButton() {
 }
 
 export default function TenantLayout() {
-  const { unreadCount } = useNotificationsStore();
+  const { user } = useAuthStore();
+  const { data } = useNotifications(user?.id ?? '');
+  const { setUnreadCount, unreadCount } = useNotificationsStore();
   
+  React.useEffect(() => {
+    if (data?.data) {
+      setUnreadCount(data.data.filter(n => !n.isRead).length);
+    }
+  }, [data?.data, setUnreadCount]);
+
   return (
     <Tabs
       screenOptions={{
