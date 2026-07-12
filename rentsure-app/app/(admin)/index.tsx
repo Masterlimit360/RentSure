@@ -24,10 +24,6 @@ export default function AdminDashboard() {
 
   return (
     <Screen noPadding>
-      <View style={styles.topBar}>
-        <Text style={styles.topBarTitle}>Dashboard</Text>
-      </View>
-
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.welcomeCard}>
           <Text style={styles.welcomeText}>Welcome back,</Text>
@@ -85,22 +81,9 @@ export default function AdminDashboard() {
 }
 
 const styles = StyleSheet.create({
-  topBar: {
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-    paddingTop: Platform.OS === 'ios' ? 60 : spacing.lg,
-    paddingBottom: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    alignItems: 'center',
-  },
-  topBarTitle: {
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold,
-    color: colors.text,
-  },
   content: {
     padding: spacing.md,
+    paddingTop: Platform.OS === 'ios' ? 60 : spacing.lg,
     paddingBottom: 80,
   },
   welcomeCard: {

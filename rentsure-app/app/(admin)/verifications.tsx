@@ -91,7 +91,9 @@ export default function AdminVerifications() {
     return (
       <View style={styles.card}>
         <View style={styles.cardHeader}>
-          <Text style={styles.docType}>{item.docType.replace('_', ' ')}</Text>
+          <Text style={styles.docType}>
+            {item.propertyId ? 'Property Document:' : 'Landlord Identification:'} {item.docType.replace('_', ' ')}
+          </Text>
           <Text style={styles.submittedDate}>
             {new Date(item.submittedAt || Date.now()).toLocaleDateString()}
           </Text>
@@ -115,9 +117,6 @@ export default function AdminVerifications() {
 
   return (
     <Screen noPadding>
-      <View style={styles.topBar}>
-        <Text style={styles.topBarTitle}>Verification Queue</Text>
-      </View>
 
       {isLoading ? (
         <View style={styles.listContent}>
@@ -157,7 +156,9 @@ export default function AdminVerifications() {
                 </TouchableOpacity>
               </View>
 
-              <Text style={styles.docTypeModal}>{selectedVerification.docType.replace('_', ' ')}</Text>
+              <Text style={styles.docTypeModal}>
+                {selectedVerification.propertyId ? 'Property Document:' : 'Landlord Identification:'} {selectedVerification.docType.replace('_', ' ')}
+              </Text>
               <Text style={styles.landlordIdModal}>
                 Landlord:{' '}
                 {usersData?.data?.content?.find((u) => u.id === selectedVerification.landlordId)?.fullName ||
@@ -199,20 +200,6 @@ export default function AdminVerifications() {
 }
 
 const styles = StyleSheet.create({
-  topBar: {
-    backgroundColor: colors.surface,
-    paddingHorizontal: spacing.md,
-    paddingTop: Platform.OS === 'ios' ? 60 : spacing.lg,
-    paddingBottom: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    alignItems: 'center',
-  },
-  topBarTitle: {
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold,
-    color: colors.text,
-  },
   listContent: {
     padding: spacing.md,
     paddingBottom: 80,

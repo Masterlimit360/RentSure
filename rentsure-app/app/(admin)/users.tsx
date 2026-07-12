@@ -103,8 +103,17 @@ export default function AdminUsers() {
 
   return (
     <Screen noPadding>
-      <View style={styles.topBar}>
-        <Text style={styles.topBarTitle}>Users Directory</Text>
+      <View style={styles.searchContainer}>
+        <View style={styles.searchBox}>
+          <Ionicons name="search" size={20} color={colors.textSecondary} style={styles.searchIcon} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Search users..."
+            value={filters.search}
+            onChangeText={(text) => setFilters(prev => ({ ...prev, search: text }))}
+            placeholderTextColor={colors.textSecondary}
+          />
+        </View>
       </View>
 
       {isLoading ? (
@@ -187,18 +196,29 @@ export default function AdminUsers() {
 }
 
 const styles = StyleSheet.create({
-  topBar: {
-    backgroundColor: colors.surface,
+  searchContainer: {
     paddingHorizontal: spacing.md,
-    paddingTop: Platform.OS === 'ios' ? 60 : spacing.lg,
-    paddingBottom: spacing.md,
+    paddingVertical: spacing.sm,
+    backgroundColor: '#F9FAFB',
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
-    alignItems: 'center',
   },
-  topBarTitle: {
-    fontSize: typography.sizes.lg,
-    fontWeight: typography.weights.bold,
+  searchBox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.sm,
+    height: 44,
+  },
+  searchIcon: {
+    marginRight: spacing.sm,
+  },
+  searchInput: {
+    flex: 1,
+    fontSize: typography.sizes.md,
     color: colors.text,
   },
   listContent: {

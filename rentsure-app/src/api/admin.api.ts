@@ -2,9 +2,23 @@ import { USE_MOCKS } from './client';
 import * as mocks from '@/mocks/admin.mock';
 import { supabase, mapSupabaseError } from './supabase';
 import type { ApiResponse, PaginatedResponse, AdminUserFilters } from '@/types';
-import type { User } from '@/types';
+import type { User, Booking } from '@/types';
 
 const ts = () => new Date().toISOString();
+
+function mapToBooking(row: any): Booking {
+  return {
+    id: row.id,
+    propertyId: row.property_id,
+    tenantId: row.tenant_id,
+    status: row.status,
+    requestedAt: row.requested_at,
+    moveInDate: row.move_in_date,
+    durationMonths: row.duration_months,
+    totalAmount: row.total_amount,
+    bookingRef: row.booking_ref,
+  };
+}
 
 function mapToUser(row: any): User {
   return {
@@ -88,4 +102,35 @@ export async function reactivateUser(
   }
 
   return { success: true, data: mapToUser(data), error: null, timestamp: ts() };
+}
+
+export async function listAllBookings(): Promise<ApiResponse<Booking[]>> {
+  if (USE_MOCKS) return { success: true, data: [], error: null, timestamp: ts() };
+  
+  const { data, error } = await supabase
+    .from('bookings')
+    .select('*')
+    .order('updated_at', { ascending: false });
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+
+  return { success: true, data: (data || []).map(mapToBooking), error: null, timestamp: ts() };
+}
+
+export async function releaseEscrow(
+  bookingId: string
+): Promise<ApiResponse<Booking>> {
+  if (USE_MOCKS) return { success: false, data: null, error: { code: 'NOT_IMPLEMENTED', message: 'Not implemented in mocks' }, timestamp: ts() };
+  
+  const { data, error } = await supabase.rpc('release_escrow', {
+    p_booking_id: bookingId
+  });
+
+  if (error) {
+    return { success: false, data: null, error: mapSupabaseError(error), timestamp: ts() };
+  }
+
+  return { success: true, data: mapToBooking(data), error: null, timestamp: ts() };
 }

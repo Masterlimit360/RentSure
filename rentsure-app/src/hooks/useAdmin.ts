@@ -5,13 +5,14 @@
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { listUsers, suspendUser, reactivateUser } from '@/api/admin.api';
+import { listUsers, suspendUser, reactivateUser, listAllBookings, releaseEscrow } from '@/api/admin.api';
 import { listVerifications, adminApproveVerification, adminRejectVerification } from '@/api/verifications.api';
 import type { AdminUserFilters } from '@/types';
 
 export const adminQueryKeys = {
   users: (filters: AdminUserFilters) => ['admin', 'users', filters] as const,
   verifications: ['admin', 'verifications'] as const,
+  bookings: ['admin', 'bookings'] as const,
 };
 
 export function useAdminUsers(filters: AdminUserFilters) {
@@ -68,6 +69,24 @@ export function useRejectVerification() {
     mutationFn: (verificationId: string) => adminRejectVerification(verificationId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: adminQueryKeys.verifications });
+    },
+  });
+}
+
+export function useAdminBookings() {
+  return useQuery({
+    queryKey: adminQueryKeys.bookings,
+    queryFn: () => listAllBookings(),
+  });
+}
+
+export function useReleaseEscrow() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (bookingId: string) => releaseEscrow(bookingId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: adminQueryKeys.bookings });
     },
   });
 }
