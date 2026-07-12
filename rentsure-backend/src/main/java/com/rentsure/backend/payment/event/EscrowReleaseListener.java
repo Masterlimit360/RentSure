@@ -14,6 +14,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Automated Escrow Release Mechanism.
+ * Listens for Tenant move-in confirmation and automatically triggers the funds transfer to the Landlord.
+ */
 @Component
 @RequiredArgsConstructor
 public class EscrowReleaseListener {
@@ -30,17 +34,14 @@ public class EscrowReleaseListener {
                 .orElseThrow(() -> new NotFoundException("Payment not found for booking " + bookingId));
 
         if (payment.getEscrowStatus() == EscrowStatus.HELD) {
-            // Important: This releases the Escrow automatically upon move-in confirmation.
+            // IMPORTANT: Escrow release must be automatic on move-in to ensure landlords are paid without manual intervention.
             payment.setEscrowStatus(EscrowStatus.RELEASED);
             payment.setReleasedAt(LocalDateTime.now());
             paymentRepository.save(payment);
 
-            // Execute the physical transfer
             // We mock the recipient account as the landlord's user ID for this stub
             String landlordId = payment.getBooking().getProperty().getLandlord().getId().toString();
             transferService.transfer(landlordId, payment.getAmount(), payment.getPaystackRef());
-            
-            System.out.println("Escrow Released for Booking: " + bookingId);
         }
     }
 }

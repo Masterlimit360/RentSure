@@ -23,6 +23,10 @@ import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
 
+/**
+ * REST Controller for Paystack checkout initialization and webhook handling.
+ * Defines the public entry points for the rent payment lifecycle.
+ */
 @RestController
 @RequestMapping("/api/v1/payments")
 @RequiredArgsConstructor
@@ -53,7 +57,7 @@ public class PaymentController {
 
     /**
      * Webhook endpoint called by Paystack.
-     * This endpoint MUST be unauthenticated in SecurityConfig, as Paystack has no JWT.
+     * IMPORTANT: This endpoint MUST be unauthenticated in SecurityConfig, as Paystack has no JWT.
      * Security is handled exclusively by HMAC-SHA512 signature verification.
      */
     @PostMapping("/webhook")
@@ -95,7 +99,7 @@ public class PaymentController {
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            // Acknowledge receipt to avoid webhook retries, but we might want to log this
+            // Acknowledge receipt with 200 OK to prevent Paystack from endlessly retrying failing payloads
             return ResponseEntity.ok().build(); 
         }
     }

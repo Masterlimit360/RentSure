@@ -19,6 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+/**
+ * Central Notification dispatcher.
+ * Converts system events into user-facing alerts in the database.
+ */
 @Service
 @RequiredArgsConstructor
 public class NotificationService {
@@ -26,12 +30,13 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final BookingRepository bookingRepository;
 
+    /**
+     * Dispatches payment success notifications to both parties.
+     */
     @EventListener
     @Transactional
     public void handleBookingPaid(BookingPaidEvent event) {
         Booking booking = bookingRepository.findById(event.getBookingId()).orElseThrow();
-        
-        // Notify Landlord
         createNotification(
                 booking.getProperty().getLandlord(),
                 "PAYMENT_RECEIVED",
@@ -39,7 +44,6 @@ public class NotificationService {
                 "Tenant has paid GHS " + booking.getTotalAmount() + " for " + booking.getProperty().getTitle() + ". Funds are securely held in escrow."
         );
 
-        // Notify Tenant
         createNotification(
                 booking.getTenant(),
                 "PAYMENT_SUCCESS",
@@ -48,6 +52,9 @@ public class NotificationService {
         );
     }
 
+    /**
+     * Dispatches escrow release notifications to the landlord.
+     */
     @EventListener
     @Transactional
     public void handleBookingMovedIn(BookingMovedInEvent event) {
@@ -73,12 +80,20 @@ public class NotificationService {
         notificationRepository.save(notification);
     }
 
+    /**
+     * Fetches paginated notifications for the calling user.
+     */
     @Transactional(readOnly = true)
     public Page<NotificationDto> getMyNotifications(UUID userId, int page, int size) {
         return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId, PageRequest.of(page, size))
                 .map(this::mapToDto);
     }
 
+    /**
+     * Marks a notification as read.
+     * Preconditions: The notification must belong to the caller.
+     * @throws AccessDeniedException if caller does not own the notification
+     */
     @Transactional
     public NotificationDto markAsRead(UUID notificationId, UUID userId) {
         Notification notification = notificationRepository.findById(notificationId)

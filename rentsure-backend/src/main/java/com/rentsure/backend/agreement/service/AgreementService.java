@@ -23,6 +23,10 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
+/**
+ * Tenancy Agreement Lifecycle.
+ * Automatically generates PDFs on payment success and handles digital signatures.
+ */
 @Service
 @RequiredArgsConstructor
 public class AgreementService {
@@ -34,7 +38,8 @@ public class AgreementService {
 
     /**
      * Listens for successful payment and automatically generates the agreement.
-     * This decouples the core payment logic from the heavy PDF generation process.
+     * IMPORTANT: By using an EventListener, we decouple the heavy openhtmltopdf 
+     * rendering from the payment webhook, preventing timeout crashes in Paystack.
      */
     @EventListener
     @Transactional
@@ -51,15 +56,13 @@ public class AgreementService {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking not found"));
 
+        // Idempotency: Webhooks can fire multiple times. If agreement exists, exit early.
         if (agreementRepository.findByBookingId(bookingId).isPresent()) {
-            // Idempotency: Agreement already exists
             return;
         }
 
-        // Generate simple HTML template
         String htmlContent = buildHtmlTemplate(booking);
 
-        // Convert HTML to PDF using openhtmltopdf
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PdfRendererBuilder builder = new PdfRendererBuilder();
         builder.useFastMode();
@@ -69,7 +72,6 @@ public class AgreementService {
 
         byte[] pdfBytes = os.toByteArray();
 
-        // Store the PDF bytes
         String pdfUrl = storageService.store(pdfBytes, "agreement_" + booking.getBookingRef() + ".pdf", "agreements");
 
         Agreement agreement = Agreement.builder()
@@ -80,6 +82,12 @@ public class AgreementService {
         agreementRepository.save(agreement);
     }
 
+    /**
+     * Applies a digital signature (timestamp) for the calling party.
+     * Preconditions: Caller must be the tenant or landlord of this specific booking.
+     * @throws AccessDeniedException if caller is not a party to the booking
+     * @throws InvalidStateException if caller has already signed
+     */
     @Transactional
     public AgreementDto signAgreement(UUID bookingId, UUID userId) {
         Agreement agreement = agreementRepository.findByBookingId(bookingId)
@@ -110,6 +118,11 @@ public class AgreementService {
         return mapToDto(agreement);
     }
 
+    /**
+     * Fetches the agreement document.
+     * Preconditions: Caller must be the tenant or landlord of this specific booking.
+     * @throws AccessDeniedException if caller is not a party to the booking
+     */
     @Transactional(readOnly = true)
     public AgreementDto getAgreementByBookingId(UUID bookingId, UUID userId) {
         Agreement agreement = agreementRepository.findByBookingId(bookingId)

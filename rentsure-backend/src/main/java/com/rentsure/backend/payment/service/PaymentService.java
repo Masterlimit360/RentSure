@@ -26,7 +26,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 /**
- * Orchestrates Paystack payments, escrow holding, and webhook processing.
+ * Payment and Escrow orchestration.
+ * Handles Paystack checkout generation and acts as the sole source of truth for Webhook processing.
+ * Never bypass this service to manually update payment rows, or idempotency and escrow rules will break.
  */
 @Service
 @RequiredArgsConstructor
@@ -41,8 +43,10 @@ public class PaymentService {
     private static final BigDecimal FEE_PERCENTAGE = new BigDecimal("0.05");
 
     /**
-     * Initializes a Paystack transaction.
-     * Preconditions: Booking must be ACCEPTED, caller must be the tenant.
+     * Prepares a Paystack checkout session for an accepted booking.
+     * Preconditions: Booking is ACCEPTED, caller is the specific tenant on the booking.
+     * @throws AccessDeniedException if caller is not the tenant
+     * @throws InvalidStateException if booking is not ACCEPTED or Paystack API fails
      */
     @Transactional
     public PaymentInitializationResponse initializePayment(UUID bookingId, User tenant) {
@@ -50,7 +54,7 @@ public class PaymentService {
             throw new AccessDeniedException("Only tenants can initialize rent payment");
         }
 
-        // We use a pessimistic lock here just in case of multiple simultaneous init attempts
+        // Pessimistic lock: prevents multiple init attempts from racing and charging the tenant twice
         Booking booking = bookingRepository.findByIdForUpdate(bookingId)
                 .orElseThrow(() -> new NotFoundException("Booking not found"));
 
@@ -62,13 +66,7 @@ public class PaymentService {
             throw new InvalidStateException("Booking is not in ACCEPTED state");
         }
 
-        // If payment already exists for this booking, we could re-use or reject.
-        // We'll just generate a new reference and update if it's not yet HELD.
         Optional<Payment> existingOpt = paymentRepository.findByBookingId(booking.getId());
-        if (existingOpt.isPresent() && existingOpt.get().getEscrowStatus() != EscrowStatus.REFUNDED) {
-             // Let the frontend handle the re-try via the previously generated url, or just overwrite.
-             // We'll just continue and generate a new one.
-        }
 
         BigDecimal rentAmount = booking.getTotalAmount();
         BigDecimal fee = rentAmount.multiply(FEE_PERCENTAGE);
@@ -76,7 +74,6 @@ public class PaymentService {
 
         // IMPORTANT: Paystack sends amounts in pesewas, so multiply GHS by 100 before initializing
         BigDecimal totalPesewas = totalPayable.multiply(new BigDecimal("100"));
-
         String reference = "PAY-" + UUID.randomUUID().toString().substring(0, 8);
 
         PaystackClient.PaystackInitializationResponse response = 
@@ -86,18 +83,7 @@ public class PaymentService {
             throw new InvalidStateException("Failed to initialize Paystack: " + response.getMessage());
         }
 
-        Payment payment = existingOpt.orElse(new Payment());
-        payment.setBooking(booking);
-        payment.setPaystackRef(reference);
-        payment.setAmount(totalPayable);
-        payment.setFee(fee);
-        // It's pending technically, but we don't have a PENDING status. It only gets created in DB.
-        // Let's actually not save it until webhook, or save with a flag? Wait, schema has paid_at default now.
-        // Actually, we can just save it when the webhook hits, but we need it to track the reference.
-        // Since schema says escrow_status NOT NULL, let's just use HELD but it's not actually paid yet.
-        // Actually we need to track if it's paid. The Flyway doesn't have PENDING.
-        // I will just wait to create the Payment row inside the Webhook! This avoids dirty pending rows.
-        // But what if we need to verify? We can just verify via the Paystack API directly.
+        // We defer saving the Payment row until the webhook fires to avoid polluting the DB with abandoned checkout sessions.
         
         PaymentInitializationResponse res = new PaymentInitializationResponse();
         res.setCheckoutUrl(response.getData().getAuthorization_url());
@@ -108,19 +94,19 @@ public class PaymentService {
     }
 
     /**
-     * Processes Paystack webhooks safely.
-     * Includes idempotency and amount-matching verification.
+     * Webhook processor for Paystack events. 
+     * Preconditions: Signature must be validated by the controller before calling this.
+     * @throws InvalidStateException if the charged amount does not strictly match expected rent + fee
      */
     @Transactional
     public void handleWebhook(String event, String reference, BigDecimal amountInPesewas, String statusStr, String bookingIdStr) {
         if (!"charge.success".equals(event) || !"success".equals(statusStr)) {
-            return; // Ignore other events
+            return;
         }
 
-        // 1. Idempotency Check
+        // IMPORTANT: Webhook idempotency. Paystack retries hooks; if we process twice, the state machine will crash.
         Optional<Payment> existingPayment = paymentRepository.findByPaystackRef(reference);
         if (existingPayment.isPresent()) {
-            // Already processed this webhook successfully.
             return;
         }
 
@@ -132,7 +118,7 @@ public class PaymentService {
         BigDecimal expectedPesewas = expectedTotal.multiply(new BigDecimal("100"));
 
         if (amountInPesewas.compareTo(expectedPesewas) != 0) {
-            // Amount mismatch. Log this heavily. In production, we'd refund or flag for manual review.
+            // Protects against users tampering with the client-side checkout amount payload
             throw new InvalidStateException("Webhook amount mismatch! Expected: " + expectedPesewas + " Got: " + amountInPesewas);
         }
 
@@ -146,13 +132,17 @@ public class PaymentService {
 
         paymentRepository.save(payment);
 
-        // Transition booking to PAID_ESCROW
-        // This validates the state machine internally
         bookingService.transition(booking.getId(), BookingStatus.PAID_ESCROW, booking.getTenant().getId(), null);
 
-        // Notify system that payment happened (for Agreements and Notifications)
+        // Triggers automated PDF agreement generation and user notifications
         eventPublisher.publishEvent(new com.rentsure.backend.payment.event.BookingPaidEvent(this, booking.getId()));
     }
+
+    /**
+     * Retrieves the escrow status of a booking's payment.
+     * Preconditions: A payment must exist for the booking.
+     * @throws NotFoundException if no payment is recorded yet
+     */
 
     @Transactional(readOnly = true)
     public PaymentStatusDto getPaymentStatus(UUID bookingId) {
