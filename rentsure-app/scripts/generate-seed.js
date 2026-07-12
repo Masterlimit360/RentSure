@@ -88,7 +88,7 @@ for (let i = 0; i < NUM_LISTINGS; i++) {
   const baths = type === 'SINGLE_ROOM' ? 0 : randInt(1, beds);
   const description = `This is a highly sought-after ${title.toLowerCase()}. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in ${city}.`;
 
-  const amenitiesSql = `ARRAY[${randAmenities().map(a => `'${a}'`).join(', ')}]`;
+  const amenitiesSql = `'[${randAmenities().map(a => `"${a}"`).join(', ')}]'::jsonb`;
 
   const exteriorImg = rand(HOUSE_IMAGES);
   const interiorImg1 = rand(INTERIOR_IMAGES);

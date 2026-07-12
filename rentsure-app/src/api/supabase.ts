@@ -24,8 +24,31 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 export function mapSupabaseError(error: any): { code: string; message: string } {
   if (!error) return { code: 'UNKNOWN_ERROR', message: 'Unknown error occurred' };
 
-  const message = error.message || error.details || 'Unknown error';
-  const code = error.code || '';
+  console.error('[Supabase Error]', JSON.stringify(error, null, 2));
+
+  let message = 'Unknown error occurred';
+  if (typeof error === 'string') {
+    message = error;
+  } else if (typeof error.message === 'string') {
+    message = error.message;
+  } else if (typeof error.details === 'string') {
+    message = error.details;
+  }
+
+  const code = error.code || error.status?.toString() || '';
+
+  // Auth specific errors
+  if (code === 'unexpected_failure' || code === '500') {
+    return { code: 'UNEXPECTED_FAILURE', message: 'Something went wrong on our end. Please try again.' };
+  }
+  
+  if (message.toLowerCase().includes('invalid login credentials') || code === 'invalid_grant' || message.toLowerCase().includes('incorrect email or password')) {
+    return { code: 'INVALID_CREDENTIALS', message: 'Incorrect email or password.' };
+  }
+  
+  if (message.toLowerCase().includes('failed to fetch') || message.toLowerCase().includes('network request failed')) {
+    return { code: 'NETWORK_ERROR', message: 'No connection. Check your internet and try again.' };
+  }
 
   // PostgREST "not found" when using .single()
   if (code === 'PGRST116') {

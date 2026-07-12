@@ -41,7 +41,9 @@ export function Toast() {
         },
       ]}
     >
-      <Text style={styles.message}>{message}</Text>
+      <Text style={styles.message}>
+        {typeof message === 'string' ? message : 'An unexpected error occurred.'}
+      </Text>
     </Animated.View>
   );
 }

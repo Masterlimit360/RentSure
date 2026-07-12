@@ -30,15 +30,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Stunning Apartment in Dzorwulu', 'This is a highly sought-after 3 bedroom stunning apartment in dzorwulu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'APARTMENT', 'Central', 'Cape Coast', 'Dzorwulu',
-    7251, 5, 5, ARRAY['Security', 'WiFi', 'Gym', 'Pool', 'Backup Generator'], true, 'AVAILABLE', NOW() - INTERVAL '3 days'
+    new_prop_id, target_user_id, '3 Bedroom Luxurious House in Tarkwa', 'This is a highly sought-after 3 bedroom luxurious house in tarkwa. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'HOUSE', 'Western', 'Tarkwa', 'Dzorwulu',
+    10443, 4, 1, '["Security", "Water Tank"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '16 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 2
   new_prop_id := gen_random_uuid();
@@ -47,15 +47,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Stunning Apartment in Dzorwulu', 'This is a highly sought-after 3 bedroom stunning apartment in dzorwulu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'APARTMENT', 'Western', 'Takoradi', 'Dzorwulu',
-    5733, 4, 4, ARRAY['WiFi', 'Security', 'Air Conditioning', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '26 days'
+    new_prop_id, target_user_id, '4 Bedroom Modern House in Cape Coast', 'This is a highly sought-after 4 bedroom modern house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'HOUSE', 'Central', 'Cape Coast', 'Osu',
+    17052, 5, 5, '["Parking", "Gym", "Security", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '14 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 3
   new_prop_id := gen_random_uuid();
@@ -64,15 +64,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Modern Self-Contained in Dzorwulu', 'This is a highly sought-after modern self-contained in dzorwulu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SELF_CONTAINED', 'Ashanti', 'Kumasi', 'Dzorwulu',
-    4369, 1, 1, ARRAY['WiFi', 'Air Conditioning', 'Backup Generator', 'Water Tank', 'Security'], true, 'AVAILABLE', NOW() - INTERVAL '16 days'
+    new_prop_id, target_user_id, '2 Bedroom Beautiful Apartment in Airport Residential', 'This is a highly sought-after 2 bedroom beautiful apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'APARTMENT', 'Greater Accra', 'Accra', 'Airport Residential',
+    21522, 4, 3, '["Parking", "WiFi", "Pool", "Gym", "Security", "Water Tank"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '11 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 4
   new_prop_id := gen_random_uuid();
@@ -81,15 +81,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '5 Bedroom Affordable House in Madina', 'This is a highly sought-after 5 bedroom affordable house in madina. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'HOUSE', 'Greater Accra', 'Madina', 'Osu',
-    11942, 2, 2, ARRAY['WiFi', 'Water Tank', 'Air Conditioning', 'Pool', 'Backup Generator'], true, 'AVAILABLE', NOW() - INTERVAL '21 days'
+    new_prop_id, target_user_id, '1 Bedroom Newly Renovated Apartment in Airport Residential', 'This is a highly sought-after 1 bedroom newly renovated apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'APARTMENT', 'Western', 'Takoradi', 'Airport Residential',
+    6380, 2, 1, '["Gym", "Security", "Balcony", "Backup Generator", "Water Tank"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '27 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 5
   new_prop_id := gen_random_uuid();
@@ -98,15 +98,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Modern Self-Contained in Ridge', 'This is a highly sought-after modern self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'SELF_CONTAINED', 'Central', 'Kasoa', 'Ridge',
-    12640, 1, 1, ARRAY['Air Conditioning', 'WiFi', 'Security', 'Parking', 'Balcony', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '26 days'
+    new_prop_id, target_user_id, 'Spacious Single Room in Ridge', 'This is a highly sought-after spacious single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'SINGLE_ROOM', 'Central', 'Cape Coast', 'Ridge',
+    2269, 1, 0, '["Security", "Water Tank", "Backup Generator", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '24 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 6
   new_prop_id := gen_random_uuid();
@@ -115,14 +115,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '1 Bedroom Modern Apartment in Cantonments', 'This is a highly sought-after 1 bedroom modern apartment in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'APARTMENT', 'Ashanti', 'Obuasi', 'Cantonments',
-    2901, 2, 2, ARRAY['Water Tank', 'Backup Generator', 'WiFi', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '7 days'
+    new_prop_id, target_user_id, '4 Bedroom Modern House in Tema', 'This is a highly sought-after 4 bedroom modern house in tema. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.', 'HOUSE', 'Greater Accra', 'Tema', 'Cantonments',
+    22360, 1, 1, '["WiFi", "Security", "Water Tank", "Balcony", "Parking"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '24 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 7
@@ -132,15 +132,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Prime Single Room in Cantonments', 'This is a highly sought-after prime single room in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'SINGLE_ROOM', 'Western', 'Takoradi', 'Cantonments',
-    5816, 1, 0, ARRAY['Pool', 'Air Conditioning', 'Security', 'WiFi'], true, 'AVAILABLE', NOW() - INTERVAL '6 days'
+    new_prop_id, target_user_id, '3 Bedroom Spacious House in Madina', 'This is a highly sought-after 3 bedroom spacious house in madina. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'HOUSE', 'Greater Accra', 'Madina', 'Airport Residential',
+    4593, 3, 2, '["Water Tank", "WiFi", "Air Conditioning", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '7 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 8
   new_prop_id := gen_random_uuid();
@@ -149,15 +149,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Spacious Apartment in Dansoman', 'This is a highly sought-after 2 bedroom spacious apartment in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'APARTMENT', 'Central', 'Cape Coast', 'Dansoman',
-    13199, 3, 2, ARRAY['Water Tank', 'Security', 'Backup Generator', 'Parking', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '20 days'
+    new_prop_id, target_user_id, '3 Bedroom Newly Renovated Apartment in East Legon', 'This is a highly sought-after 3 bedroom newly renovated apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'APARTMENT', 'Central', 'Kasoa', 'East Legon',
+    13135, 3, 2, '["WiFi", "Air Conditioning", "Backup Generator", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '12 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 9
   new_prop_id := gen_random_uuid();
@@ -166,14 +166,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Affordable Single Room in Osu', 'This is a highly sought-after affordable single room in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'SINGLE_ROOM', 'Greater Accra', 'Madina', 'Osu',
-    6643, 1, 0, ARRAY['Water Tank', 'Security', 'WiFi', 'Parking', 'Air Conditioning', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '27 days'
+    new_prop_id, target_user_id, 'Stunning Self-Contained in Osu', 'This is a highly sought-after stunning self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SELF_CONTAINED', 'Ashanti', 'Obuasi', 'Osu',
+    5753, 1, 1, '["Balcony", "Water Tank"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '6 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 10
@@ -183,14 +183,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '4 Bedroom Cozy House in Kumasi', 'This is a highly sought-after 4 bedroom cozy house in kumasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'HOUSE', 'Ashanti', 'Kumasi', 'Dzorwulu',
-    21991, 4, 1, ARRAY['Parking', 'WiFi', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '3 days'
+    new_prop_id, target_user_id, 'Affordable Single Room in Dansoman', 'This is a highly sought-after affordable single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'SINGLE_ROOM', 'Greater Accra', 'Madina', 'Dansoman',
+    12144, 1, 0, '["Gym", "Pool", "Balcony", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '15 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 11
@@ -200,15 +200,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Elegant Apartment in East Legon', 'This is a highly sought-after 2 bedroom elegant apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'APARTMENT', 'Ashanti', 'Obuasi', 'East Legon',
-    18862, 1, 1, ARRAY['Air Conditioning', 'Gym', 'WiFi'], true, 'AVAILABLE', NOW() - INTERVAL '1 days'
+    new_prop_id, target_user_id, '4 Bedroom Newly Renovated House in Cape Coast', 'This is a highly sought-after 4 bedroom newly renovated house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'HOUSE', 'Central', 'Cape Coast', 'Cantonments',
+    6986, 1, 1, '["Parking", "Security", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '9 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 12
   new_prop_id := gen_random_uuid();
@@ -217,15 +217,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Stunning House in Kumasi', 'This is a highly sought-after 3 bedroom stunning house in kumasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'HOUSE', 'Ashanti', 'Kumasi', 'Dzorwulu',
-    15804, 4, 4, ARRAY['Parking', 'Gym', 'Pool', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '22 days'
+    new_prop_id, target_user_id, 'Affordable Self-Contained in Dansoman', 'This is a highly sought-after affordable self-contained in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'SELF_CONTAINED', 'Central', 'Cape Coast', 'Dansoman',
+    5861, 1, 1, '["WiFi", "Gym", "Security", "Parking", "Water Tank"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '14 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 13
   new_prop_id := gen_random_uuid();
@@ -234,14 +234,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Luxurious Apartment in East Legon', 'This is a highly sought-after 3 bedroom luxurious apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.', 'APARTMENT', 'Greater Accra', 'Tema', 'East Legon',
-    21977, 3, 3, ARRAY['WiFi', 'Air Conditioning', 'Water Tank', 'Pool', 'Gym'], true, 'AVAILABLE', NOW() - INTERVAL '10 days'
+    new_prop_id, target_user_id, '3 Bedroom Affordable House in Kumasi', 'This is a highly sought-after 3 bedroom affordable house in kumasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'HOUSE', 'Ashanti', 'Kumasi', 'Dansoman',
+    22040, 2, 2, '["Pool", "Gym", "Air Conditioning", "Parking"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '28 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 14
@@ -251,14 +251,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Cozy Self-Contained in Osu', 'This is a highly sought-after cozy self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'SELF_CONTAINED', 'Central', 'Kasoa', 'Osu',
-    4409, 1, 1, ARRAY['Security', 'Parking', 'WiFi', 'Balcony'], true, 'AVAILABLE', NOW() - INTERVAL '7 days'
+    new_prop_id, target_user_id, 'Spacious Self-Contained in Ridge', 'This is a highly sought-after spacious self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SELF_CONTAINED', 'Western', 'Tarkwa', 'Ridge',
+    4979, 1, 1, '["Backup Generator", "Gym", "Pool", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '4 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 15
@@ -268,15 +268,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Affordable Self-Contained in Spintex', 'This is a highly sought-after affordable self-contained in spintex. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'SELF_CONTAINED', 'Central', 'Kasoa', 'Spintex',
-    12950, 1, 1, ARRAY['Water Tank', 'Security', 'WiFi', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '22 days'
+    new_prop_id, target_user_id, 'Modern Single Room in Ridge', 'This is a highly sought-after modern single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'SINGLE_ROOM', 'Central', 'Kasoa', 'Ridge',
+    22234, 1, 0, '["Water Tank", "Air Conditioning", "Gym", "Balcony"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '10 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 16
   new_prop_id := gen_random_uuid();
@@ -285,14 +285,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '4 Bedroom Cozy House in Obuasi', 'This is a highly sought-after 4 bedroom cozy house in obuasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'HOUSE', 'Ashanti', 'Obuasi', 'Airport Residential',
-    3400, 4, 4, ARRAY['Balcony', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '11 days'
+    new_prop_id, target_user_id, '4 Bedroom Prime House in Obuasi', 'This is a highly sought-after 4 bedroom prime house in obuasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'HOUSE', 'Ashanti', 'Obuasi', 'East Legon',
+    7419, 2, 2, '["Gym", "Water Tank", "Security", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '23 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 17
@@ -302,15 +302,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Modern House in Accra', 'This is a highly sought-after 3 bedroom modern house in accra. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'HOUSE', 'Greater Accra', 'Accra', 'Dansoman',
-    18354, 3, 2, ARRAY['Backup Generator', 'Balcony', 'Water Tank', 'Pool', 'Gym'], true, 'AVAILABLE', NOW() - INTERVAL '2 days'
+    new_prop_id, target_user_id, '1 Bedroom Newly Renovated Apartment in East Legon', 'This is a highly sought-after 1 bedroom newly renovated apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'APARTMENT', 'Central', 'Cape Coast', 'East Legon',
+    18647, 3, 1, '["Backup Generator", "Parking"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '25 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 18
   new_prop_id := gen_random_uuid();
@@ -319,14 +319,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Modern Self-Contained in Dansoman', 'This is a highly sought-after modern self-contained in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SELF_CONTAINED', 'Ashanti', 'Obuasi', 'Dansoman',
-    15174, 1, 1, ARRAY['Backup Generator', 'Pool', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '17 days'
+    new_prop_id, target_user_id, '4 Bedroom Modern House in Cape Coast', 'This is a highly sought-after 4 bedroom modern house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'HOUSE', 'Central', 'Cape Coast', 'Dzorwulu',
+    12939, 1, 1, '["Security", "Air Conditioning", "Pool", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '21 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 19
@@ -336,14 +336,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Spacious Self-Contained in Dansoman', 'This is a highly sought-after spacious self-contained in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SELF_CONTAINED', 'Ashanti', 'Kumasi', 'Dansoman',
-    6734, 1, 1, ARRAY['WiFi', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '18 days'
+    new_prop_id, target_user_id, 'Beautiful Self-Contained in Cantonments', 'This is a highly sought-after beautiful self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SELF_CONTAINED', 'Ashanti', 'Obuasi', 'Cantonments',
+    22921, 1, 1, '["Backup Generator", "Gym", "Water Tank", "Air Conditioning", "WiFi", "Security"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '23 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 20
@@ -353,15 +353,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Affordable Apartment in Airport Residential', 'This is a highly sought-after 2 bedroom affordable apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'APARTMENT', 'Greater Accra', 'Madina', 'Airport Residential',
-    17100, 2, 2, ARRAY['Gym', 'Water Tank', 'Security'], true, 'AVAILABLE', NOW() - INTERVAL '1 days'
+    new_prop_id, target_user_id, 'Stunning Single Room in Cantonments', 'This is a highly sought-after stunning single room in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.', 'SINGLE_ROOM', 'Greater Accra', 'Tema', 'Cantonments',
+    11624, 1, 0, '["WiFi", "Parking", "Gym", "Security", "Backup Generator"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '28 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 21
   new_prop_id := gen_random_uuid();
@@ -370,15 +370,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Affordable Single Room in Ridge', 'This is a highly sought-after affordable single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'SINGLE_ROOM', 'Western', 'Takoradi', 'Ridge',
-    14307, 1, 0, ARRAY['WiFi', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '20 days'
+    new_prop_id, target_user_id, '1 Bedroom Spacious Apartment in Airport Residential', 'This is a highly sought-after 1 bedroom spacious apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'APARTMENT', 'Central', 'Kasoa', 'Airport Residential',
+    2203, 1, 1, '["Gym", "Pool", "Air Conditioning", "Backup Generator", "Parking"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '21 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 22
   new_prop_id := gen_random_uuid();
@@ -387,14 +387,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '1 Bedroom Elegant Apartment in Airport Residential', 'This is a highly sought-after 1 bedroom elegant apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'APARTMENT', 'Ashanti', 'Obuasi', 'Airport Residential',
-    2441, 2, 2, ARRAY['Balcony', 'Security', 'WiFi'], true, 'AVAILABLE', NOW() - INTERVAL '2 days'
+    new_prop_id, target_user_id, 'Luxurious Single Room in Dansoman', 'This is a highly sought-after luxurious single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SINGLE_ROOM', 'Western', 'Tarkwa', 'Dansoman',
+    6176, 1, 0, '["WiFi", "Backup Generator", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '4 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 23
@@ -404,14 +404,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '5 Bedroom Beautiful House in Takoradi', 'This is a highly sought-after 5 bedroom beautiful house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'HOUSE', 'Western', 'Takoradi', 'Spintex',
-    20167, 4, 3, ARRAY['Parking', 'WiFi', 'Water Tank', 'Air Conditioning', 'Backup Generator'], true, 'AVAILABLE', NOW() - INTERVAL '18 days'
+    new_prop_id, target_user_id, '5 Bedroom Luxurious House in Cape Coast', 'This is a highly sought-after 5 bedroom luxurious house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'HOUSE', 'Central', 'Cape Coast', 'Airport Residential',
+    3715, 2, 2, '["Backup Generator", "Water Tank", "Pool", "Balcony"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '27 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 24
@@ -421,14 +421,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Prime Single Room in Ridge', 'This is a highly sought-after prime single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'SINGLE_ROOM', 'Greater Accra', 'Accra', 'Ridge',
-    5105, 1, 0, ARRAY['Gym', 'WiFi', 'Security', 'Parking', 'Air Conditioning', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '2 days'
+    new_prop_id, target_user_id, '3 Bedroom Beautiful House in Takoradi', 'This is a highly sought-after 3 bedroom beautiful house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'HOUSE', 'Western', 'Takoradi', 'Cantonments',
+    15916, 1, 1, '["Air Conditioning", "Water Tank", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '14 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 25
@@ -438,15 +438,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Prime Apartment in Cantonments', 'This is a highly sought-after 2 bedroom prime apartment in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'APARTMENT', 'Ashanti', 'Kumasi', 'Cantonments',
-    10689, 4, 3, ARRAY['Security', 'Balcony', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '21 days'
+    new_prop_id, target_user_id, '5 Bedroom Affordable House in Takoradi', 'This is a highly sought-after 5 bedroom affordable house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'HOUSE', 'Western', 'Takoradi', 'Dansoman',
+    7606, 1, 1, '["Security", "Balcony", "Parking", "WiFi", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '10 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 26
   new_prop_id := gen_random_uuid();
@@ -455,15 +455,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Beautiful House in Kumasi', 'This is a highly sought-after 3 bedroom beautiful house in kumasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'HOUSE', 'Ashanti', 'Kumasi', 'Osu',
-    3149, 1, 1, ARRAY['Security', 'WiFi', 'Balcony', 'Air Conditioning', 'Water Tank', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '4 days'
+    new_prop_id, target_user_id, 'Beautiful Self-Contained in Airport Residential', 'This is a highly sought-after beautiful self-contained in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SELF_CONTAINED', 'Ashanti', 'Obuasi', 'Airport Residential',
+    1623, 1, 1, '["Backup Generator", "Gym", "Pool", "Parking", "WiFi"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '24 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 27
   new_prop_id := gen_random_uuid();
@@ -472,15 +472,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Elegant Apartment in Osu', 'This is a highly sought-after 2 bedroom elegant apartment in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'APARTMENT', 'Central', 'Cape Coast', 'Osu',
-    19975, 2, 2, ARRAY['Water Tank', 'WiFi', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '3 days'
+    new_prop_id, target_user_id, '3 Bedroom Stunning House in Takoradi', 'This is a highly sought-after 3 bedroom stunning house in takoradi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'HOUSE', 'Western', 'Takoradi', 'Airport Residential',
+    17762, 5, 2, '["WiFi", "Balcony", "Air Conditioning", "Security", "Backup Generator"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '13 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 28
   new_prop_id := gen_random_uuid();
@@ -489,15 +489,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Prime Single Room in Airport Residential', 'This is a highly sought-after prime single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SINGLE_ROOM', 'Ashanti', 'Obuasi', 'Airport Residential',
-    22590, 1, 0, ARRAY['Pool', 'Water Tank', 'WiFi'], true, 'AVAILABLE', NOW() - INTERVAL '4 days'
+    new_prop_id, target_user_id, '1 Bedroom Stunning Apartment in East Legon', 'This is a highly sought-after 1 bedroom stunning apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'APARTMENT', 'Western', 'Tarkwa', 'East Legon',
+    23860, 1, 1, '["Gym", "Air Conditioning", "Balcony", "WiFi"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '4 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 29
   new_prop_id := gen_random_uuid();
@@ -506,15 +506,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Elegant Apartment in Dansoman', 'This is a highly sought-after 2 bedroom elegant apartment in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'APARTMENT', 'Ashanti', 'Obuasi', 'Dansoman',
-    24359, 2, 2, ARRAY['Balcony', 'Backup Generator', 'Pool', 'Security'], true, 'AVAILABLE', NOW() - INTERVAL '4 days'
+    new_prop_id, target_user_id, '5 Bedroom Stunning House in Obuasi', 'This is a highly sought-after 5 bedroom stunning house in obuasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'HOUSE', 'Ashanti', 'Obuasi', 'East Legon',
+    21766, 2, 1, '["Gym", "Pool", "Security"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '9 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 30
   new_prop_id := gen_random_uuid();
@@ -523,15 +523,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Modern Apartment in Dzorwulu', 'This is a highly sought-after 2 bedroom modern apartment in dzorwulu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'APARTMENT', 'Greater Accra', 'Accra', 'Dzorwulu',
-    11161, 3, 3, ARRAY['Gym', 'Backup Generator', 'Balcony', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '21 days'
+    new_prop_id, target_user_id, 'Cozy Self-Contained in Cantonments', 'This is a highly sought-after cozy self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SELF_CONTAINED', 'Western', 'Tarkwa', 'Cantonments',
+    6591, 1, 1, '["WiFi", "Security", "Balcony", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '10 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 31
   new_prop_id := gen_random_uuid();
@@ -540,15 +540,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Beautiful Self-Contained in Dansoman', 'This is a highly sought-after beautiful self-contained in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SELF_CONTAINED', 'Ashanti', 'Kumasi', 'Dansoman',
-    9732, 1, 1, ARRAY['Gym', 'WiFi', 'Water Tank', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '2 days'
+    new_prop_id, target_user_id, '1 Bedroom Luxurious Apartment in Airport Residential', 'This is a highly sought-after 1 bedroom luxurious apartment in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'APARTMENT', 'Ashanti', 'Kumasi', 'Airport Residential',
+    11758, 3, 3, '["Backup Generator", "Security"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '5 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 32
   new_prop_id := gen_random_uuid();
@@ -557,15 +557,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Cozy Single Room in Osu', 'This is a highly sought-after cozy single room in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'SINGLE_ROOM', 'Western', 'Takoradi', 'Osu',
-    23246, 1, 0, ARRAY['WiFi', 'Pool', 'Security', 'Parking', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '16 days'
+    new_prop_id, target_user_id, '3 Bedroom Modern Apartment in East Legon', 'This is a highly sought-after 3 bedroom modern apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'APARTMENT', 'Western', 'Tarkwa', 'East Legon',
+    3516, 4, 4, '["Balcony", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '25 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 33
   new_prop_id := gen_random_uuid();
@@ -574,15 +574,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Stunning Self-Contained in Airport Residential', 'This is a highly sought-after stunning self-contained in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SELF_CONTAINED', 'Ashanti', 'Kumasi', 'Airport Residential',
-    10562, 1, 1, ARRAY['WiFi', 'Backup Generator', 'Balcony'], true, 'AVAILABLE', NOW() - INTERVAL '18 days'
+    new_prop_id, target_user_id, 'Modern Single Room in Airport Residential', 'This is a highly sought-after modern single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SINGLE_ROOM', 'Ashanti', 'Obuasi', 'Airport Residential',
+    7729, 1, 0, '["Gym", "Backup Generator"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '22 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 34
   new_prop_id := gen_random_uuid();
@@ -591,13 +591,13 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Beautiful Apartment in Spintex', 'This is a highly sought-after 3 bedroom beautiful apartment in spintex. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'APARTMENT', 'Central', 'Kasoa', 'Spintex',
-    11979, 1, 1, ARRAY['Security', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '29 days'
+    new_prop_id, target_user_id, '5 Bedroom Cozy House in Cape Coast', 'This is a highly sought-after 5 bedroom cozy house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'HOUSE', 'Central', 'Cape Coast', 'Dansoman',
+    21627, 2, 2, '["Water Tank", "Balcony", "Air Conditioning", "Pool", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '21 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
@@ -608,14 +608,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Cozy Apartment in Ridge', 'This is a highly sought-after 2 bedroom cozy apartment in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'APARTMENT', 'Greater Accra', 'Madina', 'Ridge',
-    6968, 4, 4, ARRAY['Security', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '15 days'
+    new_prop_id, target_user_id, 'Newly Renovated Self-Contained in Cantonments', 'This is a highly sought-after newly renovated self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SELF_CONTAINED', 'Western', 'Tarkwa', 'Cantonments',
+    3132, 1, 1, '["Backup Generator", "WiFi", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '16 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 36
@@ -625,15 +625,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Spacious Single Room in Ridge', 'This is a highly sought-after spacious single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'SINGLE_ROOM', 'Western', 'Takoradi', 'Ridge',
-    22263, 1, 0, ARRAY['Gym', 'Parking', 'Water Tank', 'Security', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '12 days'
+    new_prop_id, target_user_id, 'Elegant Single Room in East Legon', 'This is a highly sought-after elegant single room in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'SINGLE_ROOM', 'Greater Accra', 'Accra', 'East Legon',
+    6537, 1, 0, '["Pool", "Air Conditioning", "WiFi", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '26 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 37
   new_prop_id := gen_random_uuid();
@@ -642,15 +642,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Newly Renovated Self-Contained in East Legon', 'This is a highly sought-after newly renovated self-contained in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SELF_CONTAINED', 'Western', 'Tarkwa', 'East Legon',
-    17900, 1, 1, ARRAY['Gym', 'Pool', 'Security', 'Air Conditioning', 'Balcony'], true, 'AVAILABLE', NOW() - INTERVAL '9 days'
+    new_prop_id, target_user_id, '3 Bedroom Beautiful Apartment in Osu', 'This is a highly sought-after 3 bedroom beautiful apartment in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'APARTMENT', 'Greater Accra', 'Accra', 'Osu',
+    3629, 5, 5, '["Pool", "Security"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '17 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 38
   new_prop_id := gen_random_uuid();
@@ -659,15 +659,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Spacious Self-Contained in Spintex', 'This is a highly sought-after spacious self-contained in spintex. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SELF_CONTAINED', 'Ashanti', 'Kumasi', 'Spintex',
-    12162, 1, 1, ARRAY['Gym', 'Security', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '18 days'
+    new_prop_id, target_user_id, 'Stunning Single Room in Osu', 'This is a highly sought-after stunning single room in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SINGLE_ROOM', 'Western', 'Tarkwa', 'Osu',
+    12667, 1, 0, '["Backup Generator", "WiFi", "Air Conditioning"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '30 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 39
   new_prop_id := gen_random_uuid();
@@ -676,15 +676,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Newly Renovated Single Room in Ridge', 'This is a highly sought-after newly renovated single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SINGLE_ROOM', 'Ashanti', 'Obuasi', 'Ridge',
-    19140, 1, 0, ARRAY['Water Tank', 'WiFi', 'Air Conditioning', 'Backup Generator', 'Balcony'], true, 'AVAILABLE', NOW() - INTERVAL '13 days'
+    new_prop_id, target_user_id, 'Newly Renovated Single Room in Dansoman', 'This is a highly sought-after newly renovated single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SINGLE_ROOM', 'Ashanti', 'Kumasi', 'Dansoman',
+    10336, 1, 0, '["WiFi", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '21 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 40
   new_prop_id := gen_random_uuid();
@@ -693,14 +693,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Spacious Self-Contained in East Legon', 'This is a highly sought-after spacious self-contained in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'SELF_CONTAINED', 'Central', 'Cape Coast', 'East Legon',
-    10374, 1, 1, ARRAY['WiFi', 'Gym', 'Air Conditioning'], true, 'AVAILABLE', NOW() - INTERVAL '14 days'
+    new_prop_id, target_user_id, '4 Bedroom Modern House in Cape Coast', 'This is a highly sought-after 4 bedroom modern house in cape coast. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'HOUSE', 'Central', 'Cape Coast', 'East Legon',
+    24149, 1, 1, '["Balcony", "Water Tank"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '6 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1570129477492-45c003edd2be?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 41
@@ -710,15 +710,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Modern Self-Contained in Osu', 'This is a highly sought-after modern self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'SELF_CONTAINED', 'Western', 'Takoradi', 'Osu',
-    12749, 1, 1, ARRAY['Air Conditioning', 'Parking', 'WiFi'], true, 'AVAILABLE', NOW() - INTERVAL '27 days'
+    new_prop_id, target_user_id, 'Luxurious Self-Contained in Cantonments', 'This is a highly sought-after luxurious self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SELF_CONTAINED', 'Western', 'Tarkwa', 'Cantonments',
+    10949, 1, 1, '["Security", "Water Tank", "Gym"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '29 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 42
   new_prop_id := gen_random_uuid();
@@ -727,14 +727,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Cozy Single Room in Ridge', 'This is a highly sought-after cozy single room in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Takoradi.', 'SINGLE_ROOM', 'Western', 'Takoradi', 'Ridge',
-    23583, 1, 0, ARRAY['Pool', 'Gym', 'Air Conditioning', 'WiFi', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '22 days'
+    new_prop_id, target_user_id, 'Cozy Self-Contained in Osu', 'This is a highly sought-after cozy self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'SELF_CONTAINED', 'Greater Accra', 'Accra', 'Osu',
+    13708, 1, 1, '["Balcony", "Pool", "Air Conditioning", "Security", "Water Tank", "WiFi"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '8 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 43
@@ -744,14 +744,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Prime Single Room in Airport Residential', 'This is a highly sought-after prime single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'SINGLE_ROOM', 'Ashanti', 'Obuasi', 'Airport Residential',
-    13451, 1, 0, ARRAY['Water Tank', 'Backup Generator'], true, 'AVAILABLE', NOW() - INTERVAL '27 days'
+    new_prop_id, target_user_id, 'Luxurious Self-Contained in Ridge', 'This is a highly sought-after luxurious self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'SELF_CONTAINED', 'Central', 'Cape Coast', 'Ridge',
+    10074, 1, 1, '["Parking", "Water Tank", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '17 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 44
@@ -761,15 +761,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '4 Bedroom Luxurious House in Obuasi', 'This is a highly sought-after 4 bedroom luxurious house in obuasi. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'HOUSE', 'Ashanti', 'Obuasi', 'Osu',
-    9995, 2, 2, ARRAY['WiFi', 'Air Conditioning', 'Parking', 'Pool', 'Security'], true, 'AVAILABLE', NOW() - INTERVAL '8 days'
+    new_prop_id, target_user_id, 'Cozy Self-Contained in Spintex', 'This is a highly sought-after cozy self-contained in spintex. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tarkwa.', 'SELF_CONTAINED', 'Western', 'Tarkwa', 'Spintex',
+    22498, 1, 1, '["Water Tank", "Gym", "Air Conditioning", "Security", "WiFi"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '19 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 45
   new_prop_id := gen_random_uuid();
@@ -778,14 +778,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Prime Apartment in Cantonments', 'This is a highly sought-after 3 bedroom prime apartment in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'APARTMENT', 'Greater Accra', 'Accra', 'Cantonments',
-    7325, 4, 2, ARRAY['WiFi', 'Water Tank', 'Air Conditioning', 'Pool'], true, 'AVAILABLE', NOW() - INTERVAL '27 days'
+    new_prop_id, target_user_id, 'Newly Renovated Single Room in Airport Residential', 'This is a highly sought-after newly renovated single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'SINGLE_ROOM', 'Greater Accra', 'Accra', 'Airport Residential',
+    17006, 1, 0, '["WiFi", "Backup Generator", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '16 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 46
@@ -795,15 +795,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Cozy Self-Contained in Ridge', 'This is a highly sought-after cozy self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kumasi.', 'SELF_CONTAINED', 'Ashanti', 'Kumasi', 'Ridge',
-    5380, 1, 1, ARRAY['Parking', 'Backup Generator', 'WiFi'], true, 'AVAILABLE', NOW() - INTERVAL '13 days'
+    new_prop_id, target_user_id, 'Luxurious Single Room in Dansoman', 'This is a highly sought-after luxurious single room in dansoman. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'SINGLE_ROOM', 'Greater Accra', 'Madina', 'Dansoman',
+    13702, 1, 0, '["Gym", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '8 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=80', 0),
     (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 47
   new_prop_id := gen_random_uuid();
@@ -812,15 +812,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Cozy Self-Contained in Cantonments', 'This is a highly sought-after cozy self-contained in cantonments. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.', 'SELF_CONTAINED', 'Greater Accra', 'Tema', 'Cantonments',
-    22932, 1, 1, ARRAY['WiFi', 'Air Conditioning', 'Security', 'Gym', 'Balcony'], true, 'AVAILABLE', NOW() - INTERVAL '17 days'
+    new_prop_id, target_user_id, '5 Bedroom Modern House in Kasoa', 'This is a highly sought-after 5 bedroom modern house in kasoa. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'HOUSE', 'Central', 'Kasoa', 'Spintex',
+    4333, 3, 1, '["Backup Generator", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '21 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1572120360610-d971b9d7767c?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 48
   new_prop_id := gen_random_uuid();
@@ -829,15 +829,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '2 Bedroom Beautiful Apartment in Spintex', 'This is a highly sought-after 2 bedroom beautiful apartment in spintex. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Tema.', 'APARTMENT', 'Greater Accra', 'Tema', 'Spintex',
-    22309, 1, 1, ARRAY['Water Tank', 'Backup Generator'], true, 'AVAILABLE', NOW() - INTERVAL '25 days'
+    new_prop_id, target_user_id, 'Luxurious Self-Contained in Osu', 'This is a highly sought-after luxurious self-contained in osu. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Madina.', 'SELF_CONTAINED', 'Greater Accra', 'Madina', 'Osu',
+    17022, 1, 1, '["Water Tank", "WiFi", "Parking", "Air Conditioning", "Balcony"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '14 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 49
   new_prop_id := gen_random_uuid();
@@ -846,15 +846,15 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, 'Spacious Self-Contained in Ridge', 'This is a highly sought-after spacious self-contained in ridge. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Kasoa.', 'SELF_CONTAINED', 'Central', 'Kasoa', 'Ridge',
-    12909, 1, 1, ARRAY['Air Conditioning', 'WiFi', 'Parking', 'Gym', 'Balcony', 'Water Tank'], true, 'AVAILABLE', NOW() - INTERVAL '11 days'
+    new_prop_id, target_user_id, '3 Bedroom Stunning Apartment in East Legon', 'This is a highly sought-after 3 bedroom stunning apartment in east legon. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Obuasi.', 'APARTMENT', 'Ashanti', 'Obuasi', 'East Legon',
+    19412, 3, 1, '["Gym", "Parking"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '29 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1588880331179-bc9b93a8cb65?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80', 2);
 
   -- Listing 50
   new_prop_id := gen_random_uuid();
@@ -863,14 +863,14 @@ BEGIN
     id, landlord_id, title, description, property_type, region, city, area,
     price_per_year, bedrooms, bathrooms, amenities, is_verified, status, created_at
   ) VALUES (
-    new_prop_id, target_user_id, '3 Bedroom Elegant House in Accra', 'This is a highly sought-after 3 bedroom elegant house in accra. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Accra.', 'HOUSE', 'Greater Accra', 'Accra', 'Dzorwulu',
-    23533, 1, 1, ARRAY['WiFi', 'Gym', 'Security', 'Air Conditioning', 'Parking'], true, 'AVAILABLE', NOW() - INTERVAL '9 days'
+    new_prop_id, target_user_id, 'Luxurious Single Room in Airport Residential', 'This is a highly sought-after luxurious single room in airport residential. It features excellent amenities, a great neighborhood, and easy access to local transportation. Perfect for anyone looking to live comfortably in Cape Coast.', 'SINGLE_ROOM', 'Central', 'Cape Coast', 'Airport Residential',
+    14791, 1, 0, '["Security", "Parking", "Gym", "Water Tank", "Pool"]'::jsonb, true, 'AVAILABLE', NOW() - INTERVAL '16 days'
   );
 
   INSERT INTO public.property_media (property_id, media_type, url, sort_order)
   VALUES 
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80', 0),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1556912173-3bb406ef7e77?auto=format&fit=crop&w=800&q=80', 1),
-    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80', 2);
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80', 0),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 1),
+    (new_prop_id, 'PHOTO', 'https://images.unsplash.com/photo-1505691938895-1758d7def51a?auto=format&fit=crop&w=800&q=80', 2);
 
 END $$;
