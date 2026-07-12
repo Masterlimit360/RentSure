@@ -287,7 +287,7 @@ export default function PreferencesScreen() {
                     <Text style={[
                       styles.bucketText,
                       reqAmenities.includes(a) && styles.bucketTextActive
-                    ]}>Must</Text>
+                    ]}>Must Have</Text>
                     {reqAmenities.includes(a) && <Ionicons name="checkmark-circle" size={16} color="#fff" style={{ marginLeft: 4 }} />}
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -300,7 +300,7 @@ export default function PreferencesScreen() {
                     <Text style={[
                       styles.bucketText,
                       niceAmenities.includes(a) && styles.bucketTextActive
-                    ]}>Nice</Text>
+                    ]}>Nice to Have</Text>
                     {niceAmenities.includes(a) && <Ionicons name="star" size={14} color="#fff" style={{ marginLeft: 4 }} />}
                   </TouchableOpacity>
                 </View>
@@ -410,9 +410,11 @@ const styles = StyleSheet.create({
   inputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
-    paddingBottom: spacing.sm,
+    backgroundColor: colors.surface,
+    padding: spacing.lg,
+    borderRadius: borderRadius.lg,
+    ...shadows.sm,
+    marginTop: spacing.sm,
   },
   currencyLabel: {
     fontSize: 24,
@@ -488,9 +490,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+    padding: spacing.md,
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.sm,
+    ...shadows.sm,
   },
   amenityName: {
     fontSize: typography.sizes.md,
@@ -503,8 +507,10 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   bucketBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
+    paddingVertical: spacing.sm,
     borderRadius: borderRadius.pill,
     backgroundColor: colors.background,
     borderWidth: 1,

@@ -96,13 +96,22 @@ export default function TenantIndex() {
   const properties = data?.pages.flatMap((page) => page.data?.content || []) || [];
 
   let displayProperties = [...properties];
-  if (prefs && sortByMatch) {
-    displayProperties.sort((a, b) => {
+  displayProperties.sort((a, b) => {
+    // 1. Sort by booked status (unbooked first)
+    const aIsBooked = activeBookings.some(booking => booking.propertyId === a.id);
+    const bIsBooked = activeBookings.some(booking => booking.propertyId === b.id);
+    if (aIsBooked && !bIsBooked) return 1;
+    if (!aIsBooked && bIsBooked) return -1;
+
+    // 2. Then sort by compatibility score
+    if (prefs && sortByMatch) {
       const scoreA = computeCompatibility(prefs, a).total;
       const scoreB = computeCompatibility(prefs, b).total;
       return scoreB - scoreA;
-    });
-  }
+    }
+    
+    return 0;
+  });
 
   const applyFilters = () => {
     setActiveType(tempType);

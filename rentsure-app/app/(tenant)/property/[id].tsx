@@ -74,9 +74,48 @@ export default function PropertyDetailScreen() {
 
   if (isPropertyLoading) {
     return (
-      <Screen>
-        <View style={styles.centerContainer}>
-          <Text>Loading property details...</Text>
+      <Screen noPadding>
+        <View style={styles.topBarSkeleton}>
+          <Skeleton width={32} height={32} radius={16} />
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Skeleton width={SCREEN_WIDTH} height={300} style={{ marginBottom: spacing.lg }} />
+          <View style={styles.content}>
+            <Skeleton width={200} height={32} style={{ marginBottom: spacing.xs }} />
+            <Skeleton width={150} height={20} style={{ marginBottom: spacing.md }} />
+            <Skeleton width={120} height={28} style={{ marginBottom: spacing.xl }} />
+            
+            <View style={styles.section}>
+              <Skeleton width={150} height={24} style={{ marginBottom: spacing.sm }} />
+              <View style={styles.amenitiesContainer}>
+                <Skeleton width={80} height={36} radius={ borderRadius.md } />
+                <Skeleton width={90} height={36} radius={ borderRadius.md } />
+                <Skeleton width={100} height={36} radius={ borderRadius.md } />
+              </View>
+            </View>
+
+            <View style={styles.section}>
+              <Skeleton width={120} height={24} style={{ marginBottom: spacing.sm }} />
+              <Skeleton width="100%" height={20} style={{ marginBottom: 4 }} />
+              <Skeleton width="100%" height={20} style={{ marginBottom: 4 }} />
+              <Skeleton width="80%" height={20} />
+            </View>
+
+            <View style={styles.section}>
+              <Skeleton width={100} height={24} style={{ marginBottom: spacing.sm }} />
+              <View style={styles.landlordCard}>
+                <Skeleton width={48} height={48} radius={24} style={{ marginRight: spacing.md }} />
+                <View style={styles.landlordInfo}>
+                  <Skeleton width={120} height={20} style={{ marginBottom: 4 }} />
+                  <Skeleton width={150} height={16} />
+                </View>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+        <View style={styles.bottomBar}>
+          <Skeleton width={120} height={32} />
+          <Skeleton width="40%" height={48} radius={ borderRadius.md } />
         </View>
       </Screen>
     );
@@ -436,6 +475,12 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  topBarSkeleton: {
+    position: 'absolute',
+    top: Platform.OS === 'ios' ? 60 : 40,
+    left: spacing.md,
+    zIndex: 10,
   },
   centerContainer: {
     flex: 1,

@@ -89,12 +89,7 @@ export default function PaymentScreen() {
 
   const handlePayNow = async () => {
     if (!bookingId) return;
-    if (USE_MOCKS) {
-      // Trigger mock flow directly
-      handlePaystackSuccess('MOCK_REF_' + Date.now());
-    } else {
-      setCheckoutVisible(true);
-    }
+    setCheckoutVisible(true);
   };
 
   const handlePaystackSuccess = async (res: any) => {
