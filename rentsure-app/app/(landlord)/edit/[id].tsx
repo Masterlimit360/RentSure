@@ -13,10 +13,11 @@ import { useToastStore } from '@/store/toast.store';
 import { Screen } from '@/components/ui/Screen';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing, typography, borderRadius } from '@/constants/theme';
+import { colors, spacing, typography, borderRadius, shadows } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 export default function EditPropertyScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -43,8 +44,28 @@ export default function EditPropertyScreen() {
 
   if (isLoading) {
     return (
-      <Screen style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <Screen noPadding style={styles.screen}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={24} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>Edit Property</Text>
+          <View style={{ width: 40 }} />
+        </View>
+        <ScrollView contentContainerStyle={styles.content}>
+          <View style={styles.card}>
+            <Skeleton width={120} height={16} style={{ marginBottom: spacing.xs }} />
+            <Skeleton width="100%" height={48} radius={borderRadius.md} style={{ marginBottom: spacing.md }} />
+            
+            <Skeleton width={120} height={16} style={{ marginBottom: spacing.xs }} />
+            <Skeleton width="100%" height={100} radius={borderRadius.md} style={{ marginBottom: spacing.md }} />
+            
+            <Skeleton width={120} height={16} style={{ marginBottom: spacing.xs }} />
+            <Skeleton width="100%" height={48} radius={borderRadius.md} style={{ marginBottom: spacing.md }} />
+
+            <Skeleton width="100%" height={52} radius={borderRadius.md} style={{ marginTop: spacing.md }} />
+          </View>
+        </ScrollView>
       </Screen>
     );
   }
@@ -216,8 +237,11 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     borderRadius: borderRadius.lg,
     gap: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
+    }),
   },
   textArea: {
     height: 100,

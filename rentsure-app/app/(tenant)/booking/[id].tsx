@@ -28,9 +28,10 @@ import { usePaymentStatus } from '@/hooks/usePayments';
 import { useAgreement, useSignAgreement } from '@/hooks/useAgreements';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import type { Booking, BookingStatus } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Status timeline data (shared with landlord detail screen)
@@ -324,7 +325,28 @@ export default function TenantBookingDetailScreen() {
   };
 
   if (isLoading) {
-    return <Screen><ActivityIndicator color={colors.primary} /></Screen>;
+    return (
+      <Screen noPadding>
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={22} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topBarTitle}>Booking Detail</Text>
+          <View style={{ width: 34 }} />
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.hero}>
+            <Skeleton width={120} height={24} style={{ marginBottom: 4 }} />
+            <Skeleton width={200} height={16} style={{ marginBottom: 4 }} />
+            <Skeleton width={150} height={28} />
+          </View>
+          <View style={styles.section}>
+            <Skeleton width={120} height={20} style={{ marginBottom: spacing.sm }} />
+            <Skeleton width="100%" height={200} radius={borderRadius.lg} />
+          </View>
+        </ScrollView>
+      </Screen>
+    );
   }
 
   if (!booking) {
@@ -414,9 +436,12 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
     marginBottom: spacing.md,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+    }),
   },
   heroRef: {
     fontSize: typography.sizes.lg,
@@ -453,9 +478,12 @@ const styles = StyleSheet.create({
   infoCard: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
     overflow: 'hidden',
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' },
+    }),
   },
   infoRow: {
     flexDirection: 'row',

@@ -39,6 +39,7 @@ import { Button } from '@/components/ui/Button';
 import { colors, spacing, borderRadius, typography } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import type { Booking, BookingStatus } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Status pill configuration
@@ -127,6 +128,29 @@ function BookingCard({ booking, index, onPayNow, onConfirmMoveIn, onLeaveReview 
           style={[styles.actionBtn, { backgroundColor: colors.accent }]}
         />
       )}
+    </Animated.View>
+  );
+}
+
+function BookingSkeleton({ index }: { index: number }) {
+  return (
+    <Animated.View 
+      style={styles.card}
+      entering={FadeInUp.delay(index * 100).springify()}
+    >
+      <View style={styles.cardTitleRow}>
+        <Skeleton width={120} height={20} />
+        <Skeleton width={80} height={24} radius={12} />
+      </View>
+      <View style={styles.propertyRow}>
+        <Skeleton width={80} height={80} radius={borderRadius.md} />
+        <View style={styles.propertyInfo}>
+          <Skeleton width={150} height={20} style={{ marginBottom: 4 }} />
+          <Skeleton width={100} height={16} style={{ marginBottom: 4 }} />
+          <Skeleton width={80} height={20} />
+        </View>
+      </View>
+      <Skeleton width="100%" height={48} radius={borderRadius.md} style={{ marginTop: spacing.sm }} />
     </Animated.View>
   );
 }
@@ -314,7 +338,9 @@ export default function TenantBookingsScreen() {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator style={{ marginTop: spacing.xl }} color={colors.primary} />
+        <View style={styles.list}>
+          {[1, 2, 3].map((_, i) => <BookingSkeleton key={i} index={i} />)}
+        </View>
       ) : (
         <FlatList
           data={displayed}
@@ -407,8 +433,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     padding: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+      }
+    }),
   },
   cardTitleRow: {
     flexDirection: 'row',

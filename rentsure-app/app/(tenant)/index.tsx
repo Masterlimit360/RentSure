@@ -27,6 +27,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { PropertyCard } from '@/components/PropertyCard';
 import { useInfiniteProperties, useProperties } from '@/hooks/useProperties';
 import { useAuthStore } from '@/store/auth.store';
+import { useNotificationsStore } from '@/store/notifications.store';
 import { useMyBookings } from '@/hooks/useBookings';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useRouter } from 'expo-router';
@@ -37,6 +38,7 @@ import type { PropertyType } from '@/types';
 
 export default function TenantIndex() {
   const { user } = useAuthStore();
+  const { unreadCount } = useNotificationsStore();
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState('');
   const [queryFilter, setQueryFilter] = useState('');
@@ -161,6 +163,17 @@ export default function TenantIndex() {
               size={24}
               color={(activeType || activeMaxPrice) ? colors.surface : colors.text}
             />
+          </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.filterButton, { position: 'relative' }]} 
+            onPress={() => router.push('/(tenant)/notifications')}
+          >
+            <Ionicons name="notifications-outline" size={24} color={colors.text} />
+            {unreadCount > 0 && (
+              <View style={styles.badge}>
+                <View style={styles.badgeInner} />
+              </View>
+            )}
           </TouchableOpacity>
         </View>
 
@@ -352,7 +365,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 48,
-    fontSize: typography.sizes.md,
+    fontSize: typography.sizes.sm,
   },
   filterButton: {
     width: 48,
@@ -592,7 +605,7 @@ const styles = StyleSheet.create({
   priceInput: {
     flex: 1,
     height: 48,
-    fontSize: typography.sizes.md,
+    fontSize: typography.sizes.sm,
     color: colors.text,
   },
   inputDoneButton: {
@@ -609,5 +622,22 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.sm,
     marginTop: spacing.xl,
+  },
+  badge: {
+    position: 'absolute',
+    top: 6,
+    right: 8,
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeInner: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.error,
   },
 });

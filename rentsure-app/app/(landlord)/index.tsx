@@ -27,9 +27,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout } from '@/hooks/useAuth';
 import { useProperties, useSoftDeleteProperty, useHardDeleteProperty } from '@/hooks/useProperties';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import type { Property, PropertyStatus } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Status badge configuration
@@ -102,6 +103,22 @@ function ListingCard({ property, index, onHide, onEdit, onDelete }: ListingCardP
             <Ionicons name="trash" size={14} color={colors.error} />
             <Text style={[styles.actionBtnText, { color: colors.error }]}>Delete</Text>
           </TouchableOpacity>
+        </View>
+      </View>
+    </Animated.View>
+  );
+}
+
+function ListingSkeleton({ index }: { index: number }) {
+  return (
+    <Animated.View style={styles.card} entering={FadeInUp.delay(index * 100).springify()}>
+      <Skeleton width="100%" height={110} />
+      <View style={styles.cardBody}>
+        <Skeleton width="80%" height={16} style={{ marginBottom: 4 }} />
+        <Skeleton width="50%" height={14} />
+        <View style={styles.cardActions}>
+          <Skeleton width={40} height={20} />
+          <Skeleton width={40} height={20} />
         </View>
       </View>
     </Animated.View>
@@ -187,7 +204,16 @@ export default function LandlordListingsScreen() {
       </Animated.Text>
 
       {isLoading ? (
-        <ActivityIndicator color={colors.primary} style={{ marginTop: spacing.xl }} />
+        <View style={styles.grid}>
+          <View style={styles.columnWrapper}>
+            <ListingSkeleton index={0} />
+            <ListingSkeleton index={1} />
+          </View>
+          <View style={styles.columnWrapper}>
+            <ListingSkeleton index={2} />
+            <ListingSkeleton index={3} />
+          </View>
+        </View>
       ) : (
         <FlatList
           data={myProperties}
@@ -295,8 +321,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     overflow: 'hidden',
-    borderWidth: 1,
-    borderColor: colors.border,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
+    }),
   },
   cardImage: {
     width: '100%',

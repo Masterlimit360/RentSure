@@ -28,9 +28,10 @@ import { usePaymentStatus } from '@/hooks/usePayments';
 import { useAgreement, useSignAgreement } from '@/hooks/useAgreements';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import type { Booking, BookingStatus } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Timeline (same steps as tenant detail)
@@ -269,7 +270,30 @@ export default function LandlordBookingDetailScreen() {
       { text: 'Reject', style: 'destructive', onPress: () => rejectMutation.mutate(id!) },
     ]);
 
-  if (isLoading) return <Screen><ActivityIndicator color={colors.primary} /></Screen>;
+  if (isLoading) {
+    return (
+      <Screen noPadding>
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={22} color={colors.text} />
+          </TouchableOpacity>
+          <Text style={styles.topBarTitle}>Booking Detail</Text>
+          <View style={{ width: 34 }} />
+        </View>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <View style={styles.hero}>
+            <Skeleton width={120} height={24} style={{ marginBottom: 4 }} />
+            <Skeleton width={200} height={16} style={{ marginBottom: 4 }} />
+            <Skeleton width={150} height={28} />
+          </View>
+          <View style={styles.section}>
+            <Skeleton width={120} height={20} style={{ marginBottom: spacing.sm }} />
+            <Skeleton width="100%" height={200} radius={borderRadius.lg} />
+          </View>
+        </ScrollView>
+      </Screen>
+    );
+  }
   if (!booking) return <Screen><Text style={styles.notFound}>Booking not found.</Text></Screen>;
 
   return (
@@ -313,7 +337,7 @@ const styles = StyleSheet.create({
   backBtn: { padding: spacing.xs },
   topBarTitle: { fontSize: typography.sizes.lg, fontWeight: typography.weights.bold, color: colors.text },
   scrollContent: { padding: spacing.lg, paddingBottom: 80 },
-  hero: { backgroundColor: colors.surface, borderRadius: borderRadius.lg, padding: spacing.md, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.md },
+  hero: { backgroundColor: colors.surface, borderRadius: borderRadius.lg, padding: spacing.md, marginBottom: spacing.md, ...Platform.select({ ios: shadows.sm, android: shadows.sm, web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } }) },
   heroRef: { fontSize: typography.sizes.lg, fontWeight: typography.weights.bold, color: colors.text, fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace' },
   heroMeta: { fontSize: typography.sizes.sm, color: colors.textSecondary, marginTop: 4 },
   heroAmount: { fontSize: typography.sizes.xl, fontWeight: typography.weights.bold, color: colors.primary, marginTop: spacing.xs },
@@ -333,7 +357,7 @@ const styles = StyleSheet.create({
   stepLabel: { fontSize: typography.sizes.sm, color: colors.textSecondary, paddingTop: 1 },
   stepLabelActive: { color: colors.primary, fontWeight: typography.weights.bold },
   stepLabelDone: { color: colors.text },
-  infoCard: { backgroundColor: colors.surface, borderRadius: borderRadius.lg, borderWidth: 1, borderColor: colors.border, overflow: 'hidden' },
+  infoCard: { backgroundColor: colors.surface, borderRadius: borderRadius.lg, overflow: 'hidden', ...Platform.select({ ios: shadows.sm, android: shadows.sm, web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } }) },
   infoRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomWidth: 1, borderBottomColor: colors.border },
   infoKey: { fontSize: typography.sizes.sm, color: colors.textSecondary },
   infoValue: { fontSize: typography.sizes.sm, color: colors.text, fontWeight: typography.weights.medium },
@@ -351,7 +375,7 @@ const styles = StyleSheet.create({
   signBtn: { marginBottom: 0 },
   actionRow: { flexDirection: 'row', gap: spacing.md },
   halfBtn: { flex: 1, marginVertical: 0 },
-  tenantCard: { backgroundColor: colors.surface, borderRadius: borderRadius.lg, borderWidth: 1, borderColor: colors.border, paddingVertical: spacing.sm },
+  tenantCard: { backgroundColor: colors.surface, borderRadius: borderRadius.lg, paddingVertical: spacing.sm, ...Platform.select({ ios: shadows.sm, android: shadows.sm, web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' } }) },
   tenantRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
   tenantInfo: { flex: 1 },
   tenantLabel: { fontSize: 12, color: colors.textSecondary, marginBottom: 2, textTransform: 'uppercase', letterSpacing: 0.5 },

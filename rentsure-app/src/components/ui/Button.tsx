@@ -13,8 +13,9 @@ import {
   ActivityIndicator,
   ViewStyle,
   StyleProp,
+  Platform,
 } from 'react-native';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 
 interface ButtonProps {
   title: string;
@@ -79,9 +80,19 @@ const styles = StyleSheet.create({
   },
   primaryContainer: {
     backgroundColor: colors.primary,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' },
+    }),
   },
   secondaryContainer: {
     backgroundColor: colors.accent,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.1)' },
+    }),
   },
   outlineContainer: {
     backgroundColor: 'transparent',

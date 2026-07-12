@@ -4,8 +4,27 @@ import { Ionicons } from '@expo/vector-icons';
 import { useAdminUsers, useSuspendUser, useReactivateUser } from '@/hooks/useAdmin';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
-import { typography, colors, spacing, borderRadius } from '@/constants/theme';
+import { typography, colors, spacing, borderRadius, shadows } from '@/constants/theme';
 import type { User, AdminUserFilters } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
+
+function UserSkeleton() {
+  return (
+    <View style={styles.userCard}>
+      <View style={styles.cardHeader}>
+        <View style={styles.userInfo}>
+          <Skeleton width={120} height={16} style={{ marginBottom: 4 }} />
+          <Skeleton width={180} height={14} />
+        </View>
+        <Skeleton width={60} height={20} radius={borderRadius.pill} />
+      </View>
+      <View style={styles.cardFooter}>
+        <Skeleton width={80} height={16} />
+        <Skeleton width={70} height={24} />
+      </View>
+    </View>
+  );
+}
 
 export default function AdminUsers() {
   const [filters, setFilters] = useState<AdminUserFilters>({});
@@ -89,7 +108,9 @@ export default function AdminUsers() {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator style={{ marginTop: spacing.xl }} color={colors.primary} />
+        <View style={styles.listContent}>
+          {[1, 2, 3].map((i) => <UserSkeleton key={i} />)}
+        </View>
       ) : (
         <FlatList
           data={users}
@@ -188,9 +209,12 @@ const styles = StyleSheet.create({
   userCard: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: spacing.md,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
+    }),
   },
   cardHeader: {
     flexDirection: 'row',

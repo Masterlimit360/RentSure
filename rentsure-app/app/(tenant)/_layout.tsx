@@ -43,7 +43,7 @@ export default function TenantLayout() {
         name="index"
         options={{
           title: 'Explore',
-          headerRight: () => <InboxButton />,
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="search" size={size} color={color} />
           ),

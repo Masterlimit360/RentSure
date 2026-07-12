@@ -25,6 +25,7 @@ import {
 } from '@/constants/options';
 import type { TenantPreferences, PropertyType } from '@/types';
 import { useToastStore } from '@/store/toast.store';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // We extract all unique cities across regions for the City picker
 const ALL_CITIES = Array.from(new Set(Object.values(GHANA_REGIONS).flat()));
@@ -66,8 +67,20 @@ export default function PreferencesScreen() {
 
   if (isLoadingPrefs) {
     return (
-      <Screen style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <Screen noPadding style={styles.screen}>
+        <View style={styles.topBar}>
+          <Skeleton width={24} height={24} radius={12} />
+          <Skeleton width={120} height={24} />
+          <Skeleton width={80} height={20} />
+        </View>
+        <View style={styles.indicator}>
+          <Skeleton width="100%" height={8} radius={4} />
+        </View>
+        <View style={styles.scrollContent}>
+          <Skeleton width={250} height={32} style={{ marginBottom: spacing.xs }} />
+          <Skeleton width="100%" height={40} style={{ marginBottom: spacing.lg }} />
+          <Skeleton width="100%" height={60} radius={borderRadius.md} />
+        </View>
       </Screen>
     );
   }

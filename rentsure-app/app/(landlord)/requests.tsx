@@ -28,9 +28,10 @@ import { useAuthStore } from '@/store/auth.store';
 import { useMyBookings, useAcceptBooking, useRejectBooking } from '@/hooks/useBookings';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { formatCurrency } from '@/utils/format';
 import type { Booking, BookingStatus } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // ---------------------------------------------------------------------------
 // Preset rejection reasons — keeps rejection analytics actionable
@@ -240,6 +241,22 @@ function RequestCard({ booking, onAccept, onReject }: RequestCardProps) {
   );
 }
 
+function RequestSkeleton() {
+  return (
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <View style={styles.cardHeaderContent}>
+          <Skeleton width={100} height={16} style={{ marginBottom: 4 }} />
+          <Skeleton width="70%" height={20} style={{ marginBottom: 4 }} />
+          <Skeleton width={120} height={14} style={{ marginBottom: 4 }} />
+          <Skeleton width={80} height={18} />
+        </View>
+        <Ionicons name="chevron-down" size={20} color={colors.textSecondary} />
+      </View>
+    </View>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Main Screen
 // ---------------------------------------------------------------------------
@@ -296,7 +313,9 @@ export default function LandlordRequestsScreen() {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator style={{ marginTop: spacing.xl }} color={colors.primary} />
+        <View style={styles.list}>
+          {[1, 2, 3].map((i) => <RequestSkeleton key={i} />)}
+        </View>
       ) : (
         <FlatList
           data={bookings}
@@ -362,9 +381,12 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
     overflow: 'hidden',
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
+    }),
   },
   cardHeader: {
     flexDirection: 'row',

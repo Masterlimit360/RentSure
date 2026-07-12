@@ -5,8 +5,23 @@ import { useAdminVerifications, useApproveVerification, useRejectVerification, u
 import { useProperties } from '@/hooks/useProperties';
 import { Screen } from '@/components/ui/Screen';
 import { Button } from '@/components/ui/Button';
-import { typography, colors, spacing, borderRadius } from '@/constants/theme';
+import { typography, colors, spacing, borderRadius, shadows } from '@/constants/theme';
 import type { Verification } from '@/types';
+import { Skeleton } from '@/components/ui/Skeleton';
+
+function VerificationSkeleton() {
+  return (
+    <View style={styles.card}>
+      <View style={styles.cardHeader}>
+        <Skeleton width={150} height={20} />
+        <Skeleton width={80} height={14} />
+      </View>
+      <Skeleton width="60%" height={14} style={{ marginBottom: spacing.xs }} />
+      <Skeleton width="40%" height={14} style={{ marginBottom: spacing.md }} />
+      <Skeleton width="100%" height={40} radius={borderRadius.md} />
+    </View>
+  );
+}
 
 export default function AdminVerifications() {
   const { data, isLoading, refetch } = useAdminVerifications();
@@ -105,7 +120,9 @@ export default function AdminVerifications() {
       </View>
 
       {isLoading ? (
-        <ActivityIndicator style={{ marginTop: spacing.xl }} color={colors.primary} />
+        <View style={styles.listContent}>
+          {[1, 2, 3].map((i) => <VerificationSkeleton key={i} />)}
+        </View>
       ) : (
         <FlatList
           data={pending}
@@ -204,9 +221,12 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    borderWidth: 1,
-    borderColor: colors.border,
     padding: spacing.md,
+    ...Platform.select({
+      ios: shadows.sm,
+      android: shadows.sm,
+      web: { boxShadow: '0 2px 4px rgba(0,0,0,0.05)' }
+    }),
   },
   cardHeader: {
     flexDirection: 'row',

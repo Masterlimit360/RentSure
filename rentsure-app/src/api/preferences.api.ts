@@ -1,6 +1,7 @@
-import { supabase } from '@/lib/supabase';
-import { db, simulateLatency, wrapResponse, wrapError } from '@/mocks/store';
-import { USE_MOCKS } from '@/config';
+import { supabase } from '@/api/supabase';
+import { db } from '@/mocks/store';
+import { simulateLatency, wrapResponse, wrapError } from '@/utils/format';
+import { USE_MOCKS } from './client';
 import type { ApiResponse, TenantPreferences } from '@/types';
 
 /**

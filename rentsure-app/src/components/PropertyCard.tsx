@@ -11,7 +11,7 @@ import { useRouter } from 'expo-router';
 import Animated, { FadeInUp, LinearTransition } from 'react-native-reanimated';
 import type { Property, BookingStatus } from '@/types';
 import { formatCurrency } from '@/utils/format';
-import { colors, spacing, borderRadius, typography } from '@/constants/theme';
+import { colors, spacing, borderRadius, typography, shadows } from '@/constants/theme';
 import { useAuthStore } from '@/store/auth.store';
 import { usePreferences } from '@/hooks/usePreferences';
 import { computeCompatibility } from '@/utils/compatibility';
@@ -131,19 +131,11 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
     marginBottom: spacing.lg,
-    overflow: 'hidden',
     ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-      },
-      android: {
-        elevation: 3,
-      },
+      ios: shadows.md,
+      android: shadows.md,
       web: {
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
       },
     }),
   },
@@ -151,6 +143,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 200,
     position: 'relative',
+    borderTopLeftRadius: borderRadius.lg,
+    borderTopRightRadius: borderRadius.lg,
+    overflow: 'hidden',
   },
   image: {
     width: '100%',
