@@ -27,9 +27,8 @@ export function PaystackCheckout({
   onSuccess,
   onCancel,
 }: PaystackCheckoutProps) {
-  
-  const isMockKey = !paystackKey.startsWith('pk_');
-  
+  // Force real Paystack UI regardless of key prefix so user can test the actual integration
+  const isMockKey = false;
   const htmlContent = isMockKey ? `
     <!DOCTYPE html>
     <html lang="en">

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { useAuthStore } from '@/store/auth.store';
 import { useLogout } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/Button';
@@ -38,63 +38,68 @@ export default function ProfileScreen() {
       <View style={styles.container}>
         <Text style={styles.title}>Profile</Text>
         
-        <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.profileCard}>
-          <View style={styles.profileCardContent}>
-            <View style={styles.avatarContainer}>
-              <View style={styles.avatar}>
-                <Text style={styles.avatarText}>
-                  {user?.fullName?.charAt(0).toUpperCase()}
-                </Text>
-              </View>
+        <Animated.View entering={FadeInDown.delay(100).springify()} style={styles.profileHeader}>
+          <View style={styles.avatarContainer}>
+            <View style={styles.avatar}>
+              <Text style={styles.avatarText}>
+                {user?.fullName?.charAt(0).toUpperCase()}
+              </Text>
             </View>
+            <View style={styles.badge}>
+              <Ionicons name="checkmark" size={16} color="#fff" />
+            </View>
+          </View>
 
-            <View style={styles.profileInfo}>
-              <View style={styles.nameRow}>
-                {isEditing ? (
-                  <TextInput
-                    style={[styles.name, styles.inlineInput]}
-                    value={editForm.fullName}
-                    onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
-                    placeholder="Full Name"
-                    autoFocus
-                  />
-                ) : (
-                  <Text style={styles.name} numberOfLines={1}>{user?.fullName}</Text>
-                )}
-                
-                {isEditing ? (
-                  <View style={styles.actionIconRow}>
-                    <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.iconBtn}>
-                      <Ionicons name="close-circle" size={24} color={colors.error} />
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleSavePress} style={styles.iconBtn}>
-                      <Ionicons name="checkmark-circle" size={24} color={colors.success} />
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <TouchableOpacity onPress={handleEditPress} style={styles.editBtn}>
-                    <Ionicons name="pencil" size={16} color={colors.textSecondary} />
-                  </TouchableOpacity>
-                )}
-              </View>
-
+          <View style={styles.infoContainer}>
+            <View style={styles.nameRow}>
               {isEditing ? (
                 <TextInput
-                  style={[styles.phone, styles.inlineInput]}
-                  value={editForm.phone}
-                  onChangeText={(t) => setEditForm({ ...editForm, phone: t })}
-                  placeholder="Phone Number"
-                  keyboardType="phone-pad"
+                  style={[styles.name, styles.inlineInput]}
+                  value={editForm.fullName}
+                  onChangeText={(t) => setEditForm({ ...editForm, fullName: t })}
+                  placeholder="Full Name"
+                  placeholderTextColor={colors.textSecondary}
+                  autoFocus
+                  textAlign="center"
                 />
               ) : (
-                <Text style={styles.phone} numberOfLines={1}>{user?.phone || 'No phone set'}</Text>
+                <Text style={styles.name} numberOfLines={1}>{user?.fullName}</Text>
               )}
               
-              <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
-              
-              <View style={styles.roleChip}>
-                <Text style={styles.roleText}>{user?.role || 'USER'}</Text>
-              </View>
+              {isEditing ? (
+                <View style={styles.actionIconRow}>
+                  <TouchableOpacity onPress={() => setIsEditing(false)} style={styles.iconBtn}>
+                    <Ionicons name="close-circle" size={28} color={colors.error} />
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={handleSavePress} style={styles.iconBtn}>
+                    <Ionicons name="checkmark-circle" size={28} color={colors.success} />
+                  </TouchableOpacity>
+                </View>
+              ) : (
+                <TouchableOpacity onPress={handleEditPress} style={styles.editBtn}>
+                  <Ionicons name="pencil" size={18} color={colors.textSecondary} />
+                </TouchableOpacity>
+              )}
+            </View>
+
+            {isEditing ? (
+              <TextInput
+                style={[styles.phone, styles.inlineInput, { marginTop: 4 }]}
+                value={editForm.phone}
+                onChangeText={(t) => setEditForm({ ...editForm, phone: t })}
+                placeholder="Phone Number"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="phone-pad"
+                textAlign="center"
+              />
+            ) : (
+              <Text style={styles.phone} numberOfLines={1}>{user?.phone || 'No phone set'}</Text>
+            )}
+            
+            <Text style={styles.email} numberOfLines={1}>{user?.email}</Text>
+            
+            <View style={styles.roleChip}>
+              <Text style={styles.roleText}>{user?.role || 'USER'}</Text>
             </View>
           </View>
         </Animated.View>
@@ -131,74 +136,90 @@ const styles = StyleSheet.create({
     color: colors.text,
     marginBottom: spacing.md,
   },
-  profileCard: {
-    backgroundColor: colors.background,
-    borderRadius: 16,
-    padding: spacing.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  profileCardContent: {
-    flexDirection: 'row',
+  profileHeader: {
     alignItems: 'center',
+    marginBottom: spacing.xxl,
+    width: '100%',
   },
   avatarContainer: {
-    marginRight: spacing.md,
+    position: 'relative',
+    marginBottom: spacing.lg,
   },
   avatar: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: colors.primary,
-    alignItems: 'center',
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: colors.surface,
     justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 4,
+    borderColor: colors.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
   },
   avatarText: {
-    fontSize: 24,
-    color: '#fff',
-    fontWeight: 'bold',
+    fontSize: 40,
+    fontWeight: typography.weights.bold,
+    color: colors.primary,
   },
-  profileInfo: {
-    flex: 1,
+  badge: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: colors.success,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+    borderColor: '#FFF',
+  },
+  infoContainer: {
+    alignItems: 'center',
+    width: '100%',
+    paddingHorizontal: spacing.xl,
   },
   nameRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    marginBottom: spacing.xs,
   },
   name: {
-    fontSize: typography.sizes.lg,
+    fontSize: typography.sizes.xxl,
     fontWeight: typography.weights.bold,
     color: colors.text,
-    flex: 1,
+    flexShrink: 1,
+    textAlign: 'center',
   },
   phone: {
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.md,
     color: colors.textSecondary,
-    marginBottom: spacing.xs,
-    flexShrink: 1,
-    flexWrap: 'wrap',
+    marginBottom: 4,
+    textAlign: 'center',
   },
   email: {
-    fontSize: typography.sizes.sm,
+    fontSize: typography.sizes.md,
     color: colors.textSecondary,
-    marginTop: spacing.xs,
-    flexShrink: 1,
-    flexWrap: 'wrap',
+    marginBottom: spacing.md,
+    textAlign: 'center',
   },
   roleChip: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 2,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 4,
     backgroundColor: colors.primary,
     borderRadius: 9999,
-    alignSelf: 'flex-start',
-    marginTop: 4,
   },
   roleText: {
     fontSize: 10,
     fontWeight: typography.weights.bold,
     color: colors.surface,
-    letterSpacing: 1,
+    letterSpacing: 1.5,
   },
   inlineInput: {
     padding: 0,
@@ -207,22 +228,26 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.primary,
     backgroundColor: '#F3F4F6',
     borderRadius: 4,
-    paddingHorizontal: 6,
+    paddingHorizontal: 8,
     paddingVertical: 2,
-    flex: 1,
+    color: colors.text,
   },
   actionIconRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    marginLeft: 8,
   },
   iconBtn: {
     padding: 2,
+    backgroundColor: '#F3F4F6',
+    borderRadius: 16,
   },
   editBtn: {
-    padding: 4,
+    padding: 6,
     backgroundColor: '#F3F4F6',
-    borderRadius: 12,
+    borderRadius: 16,
+    marginLeft: 8,
   },
   spacer: {
     flex: 1,

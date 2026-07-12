@@ -201,12 +201,12 @@ function AgreementSection({ bookingId, signerRole }: AgreementSectionProps) {
     <View style={styles.section}>
       <Text style={styles.sectionTitle}>Rental Agreement</Text>
       <View style={styles.infoCard}>
-        <TouchableOpacity
-          style={styles.pdfRow}
-          onPress={() => Linking.openURL(agreement.pdfUrl)}
+        <TouchableOpacity 
+          style={styles.pdfRow} 
+          onPress={() => router.push(`/agreement/${agreement.id}`)}
         >
-          <Ionicons name="document-text-outline" size={20} color={colors.primary} />
-          <Text style={styles.pdfLink}>View Agreement PDF</Text>
+          <Ionicons name="document-text" size={24} color={colors.primary} />
+          <Text style={styles.pdfLink}>View Rent Agreement</Text>
           <Ionicons name="open-outline" size={16} color={colors.textSecondary} />
         </TouchableOpacity>
 
