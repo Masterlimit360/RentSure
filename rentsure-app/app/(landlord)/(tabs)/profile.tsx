@@ -71,7 +71,7 @@ export default function LandlordProfileScreen() {
   };
 
   return (
-    <Screen noPadding>
+    <Screen noPadding safeAreaEdges={['top', 'bottom', 'left', 'right']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.headerBg} />
         {/* Avatar & Header */}
@@ -287,14 +287,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   content: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
     paddingHorizontal: spacing.lg,
     paddingBottom: 80,
   },
   profileHeader: {
     alignItems: 'center',
     marginBottom: spacing.xxl,
-    marginTop: -60,
+    marginTop: 20,
     width: '100%',
   },
   avatarContainer: {

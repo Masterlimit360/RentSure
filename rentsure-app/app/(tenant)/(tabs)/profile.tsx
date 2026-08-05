@@ -8,6 +8,7 @@
 
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Platform, TextInput, ActivityIndicator } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Animated, { FadeInUp, FadeInDown, FadeIn } from 'react-native-reanimated';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuthStore } from '@/store/auth.store';
@@ -19,6 +20,7 @@ import { DevMenu } from '@/components/DevMenu';
 
 export default function TenantProfileScreen() {
   const { user } = useAuthStore();
+  const insets = useSafeAreaInsets();
   const logoutMutation = useLogout();
   const updateMutation = useUpdateProfile();
   const router = useRouter();
@@ -56,7 +58,7 @@ export default function TenantProfileScreen() {
   };
 
   return (
-    <Screen noPadding>
+    <Screen noPadding safeAreaEdges={['top', 'bottom', 'left', 'right']}>
       <ScrollView contentContainerStyle={styles.content}>
         <Animated.View entering={FadeIn.duration(500)} style={styles.headerBg} />
         {/* Avatar & Header */}
@@ -219,14 +221,13 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   content: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 10,
     paddingHorizontal: spacing.lg,
     paddingBottom: 80,
   },
   profileHeader: {
     alignItems: 'center',
     marginBottom: spacing.xxl,
-    marginTop: Platform.OS === 'ios' ? -60 : -40,
+    marginTop: 20,
     width: '100%',
   },
   avatarContainer: {
