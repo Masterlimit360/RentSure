@@ -25,3 +25,6 @@ app:
       url: https://nxujvinvafvfsavdlqwj.supabase.co
       anon-key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54dWp2aW52YWZ2ZnNhdmRscXdqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM4NTgxNTgsImV4cCI6MjA5OTQzNDE1OH0.Veu006UvNDlbxf9tiQd9cuwap3HebE2mRTxgibJFuUE
       bucket: media
+
+  paystack:
+    secret-key: ${PAYSTACK_SECRET_KEY}

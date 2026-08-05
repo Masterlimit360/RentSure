@@ -87,17 +87,26 @@ export const userPasswords: Record<string, string> = {
 // Prices: GHS 3,000–25,000/year (realistic 2026 range)
 // ---------------------------------------------------------------------------
 
+const HOUSE_IMAGES = [
+  'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80',
+  'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=800&q=80',
+  'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80',
+  'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80',
+  'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80',
+];
+
 const makeMedia = (
   propertyId: string,
   count: number
-): PropertyMedia[] =>
-  Array.from({ length: count }, (_, i) => ({
+): PropertyMedia[] => {
+  const numericId = parseInt(propertyId.replace(/[^0-9]/g, '') || '0');
+  return Array.from({ length: count }, (_, i) => ({
     id: `media-${propertyId}-${i + 1}`,
     mediaType: 'PHOTO' as const,
-    /* Placeholder URL — the real app will use S3/CDN URLs */
-    url: `https://picsum.photos/seed/${propertyId}-${i + 1}/800/600`,
+    url: HOUSE_IMAGES[(numericId + i) % HOUSE_IMAGES.length],
     sortOrder: i + 1,
   }));
+};
 
 export const seedProperties: Property[] = [
   // --- Kumasi listings ---
@@ -1592,6 +1601,12 @@ export const seedProperties: Property[] = [
     "createdAt": "2026-07-12T21:54:13.366Z"
   },
 ];
+
+seedProperties.forEach((p) => {
+  if (!p.media || p.media.length === 0) {
+    p.media = makeMedia(p.id, 3);
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Seed bookings — spread across various states to exercise the UI

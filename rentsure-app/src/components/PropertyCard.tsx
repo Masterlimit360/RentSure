@@ -30,7 +30,10 @@ export function PropertyCard({ property, index = 0, activeBookingStatus, activeB
   // Pick the first photo based on sort_order or use a placeholder
   const sortedMedia = [...(property.media || [])].sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
   const mainPhoto = sortedMedia.find((m) => m.mediaType === 'PHOTO')?.url;
-  const imageUrl = mainPhoto || 'https://via.placeholder.com/400x300?text=No+Image';
+  const isDummy = mainPhoto && mainPhoto.includes('dummy');
+  const imageUrl = (!mainPhoto || isDummy) 
+    ? 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=400&q=80' 
+    : mainPhoto;
 
   const { user } = useAuthStore();
   const { data: prefs } = usePreferences(user?.role === 'TENANT' ? user.id : undefined);

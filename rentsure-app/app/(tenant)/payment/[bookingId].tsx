@@ -184,17 +184,6 @@ export default function PaymentScreen() {
 
             <Text style={styles.refNote}>Ref: {booking.bookingRef}</Text>
 
-            <View style={styles.phoneInputContainer}>
-              <Text style={styles.phoneInputLabel}>Mobile Money Phone Number</Text>
-              <TextInput
-                style={styles.phoneInput}
-                value={phoneInput}
-                onChangeText={setPhoneInput}
-                placeholder="e.g. 0241234567"
-                keyboardType="phone-pad"
-              />
-            </View>
-
             <Button
               title="Pay with Paystack"
               onPress={handlePayNow}
@@ -205,7 +194,7 @@ export default function PaymentScreen() {
               visible={isCheckoutVisible}
               paystackKey={process.env.EXPO_PUBLIC_PAYSTACK_KEY || "pk_test_dummy"}
               email={user?.email || "tenant@rentsure.com"}
-              phone={phoneInput}
+              phone={user?.phone || ""}
               amountPesewas={amountPesewas}
               reference={booking.bookingRef + '_' + Date.now()}
               bookingId={bookingId!}

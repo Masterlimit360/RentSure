@@ -219,14 +219,14 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
   },
   content: {
-    paddingTop: Platform.OS === 'ios' ? 50 : 30,
+    paddingTop: Platform.OS === 'ios' ? 50 : 10,
     paddingHorizontal: spacing.lg,
     paddingBottom: 80,
   },
   profileHeader: {
     alignItems: 'center',
     marginBottom: spacing.xxl,
-    marginTop: -60,
+    marginTop: Platform.OS === 'ios' ? -60 : -40,
     width: '100%',
   },
   avatarContainer: {

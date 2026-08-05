@@ -369,7 +369,7 @@ export default function TenantPaymentMethodsScreen() {
                   keyboardType="number-pad"
                   placeholderTextColor={colors.textSecondary}
                 />
-                <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
+                <TouchableOpacity style={styles.inputDoneButton} onPress={() => Keyboard.dismiss()}>
                   <Text style={styles.inputDoneText}>Done</Text>
                 </TouchableOpacity>
               </View>
@@ -612,10 +612,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     paddingHorizontal: spacing.md,
+    height: 40,
   },
   input: {
     flex: 1,
-    height: 48,
+    height: 40,
     fontSize: typography.sizes.md,
     color: colors.text,
   },

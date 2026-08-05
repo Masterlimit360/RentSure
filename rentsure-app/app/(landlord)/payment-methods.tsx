@@ -371,7 +371,7 @@ export default function PayoutAccountsScreen() {
                   keyboardType="number-pad"
                   placeholderTextColor={colors.textSecondary}
                 />
-                <TouchableOpacity style={styles.inputDoneButton} onPress={Keyboard.dismiss}>
+                <TouchableOpacity style={styles.inputDoneButton} onPress={() => { Keyboard.dismiss(); handleSave(); }}>
                   <Text style={styles.inputDoneText}>Done</Text>
                 </TouchableOpacity>
               </View>
@@ -617,8 +617,8 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 48,
-    fontSize: typography.sizes.md,
+    height: 40,
+    fontSize: typography.sizes.sm,
     color: colors.text,
   },
   inputDoneButton: {

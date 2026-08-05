@@ -170,7 +170,7 @@ export default function LandlordProfileScreen() {
               )}
             </View>
             <View style={styles.divider} />
-            <TouchableOpacity style={styles.row} onPress={() => router.push('/(landlord)/(tabs)/index' as any)}>
+            <TouchableOpacity style={styles.row} onPress={() => router.push('/(landlord)' as any)}>
               <View style={[styles.rowIcon, verifiedPropertiesCount > 0 ? { backgroundColor: '#D1FAE5' } : {}]}>
                 <Ionicons name="home-outline" size={22} color={verifiedPropertiesCount > 0 ? colors.success : colors.primary} />
               </View>
